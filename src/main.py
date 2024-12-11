@@ -9,15 +9,12 @@ from lib_resume_builder_AIHawk import Resume, FacadeManager, ResumeGenerator, St
 from typing import Optional
 from constants import PLAIN_TEXT_RESUME_YAML, SECRETS_YAML, WORK_PREFERENCES_YAML
 
-from src.webdrivers.browser_factory import BrowserFactory
-from src.job_application_profile import JobApplicationProfile
-from src.logging import logger
+from webdrivers.browser_factory import BrowserFactory
+from job_application_profile import JobApplicationProfile
+from logger import logger
 
 # Suppress stderr only during specific operations
 original_stderr = sys.stderr
-
-# Add the src directory to the Python path
-sys.path.append(str(Path(__file__).resolve().parent / 'src'))
 
 from ai_hawk.authenticator import get_authenticator
 from ai_hawk.bot_facade import AIHawkBotFacade

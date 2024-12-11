@@ -22,11 +22,11 @@ from selenium.webdriver.support.ui import Select, WebDriverWait
 from jobContext import JobContext
 from job_application import JobApplication
 from job_application_saver import ApplicationSaver
-from src.custom_exception import JobNotSuitableException
-import src.utils as utils
-from src.logging import logger
-from src.job import Job
-from src.ai_hawk.llm.llm_manager import GPTAnswerer
+from custom_exception import JobNotSuitableException
+import utils as utils
+from logger import logger
+from job import Job
+from ai_hawk.llm.llm_manager import GPTAnswerer
 from utils import browser_utils
 import utils.time_utils
 

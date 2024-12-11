@@ -14,16 +14,16 @@ from selenium.webdriver.common.by import By
 
 from ai_hawk.linkedIn_easy_applier import AIHawkEasyApplier
 from config import JOB_MAX_APPLICATIONS, JOB_MIN_APPLICATIONS, MINIMUM_WAIT_TIME_IN_SECONDS
-from src.custom_exception import JobNotSuitableException
-from src.job import Job
-from src.logging import logger
+from custom_exception import JobNotSuitableException
+from job import Job
+from logger import logger
 
 import urllib.parse
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 
-from src.regex_utils import generate_regex_patterns_for_blacklisting
+from regex_utils import generate_regex_patterns_for_blacklisting
 import re
 
 import utils.browser_utils as browser_utils

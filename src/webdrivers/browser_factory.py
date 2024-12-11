@@ -4,7 +4,7 @@ from selenium import webdriver
 from loguru import logger
 
 from config import BROWSER_TYPE_CONFIG
-from src.webdrivers.browser_type import BrowserType
+from webdrivers.browser_type import BrowserType
 
 
 class BrowserFactory:

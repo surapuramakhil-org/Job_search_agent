@@ -1,6 +1,6 @@
 import pytest
 from ai_hawk.job_manager import AIHawkJobManager
-from src.regex_utils import generate_regex_patterns_for_blacklisting
+from regex_utils import generate_regex_patterns_for_blacklisting
 
 apply_component = AIHawkJobManager(None) # For this test we dont need the web driver
 

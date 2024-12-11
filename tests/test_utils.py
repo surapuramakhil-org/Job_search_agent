@@ -4,11 +4,11 @@ import os
 import time
 from unittest import mock
 from selenium.webdriver.remote.webelement import WebElement
-from src.utils.browser_utils import  is_scrollable, scroll_slow
-from src.webdrivers.base_browser import BrowserProfile
-from src.webdrivers.browser_type import BrowserType
-from src.webdrivers.chrome import Chrome
-from src.webdrivers.firefox import Firefox
+from utils.browser_utils import  is_scrollable, scroll_slow
+from webdrivers.base_browser import BrowserProfile
+from webdrivers.browser_type import BrowserType
+from webdrivers.chrome import Chrome
+from webdrivers.firefox import Firefox
 
 # Mocking logging to avoid actual file writing
 @pytest.fixture(autouse=True)

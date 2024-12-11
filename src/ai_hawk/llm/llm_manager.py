@@ -72,7 +72,7 @@ from constants import (
     WORK_PREFERENCES,
     AIML,
 )
-from src.job import Job
+from job import Job
 import config as cfg
 
 load_dotenv()

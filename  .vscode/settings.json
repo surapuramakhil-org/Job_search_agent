@@ -1,0 +1,9 @@
+{
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv",
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}/src",
+        "${workspaceFolder}"
+    ],
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.indexing": true
+}
