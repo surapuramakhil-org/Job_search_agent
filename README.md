@@ -96,81 +96,59 @@ Auto_Jobs_Applier_AIHawk steps in as a game-changing solution to these challenge
 - Operating Systems:
   - Windows 10
   - Ubuntu 22
+  - macOS
 - Python versions:
   - 3.10
   - 3.11.9(64b)
   - 3.12.5(64b)
+  - 3.13
 
-### Option 1: Using Python Virtual Environment 
+## Prerequisites
 
-1. **Download and Install Python:**
+Before you begin, ensure you have met the following requirements:
 
-   Ensure you have the last Python version  installed. If not, download and install it from Python's official website. For detailed instructions, refer to the tutorials:
+### Download and Install Python
 
-   - [How to Install Python on Windows](https://www.geeksforgeeks.org/how-to-install-python-on-windows/)
-   - [How to Install Python on Linux](https://www.geeksforgeeks.org/how-to-install-python-on-linux/)
-   - [How to Download and Install Python on macOS](https://www.geeksforgeeks.org/how-to-download-and-install-python-latest-version-on-macos-mac-os-x/)
+Ensure you have the latest Python version installed (Python 3.8 or higher is required for Poetry). If not, download and install it from Python's official website. For detailed instructions, refer to the tutorials:
+- [How to Install Python on Windows](https://docs.python.org/3/using/windows.html)
+- [How to Install Python on Linux](https://docs.python.org/3/using/unix.html)
+- [How to Download and Install Python on macOS](https://docs.python.org/3/using/mac.html)
 
-2. **Download and Install Google Chrome:**
-   - Download and install the latest version of Google Chrome in its default location from the [official website](https://www.google.com/chrome).
+### Download and Install Google Chrome
 
-3. **Clone the repository:**
+Download and install the latest version of Google Chrome in its default location from the [official website](https://www.google.com/chrome/).
 
-   ```bash
-   git clone https://github.com/feder-cr/Auto_Jobs_Applier_AIHawk.git
-   
-   cd Auto_Jobs_Applier_AIHawk
-   ```
+### Install Poetry
 
-4. **Activate virtual environment:**
+Follow the instructions provided on Poetry's [official installation page](https://python-poetry.org/docs/#installation).
 
-   ```bash
-   python3 -m venv virtual
-   ```
+### Clone the Repository
 
-   ```bash
-   source virtual/bin/activate
-   ```
+```bash
+git clone https://github.com/feder-cr/Auto_Jobs_Applier_AIHawk.git
+cd Auto_Jobs_Applier_AIHawk
+```
 
-   or for Windows-based machines -
+### Setting Up the Project with Poetry
 
-   ```bash
-   .\virtual\Scripts\activate
-   ```
+Since the project already includes a `pyproject.toml` file, follow these steps:
 
-5. **Install the required packages:**
+#### Install Dependencies
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+Run the following command in the project directory to install all dependencies specified in `pyproject.toml`:
 
-### Option 2: Using Conda 
+```bash
+poetry install
+```
 
-1. **Install Conda:**
-   - Download and install Miniconda from the [official website](https://docs.conda.io/en/latest/miniconda.html)
-   - Or install Anaconda from the [Anaconda website](https://www.anaconda.com/download)
+#### Run the Program
 
-2. **Create and activate conda environment:**
-   ```bash
-   # Create new environment
-   conda create -n aihawk python=3.11
+After installing dependencies, run the program using:
 
-   # Activate environment
-   conda activate aihawk
-   ```
+```bash
+poetry run python src/main.py
+```
 
-3. **Clone the repository:**
-   ```bash
-   git clone https://github.com/feder-cr/Auto_Jobs_Applier_AIHawk.git
-   cd Auto_Jobs_Applier_AIHawk
-   ```
-
-4. **Install dependencies:**
-   ```bash
-   # Install from requirements.txt
-   pip install -r requirements.txt
-   ```
- 
 
 ## Configuration
 
