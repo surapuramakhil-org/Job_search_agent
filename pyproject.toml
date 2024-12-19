@@ -46,7 +46,7 @@ langchain-ollama = "^0.2.1"
 #langchain-huggingface # commented due to its dependency with torch
 
 [tool.poetry.extras]
-
+dev = ["pytest", "pytest-mock", "pytest-cov"]
 
 [build-system]
 requires = ["poetry-core"]
