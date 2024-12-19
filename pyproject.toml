@@ -45,8 +45,10 @@ lib-resume-builder-aihawk = {git = "https://github.com/feder-cr/lib_resume_build
 langchain-ollama = "^0.2.1"
 #langchain-huggingface # commented due to its dependency with torch
 
-[tool.poetry.extras]
-dev = ["pytest", "pytest-mock", "pytest-cov"]
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+pytest-mock = "^3.14.0"
+pytest-cov = "^6.0.0"
 
 [build-system]
 requires = ["poetry-core"]
