@@ -13,7 +13,7 @@ from webdrivers.firefox import Firefox
 # Mocking logging to avoid actual file writing
 @pytest.fixture(autouse=True)
 def mock_logger(mocker):
-    mocker.patch("src.logging.logger")
+    mocker.patch("logger.logger")
 
 # Test ensure_chrome_profile function
 def test_ensure_browser_profiles(mocker):
