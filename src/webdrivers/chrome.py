@@ -5,7 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 
-from src.webdrivers.base_browser import Browser
+from webdrivers.base_browser import Browser
 
 
 class Chrome(Browser):

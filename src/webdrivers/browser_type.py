@@ -1,7 +1,7 @@
 from enum import Enum
 
-from src.webdrivers.chrome import Chrome
-from src.webdrivers.firefox import Firefox
+from webdrivers.chrome import Chrome
+from webdrivers.firefox import Firefox
 
 
 class BrowserType(Enum):
