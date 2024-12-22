@@ -6,6 +6,7 @@ authors = ["Akhil <surapuramakhil@gmail.com>"]
 license = "AGPL"
 readme = "README.md"
 package-mode = false
+packages = [{ include = "src" }]
 
 [[tool.poetry.source]]
 name = "pytorch"
