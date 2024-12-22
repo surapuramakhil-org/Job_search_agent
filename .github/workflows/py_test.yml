@@ -27,6 +27,9 @@ jobs:
           curl -sSL https://install.python-poetry.org | python3 -
           export PATH="$HOME/.local/bin:$PATH"
 
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$PWD/src" >> $GITHUB_ENV
+
       - name: Install dependencies
         run: poetry install --with dev
 
@@ -51,6 +54,9 @@ jobs:
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
           export PATH="$HOME/.local/bin:$PATH"
+
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$PWD/src" >> $GITHUB_ENV
 
       - name: Install dependencies
         run: poetry install --with dev
