@@ -4,12 +4,15 @@ import sys
 from pathlib import Path
 import yaml
 import click
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.common.exceptions import WebDriverException
 from lib_resume_builder_AIHawk import Resume, FacadeManager, ResumeGenerator, StyleManager
 from typing import Optional
 from constants import PLAIN_TEXT_RESUME_YAML, SECRETS_YAML, WORK_PREFERENCES_YAML
+from src.utils.chrome_utils import chrome_browser_options
 
-from webdrivers.browser_factory import BrowserFactory
 from job_application_profile import JobApplicationProfile
 from logger import logger
 
@@ -149,6 +152,14 @@ class FileManager:
 
         return result
 
+def init_browser() -> webdriver.Chrome:
+    try:
+        options = chrome_browser_options()
+        service = ChromeService(ChromeDriverManager().install())
+        return webdriver.Chrome(service=service, options=options)
+    except Exception as e:
+        raise RuntimeError(f"Failed to initialize browser: {str(e)}")
+
 def create_and_run_bot(parameters, llm_api_key):
     try:
         style_manager = StyleManager()
@@ -164,7 +175,7 @@ def create_and_run_bot(parameters, llm_api_key):
         
         job_application_profile_object = JobApplicationProfile(plain_text_resume)
         
-        browser = BrowserFactory.get_browser()
+        browser = init_browser()
         login_component = get_authenticator(driver=browser, platform='linkedin')
         apply_component = AIHawkJobManager(browser)
         gpt_answerer_component = GPTAnswerer(parameters, llm_api_key)
@@ -199,7 +210,7 @@ def main(collect: bool = False, resume: Optional[Path] = None):
         parameters['uploads'] = FileManager.file_paths_to_dict(resume, plain_text_resume_file)
         parameters['outputFileDirectory'] = output_folder
         parameters['collectMode'] = collect
-
+        
         create_and_run_bot(parameters, llm_api_key)
     except ConfigError as ce:
         logger.error(f"Configuration error: {str(ce)}")
