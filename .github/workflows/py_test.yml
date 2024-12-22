@@ -9,9 +9,11 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  unit-tests:
-    name: Unit Tests
+  setup-environment:
+    name: Setup Environment
     runs-on: ubuntu-latest
+    outputs:
+      python-path: ${{ steps.set-pythonpath.outputs.pythonpath }}
 
     steps:
       - name: Checkout code
@@ -28,10 +30,20 @@ jobs:
           export PATH="$HOME/.local/bin:$PATH"
 
       - name: Set PYTHONPATH
+        id: set-pythonpath
         run: echo "PYTHONPATH=$PWD/src" >> $GITHUB_ENV
 
       - name: Install dependencies
         run: poetry install --with dev
+
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    needs: setup-environment # Ensure setup is completed before running tests
+
+    steps:
+      - name: Checkout code (again for isolation)
+        uses: actions/checkout@v3
 
       - name: Run unit tests
         run: poetry run pytest tests/unit
@@ -39,27 +51,12 @@ jobs:
   integration-tests:
     name: Integration Tests
     runs-on: ubuntu-latest
+    needs: setup-environment # Ensure setup is completed before running tests
     if: github.event_name == 'pull_request' # Run only on pull requests
 
     steps:
-      - name: Checkout code
+      - name: Checkout code (again for isolation)
         uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: '3.13'
-
-      - name: Install Poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-          export PATH="$HOME/.local/bin:$PATH"
-
-      - name: Set PYTHONPATH
-        run: echo "PYTHONPATH=$PWD/src" >> $GITHUB_ENV
-
-      - name: Install dependencies
-        run: poetry install --with dev
 
       - name: Run integration tests
         run: poetry run pytest tests/integration
