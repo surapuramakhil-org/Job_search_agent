@@ -1,7 +1,6 @@
 # In this file, you can set the configurations of the app.
 
 from constants import DEBUG, LLM_MODEL, OPENAI
-from webdrivers.browser_type import BrowserType
 
 #config related to logging must have prefix LOG_
 LOG_LEVEL = DEBUG
@@ -13,8 +12,6 @@ MINIMUM_WAIT_TIME_IN_SECONDS = 60
 
 JOB_APPLICATIONS_DIR = "job_applications"
 JOB_SUITABILITY_SCORE = 7
-BROWSER_TYPE_CONFIG = BrowserType.CHROME
-
 
 JOB_MAX_APPLICATIONS = 5
 JOB_MIN_APPLICATIONS = 1

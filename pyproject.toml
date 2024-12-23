@@ -6,6 +6,7 @@ authors = ["Akhil <surapuramakhil@gmail.com>"]
 license = "AGPL"
 readme = "README.md"
 package-mode = false
+packages = [{ include = "src" }]
 
 [[tool.poetry.source]]
 name = "pytorch"
@@ -53,3 +54,6 @@ pytest-cov = "^6.0.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
