@@ -1,10 +1,15 @@
-name: Setup Test Environment
+name: Test Environment Setup and Run Workflow
 
 on:
-  workflow_call: # Makes this workflow reusable
+  workflow_call:
+    inputs:
+      test_command:
+        description: "The command to run tests"
+        required: true
+        type: string
 
 jobs:
-  setup-environment:
+  setup_and_test:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,3 +31,6 @@ jobs:
 
       - name: Install dependencies (with dev)
         run: poetry install --with dev
+
+      - name: Run tests
+        run: ${{ inputs.test_command }} # Executes the test command passed as input

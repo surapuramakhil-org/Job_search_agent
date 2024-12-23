@@ -11,23 +11,12 @@ on:
 jobs:
   unit_tests:
     name: Unit Tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Setup Test Environment
-        uses: ./.github/workflows/setup_test_environment.yml 
-
-      - name: Run unit tests
-        run: poetry run pytest tests/unit 
+    uses: ./.github/workflows/test_env_setup_and_run_workflow.yml # Calls reusable workflow for setup and test execution
+    with:
+      test_command: poetry run pytest tests/unit # Passes unit test command as input
 
   integration_tests:
     name: Integration Tests
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' # Run only on pull requests
-
-    steps:
-      - name: Setup Test Environment
-        uses: ./.github/workflows/setup_test_environment.yml 
-
-      - name: Run integration tests
-        run: poetry run pytest tests/integration 
+    uses: ./.github/workflows/test_env_setup_and_run_workflow.yml # Calls reusable workflow for setup and test execution
+    with:
+      test_command: poetry run pytest tests/integration # Passes integration test command as input
