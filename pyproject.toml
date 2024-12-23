@@ -45,6 +45,7 @@ click = "^8.1.7"
 lib-resume-builder-aihawk = {git = "https://github.com/feder-cr/lib_resume_builder_AIHawk.git"}
 langchain-ollama = "^0.2.1"
 #langchain-huggingface # commented due to its dependency with torch
+undetected-chromedriver = "^3.5.5"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.4"

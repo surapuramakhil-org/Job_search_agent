@@ -1,3 +1,10 @@
+DATE_ALL_TIME = "all_time"
+DATE_MONTH = "month"
+DATE_WEEK = "week"
+DATE_24_HOURS = "24_hours"
+
+LINKEDIN = "linkedin"
+
 # constants used in application
 SECRETS_YAML = "secrets.yaml"
 WORK_PREFERENCES_YAML = "work_preferences.yaml"
@@ -64,10 +71,8 @@ LLM_MODEL_TYPE = "llm_model_type"
 LLM_API_URL = "llm_api_url"
 LLM_MODEL = "llm_model"
 OPENAI = "openai"
-AIML="aiml"
 CLAUDE = "claude"
 OLLAMA = "ollama"
 GEMINI = "gemini"
-GROQ = "groq"
 HUGGINGFACE = "huggingface"
 PERPLEXITY = "perplexity"
