@@ -10,7 +10,7 @@
 
 Join our community: [Telegram] (for Normal user) | [Discord](https://discord.gg/MYYwG8JyrQ) (for Open Source contributors)
 
-[![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)]
+[![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)]()
 [![Discord](https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/MYYwG8JyrQ)
 
 </div>
