@@ -1,0 +1,27 @@
+name: setup test environment
+
+on:
+  workflow_call:
+    inputs:
+      test-type:
+        description: 'Type of tests to run (unit or integration)'
+        required: true
+        type: string
+      pythonpath:
+        description: 'Python path from setup environment'
+        required: true
+        type: string
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set PYTHONPATH from setup-environment
+        run: echo "PYTHONPATH=${{ inputs.pythonpath }}" >> $GITHUB_ENV
+
+      - name: Run ${{ inputs.test-type }} tests
+        run: poetry run pytest tests/${{ inputs.test-type }}
