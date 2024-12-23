@@ -9,25 +9,25 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  unit-tests:
+  unit_tests:
     name: Unit Tests
     runs-on: ubuntu-latest
 
     steps:
       - name: Setup Test Environment
-        uses: ./.github/workflows/setup_test_environment.yml
+        uses: ./.github/workflows/setup_test_environment.yml 
 
       - name: Run unit tests
-        run: poetry run pytest tests/unit
+        run: poetry run pytest tests/unit 
 
-  integration-tests:
+  integration_tests:
     name: Integration Tests
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request' # Run only on pull requests
 
     steps:
       - name: Setup Test Environment
-        uses: ./.github/workflows/setup_test_environment.yml
+        uses: ./.github/workflows/setup_test_environment.yml 
 
       - name: Run integration tests
-        run: poetry run pytest tests/integration
+        run: poetry run pytest tests/integration 

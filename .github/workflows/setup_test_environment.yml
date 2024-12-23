@@ -1,27 +1,28 @@
-name: setup test environment
+name: Setup Test Environment
 
 on:
-  workflow_call:
-    inputs:
-      test-type:
-        description: 'Type of tests to run (unit or integration)'
-        required: true
-        type: string
-      pythonpath:
-        description: 'Python path from setup environment'
-        required: true
-        type: string
+  workflow_call: # Makes this workflow reusable
 
 jobs:
-  run-tests:
+  setup-environment:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set PYTHONPATH from setup-environment
-        run: echo "PYTHONPATH=${{ inputs.pythonpath }}" >> $GITHUB_ENV
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.13'
 
-      - name: Run ${{ inputs.test-type }} tests
-        run: poetry run pytest tests/${{ inputs.test-type }}
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          export PATH="$HOME/.local/bin:$PATH"
+
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$PWD/src" >> $GITHUB_ENV
+
+      - name: Install dependencies (with dev)
+        run: poetry install --with dev
