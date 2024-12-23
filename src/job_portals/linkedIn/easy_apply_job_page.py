@@ -3,10 +3,10 @@ import time
 import traceback
 
 from httpx import get
+from loguru import logger
 from job import Job
 from jobContext import JobContext
 from job_portals.base_job_portal import BaseJobPage
-from src.logging import logger
 import utils
 from utils import browser_utils
 import utils.time_utils

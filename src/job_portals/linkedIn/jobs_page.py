@@ -1,8 +1,9 @@
 import re
 import traceback
+
+from loguru import logger
 from constants import DATE_24_HOURS, DATE_ALL_TIME, DATE_MONTH, DATE_WEEK
 from job import Job
-from src.logging import logger
 from job_portals.base_job_portal import BaseJobsPage
 import urllib.parse
 from selenium.common.exceptions import NoSuchElementException

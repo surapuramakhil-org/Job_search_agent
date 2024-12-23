@@ -1,5 +1,6 @@
+from loguru import logger
 from src.ai_hawk.authenticator import AIHawkAuthenticator
-from src.logging import logger
+
 
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support import expected_conditions as EC
