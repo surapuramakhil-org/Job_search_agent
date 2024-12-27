@@ -683,18 +683,18 @@ For further assistance, please create an issue on the [GitHub repository](https:
 ### For Users
 
 - Ollama & Gemini Setup
-  - To install and configure **Ollama** and **Gemini**, [Download Ollama and Gemini Setup Guide (PDF)](https://github.com/feder-cr/Auto_Jobs_Applier_AIHawk/blob/main/docs/guide_to_setup_ollama_and_gemini.pdf)
+  - To install and configure **Ollama** and **Gemini**, [Download Ollama and Gemini Setup Guide (PDF)](docs/guide_to_setup_ollama_and_gemini.pdf)
   - Follow the instructions in these guides to ensure proper configuration of **AIHawk** with **Ollama** and **Gemini**.
   - Written by Rushi, [Linkedin](https://www.linkedin.com/in/rushichaganti/), support him by following.
 
 - Editing YAML Files
   - For detailed instructions on editing YAML configuration sections for **AIHawk**, refer to this document:
-  - [Download YAML Editing Guide (PDF)](https://github.com/feder-cr/Auto_Jobs_Applier_AIHawk/blob/main/docs/guide_yaml_sections.pdf)
+  - [Download YAML Editing Guide (PDF)](docs/guide_yaml_sections.pdf)
   - Written by Rushi, [Linkedin](https://www.linkedin.com/in/rushichaganti/), support him by following.
 
 - Auto-start AIHawk
   - To make **AIHawk** automatically start when your system boots, follow the steps in this guide:
-  - [Download Auto-start AIHawk Guide (PDF)](https://github.com/feder-cr/Auto_Jobs_Applier_AIHawk/blob/main/docs/guide_to_autostart_aihawk.pdf)
+  - [Download Auto-start AIHawk Guide (PDF)](docs/guide_to_autostart_aihawk.pdf)
   - Written by Rushi, [Linkedin](https://www.linkedin.com/in/rushichaganti/), support him by following.
 
 - Video Tutorial
@@ -723,15 +723,15 @@ Auto_Jobs_Applier_AIHawk provides a significant advantage in the modern job mark
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=feder-cr/Auto_Jobs_Applier_AIHawk&type=Date)](https://star-history.com/#feder-cr/Auto_Jobs_Applier_AIHawk&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=surapuramakhil-org/Job_hunt_assistant&type=Date)](https://star-history.com/#surapuramakhil-org/Job_hunt_assistant&Date)
 
 If you like the project please star ⭐ the repository!
 
 ## Special Thanks
-[![Contributors](https://img.shields.io/github/contributors/feder-cr/Auto_Jobs_Applier_AIHawk)](https://github.com/feder-cr/Auto_Jobs_Applier_AIHawk/graphs/contributors)
+[![Contributors](https://img.shields.io/github/contributors/surapuramakhil-org/Job_hunt_assistant)](https://github.com/surapuramakhil-org/Job_hunt_assistant/graphs/contributors)
 
-<a href="https://github.com/AIHawk-co/Auto_Jobs_Applier/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=AIHawk-co/Auto_Jobs_Applier" />
+<a href="https://github.com/surapuramakhil-org/Job_hunt_assistant/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=surapuramakhil-org/Job_hunt_assistant" />
 </a>
 
 Made with [contrib.rocks](https://contrib.rocks).
