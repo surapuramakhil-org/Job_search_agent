@@ -1,9 +1,10 @@
 import pytest
 from unittest.mock import patch, MagicMock
-from src.services.web_search_engine import GoogleSearchEngine, BingSearchEngine, BraveSearchEngine, WebSearchEngineFactory
+from src.services.web_search_engine import GoogleSearchEngine, BingSearchEngine, BraveSearchEngine
 
 # Unit test for GoogleSearchEngine
 @patch("requests.get")
+@patch("src.config.GOOGLE_API_KEY", "mock_api_key")  # Mocking the Google API key
 def test_google_search_engine(mock_get):
     mock_response = MagicMock()
     mock_response.json.return_value = {"items": ["result1", "result2"]}
@@ -20,6 +21,7 @@ def test_google_search_engine(mock_get):
 
 # Unit test for BingSearchEngine
 @patch("requests.get")
+@patch("src.config.BING_API_KEY", "mock_bing_api_key")  # Mocking the Bing API key
 def test_bing_search_engine(mock_get):
     mock_response = MagicMock()
     mock_response.json.return_value = {"webPages": {"value": ["result1", "result2"]}}
@@ -37,6 +39,7 @@ def test_bing_search_engine(mock_get):
 
 # Unit test for BraveSearchEngine
 @patch("requests.get")
+@patch("src.config.BRAVE_API_KEY", "mock_brave_api_key")  # Mocking the Brave API key
 def test_brave_search_engine(mock_get):
     mock_response = MagicMock()
     mock_response.json.return_value = {"results": ["result1", "result2"]}
@@ -51,5 +54,3 @@ def test_brave_search_engine(mock_get):
         headers={"Authorization": "Bearer mock_brave_api_key"},
         params={"q": "test query", "offset": 0, "limit": 10},
     )
-    import src.config as config
-
