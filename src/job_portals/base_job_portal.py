@@ -19,9 +19,9 @@ class WebPage(ABC):
 
 class BaseJobsPage(WebPage):
 
-    def __init__(self, driver, parameters):
+    def __init__(self, driver, work_preferences):
         super().__init__(driver)
-        self.parameters = parameters
+        self.work_preferences = work_preferences
 
     @abstractmethod
     def next_job_page(self, position, location, page_number):
@@ -204,11 +204,11 @@ class BaseJobPortal(ABC):
         pass
 
 
-def get_job_portal(portal_name, driver, parameters):
+def get_job_portal(portal_name, driver, work_preferences):
     from src.job_portals.linkedIn.linkedin import LinkedIn
 
     if portal_name == LINKEDIN:
-        return LinkedIn(driver, parameters)
+        return LinkedIn(driver, work_preferences)
     else:
         raise ValueError(f"Unknown job portal: {portal_name}")
 
