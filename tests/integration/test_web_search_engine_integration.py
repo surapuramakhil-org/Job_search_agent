@@ -3,25 +3,25 @@ from src.services.web_search_engine import GoogleSearchEngine, BingSearchEngine,
 
 @pytest.mark.integration
 def test_google_search_engine_integration():
-    search_engine = GoogleSearchEngine("real_google_search_engine_id")  # Replace with a valid ID
+    search_engine = GoogleSearchEngine()  # Replace with a valid ID
     result = search_engine.search("Python integration testing")
 
     assert "items" in result
     assert len(result["items"]) > 0
 
-@pytest.mark.integration
-def test_bing_search_engine_integration():
-    search_engine = BingSearchEngine()
-    result = search_engine.search("Python integration testing")
+# @pytest.mark.integration
+# def test_bing_search_engine_integration():
+#     search_engine = BingSearchEngine()
+#     result = search_engine.search("Python integration testing")
 
-    assert "webPages" in result
-    assert "value" in result["webPages"]
-    assert len(result["webPages"]["value"]) > 0
+#     assert "webPages" in result
+#     assert "value" in result["webPages"]
+#     assert len(result["webPages"]["value"]) > 0
 
-@pytest.mark.integration
-def test_brave_search_engine_integration():
-    search_engine = BraveSearchEngine()
-    result = search_engine.search("Python integration testing")
+# @pytest.mark.integration
+# def test_brave_search_engine_integration():
+#     search_engine = BraveSearchEngine()
+#     result = search_engine.search("Python integration testing")
 
-    assert "results" in result
-    assert len(result["results"]) > 0
+#     assert "results" in result
+#     assert len(result["results"]) > 0

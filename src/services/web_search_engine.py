@@ -2,6 +2,7 @@ import requests
 from abc import ABC, abstractmethod
 import src.config as config
 from src.config import ALLOWED_SEARCH_ENGINES, GOOGLE, BING, BRAVE
+from src.logger import logger
 
 class WebSearchEngine(ABC):
     """
@@ -15,14 +16,14 @@ class WebSearchEngine(ABC):
 class GoogleSearchEngine(WebSearchEngine):
     GOOGLE_SEARCH_URL = "https://www.googleapis.com/customsearch/v1"
 
-    def __init__(self, search_engine_id):
-        self.search_engine_id = search_engine_id
+    def __init__(self,):
+        self.api_key = config.GOOGLE_API_KEY
+        self.search_engine_id = config.GOOGLE_SEARCH_ENGINE_ID
 
     def search(self, query, page=1):
-        api_key = config.GOOGLE_API_KEY
         start = (page - 1) * 10 + 1
         params = {
-            "key": api_key,
+            "key": self.api_key,
             "cx": self.search_engine_id,
             "q": query,
             "start": start
