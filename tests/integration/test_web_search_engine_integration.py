@@ -4,10 +4,9 @@ from src.services.web_search_engine import GoogleSearchEngine, BingSearchEngine,
 @pytest.mark.integration
 def test_google_search_engine_integration():
     search_engine = GoogleSearchEngine()  # Replace with a valid ID
-    result = search_engine.search("Python integration testing")
+    pagenated_response = search_engine.search("Python integration testing")
 
-    assert "items" in result
-    assert len(result["items"]) > 0
+    assert len(pagenated_response.results) > 0
 
 # @pytest.mark.integration
 # def test_bing_search_engine_integration():
