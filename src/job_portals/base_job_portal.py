@@ -8,8 +8,10 @@ from src.job import Job
 from src.jobContext import JobContext
 
 from selenium.webdriver.remote.webelement import WebElement
-from typing import List
+from typing import List, TypeVar
 
+# Generic type
+T = TypeVar('T')
 
 class WebPage(ABC):
 
@@ -25,14 +27,20 @@ class BaseJobsPage(WebPage):
 
     @abstractmethod
     def next_job_page(self, position, location, page_number):
+        """
+            This method will be called first, before get_jobs_from_page
+        """
         pass
 
     @abstractmethod
-    def job_tile_to_job(self, job_tile: WebElement) -> Job:
+    def job_tile_to_job(self, job_tile: T) -> Job: # type: ignore as it used to enforce between methods 
         pass
 
     @abstractmethod
-    def get_jobs_from_page(self, scroll=False) -> List[WebElement]:
+    def get_jobs_from_page(self, scroll=False) -> List[T]: # type: ignore as it used to enforce between methods 
+        """
+            This method will be called after next_job_page, even for the first time
+        """
         pass
 
 
