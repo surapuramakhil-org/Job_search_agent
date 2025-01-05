@@ -10,7 +10,7 @@ from datetime import datetime
 from inputimeout import inputimeout, TimeoutOccurred
 
 from ai_hawk.job_applier import AIHawkJobApplier
-from config import JOB_MAX_APPLICATIONS, JOB_MIN_APPLICATIONS, MINIMUM_WAIT_TIME_IN_SECONDS
+import config
 
 from job_portals.base_job_portal import BaseJobPortal, get_job_portal
 from custom_exception import JobNotSuitableException
@@ -63,12 +63,11 @@ class AIHawkJobManager:
         self.location_blacklist = parameters.get('location_blacklist', []) or []
         self.positions = parameters.get('positions', [])
         self.locations = parameters.get('locations', [])
-        self.apply_once_at_company = parameters.get('apply_once_at_company', False)
         self.seen_jobs = []
         self.keywords_whitelist = parameters.get('keywords_whitelist', []) or []
 
-        self.min_applicants = JOB_MIN_APPLICATIONS
-        self.max_applicants = JOB_MAX_APPLICATIONS
+        self.min_applicants = config.JOB_MIN_APPLICATIONS
+        self.max_applicants = config.JOB_MAX_APPLICATIONS
 
         # Generate regex patterns from blacklist lists
         self.title_blacklist_patterns = look_ahead_patterns(self.title_blacklist)
@@ -141,7 +140,7 @@ class AIHawkJobManager:
         searches = list(product(self.positions, self.locations))
         random.shuffle(searches)
         page_sleep = 0
-        minimum_time = MINIMUM_WAIT_TIME_IN_SECONDS
+        minimum_time = config.MINIMUM_WAIT_TIME_IN_SECONDS
         minimum_page_time = time.time() + minimum_time
 
         for position, location in searches:
@@ -414,7 +413,7 @@ class AIHawkJobManager:
         return link_seen
 
     def is_already_applied_to_company(self, company):
-        if not self.apply_once_at_company:
+        if not config.APPLY_ONCE_PER_COMPANY:
             return False
 
         output_files = ["success.json"]

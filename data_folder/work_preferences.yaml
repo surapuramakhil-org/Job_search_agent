@@ -36,8 +36,6 @@ keywords_whitelist:
 locations:
   - Germany
 
-apply_once_at_company: true
-
 distance: 100
 
 company_blacklist:

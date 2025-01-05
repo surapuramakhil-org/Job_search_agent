@@ -12,6 +12,7 @@ from logger import logger
 class AIHawkAuthenticator(ABC):
 
     @property
+    @abstractmethod
     def home_url(self):
         pass
 
@@ -20,6 +21,7 @@ class AIHawkAuthenticator(ABC):
         pass
 
     @property
+    @abstractmethod
     def is_logged_in(self):
         pass
 

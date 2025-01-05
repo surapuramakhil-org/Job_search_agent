@@ -47,12 +47,13 @@ class WebSearchEngine(ABC):
 
 class GoogleSearchEngine(WebSearchEngine):
     GOOGLE_SEARCH_URL = "https://www.googleapis.com/customsearch/v1"
+    DEFAULT_SEARCH_LIMIT = 10
 
     def __init__(self):
         self.api_key = config.GOOGLE_API_KEY
         self.search_engine_id = config.GOOGLE_SEARCH_ENGINE_ID
 
-    def search(self, query: str, offset: int = 0, limit: int = 10) -> PaginatedSearchResponse:
+    def search(self, query: str, offset: int = 0, limit: int = DEFAULT_SEARCH_LIMIT) -> PaginatedSearchResponse:
         """
         Google uses 'start' to represent offset. 
         If offset is 0, start=1. If offset is 10, start=11, etc.
@@ -97,14 +98,14 @@ class GoogleSearchEngine(WebSearchEngine):
             total_results=total_results
         )
 
-
 class BingSearchEngine(WebSearchEngine):
     BING_SEARCH_URL = "https://api.bing.microsoft.com/v7.0/search"
+    DEFAULT_SEARCH_LIMIT = 50
 
     def __init__(self):
         self.api_key = config.BING_API_KEY
 
-    def search(self, query: str, offset: int = 0, limit: int = 50) -> PaginatedSearchResponse:
+    def search(self, query: str, offset: int = 0, limit: int = DEFAULT_SEARCH_LIMIT) -> PaginatedSearchResponse:
         """
         Bing uses 'offset' in addition to 'count' (our limit).
         """
@@ -145,14 +146,14 @@ class BingSearchEngine(WebSearchEngine):
             total_results=total_results
         )
 
-
 class BraveSearchEngine(WebSearchEngine):
     BRAVE_SEARCH_URL = "https://api.search.brave.com/res/v1/web/search"
+    DEFAULT_SEARCH_LIMIT = 20
 
     def __init__(self):
         self.api_key = config.BRAVE_API_KEY
 
-    def search(self, query: str, offset: int = 0, limit: int = 20) -> PaginatedSearchResponse:
+    def search(self, query: str, offset: int = 0, limit: int = DEFAULT_SEARCH_LIMIT) -> PaginatedSearchResponse:
         """
         Brave also supports 'offset' (number of items to skip) and 'limit'.
         """

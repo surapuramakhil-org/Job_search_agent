@@ -32,6 +32,8 @@ BRAVE_API_KEY = os.getenv("BRAVE_API_KEY", None)
 ALLOWED_SEARCH_ENGINES = [GOOGLE]
 DEFAULT_SEARCH_ENGINE = GOOGLE
 
+APPLY_ONCE_PER_COMPANY = False
+
 def validate_config():
     """
     Validate that all required API keys and configurations are set.
