@@ -1,0 +1,12 @@
+{
+    "configurations": [
+        {
+            "type": "debugpy",
+            "request": "launch",
+            "name": "Launch Program",
+            "program": "${workspaceFolder}/src/main.py",
+            "args": ["--resume", "akhil_resume_SE.pdf"],
+            "console": "integratedTerminal"
+        }
+    ]
+}

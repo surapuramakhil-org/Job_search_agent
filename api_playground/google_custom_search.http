@@ -1,18 +1,13 @@
-### Google Custom Search API - Example Request
+### Sample Request URL
 GET https://www.googleapis.com/customsearch/v1
-Content-Type: application/json
-
-# Query Parameters
-key={{$dotenv GOOGLE_API_KEY}}
-cx={{$dotenv GOOGLE_SEARCH_ENGINE_ID}}
-q=new+jobs
-start=1
-
-
-
-### Debugging Request URL
-GET https://www.googleapis.com/customsearch/v1?key={{$dotenv GOOGLE_API_KEY}}&cx={{$dotenv GOOGLE_SEARCH_ENGINE_ID}}&q=new+jobs&start=1
-
+    ?key={{$dotenv GOOGLE_API_KEY}}
+    &cx={{$dotenv GOOGLE_SEARCH_ENGINE_ID}}
+    &q=new+jobs
+    &start=1
 
 ### lever jobs search Request URL
-GET https://www.googleapis.com/customsearch/v1?key={{$dotenv GOOGLE_API_KEY}}&cx={{$dotenv GOOGLE_SEARCH_ENGINE_ID}}&q=software+engineer+site:jobs.lever.co&start=1
+GET https://www.googleapis.com/customsearch/v1
+    ?key={{$dotenv GOOGLE_API_KEY}}
+    &cx={{$dotenv GOOGLE_SEARCH_ENGINE_ID}}
+    &q=site:jobs.lever.co Software Engineer Java Python &location=USA after:1d (Full Time OR Contract OR Part Time OR Temporary OR Other) (Entry OR Associate OR Mid Senior Level) within:100km
+    &start=1

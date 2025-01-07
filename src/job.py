@@ -3,6 +3,7 @@ from logger import logger
 
 @dataclass
 class Job:
+    portal: str = ""
     id: str = ""
     title: str = ""
     company: str = ""

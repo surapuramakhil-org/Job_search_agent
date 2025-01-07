@@ -19,6 +19,7 @@ from lib_resume_builder_AIHawk import (
 from typing import Optional
 from constants import (
     COLLECT_MODE,
+    LEVER,
     LINKEDIN,
     OUTPUT_FIELE_DIRECTORY,
     PLAIN_TEXT_RESUME_YAML,
@@ -29,7 +30,6 @@ from constants import (
 )
 from src.job_portals.base_job_portal import get_job_portal
 from src.utils.chrome_utils import chrome_browser_options
-import undetected_chromedriver as uc
 
 from job_application_profile import JobApplicationProfile
 from logger import logger
@@ -242,18 +242,6 @@ def init_browser() -> webdriver.Chrome:
         raise RuntimeError(f"Failed to initialize browser: {str(e)}")
 
 
-def init_uc_browser() -> webdriver.Chrome:
-    try:
-        options = uc.ChromeOptions()
-        # Add any additional options you need
-        options.add_argument(
-            "--blink-settings=imagesEnabled=false"
-        )  # Optional: disable images
-        return uc.Chrome(options=options)
-    except Exception as e:
-        raise RuntimeError(f"Failed to initialize browser: {str(e)}")
-
-
 def create_and_run_bot(parameters, llm_api_key):
     try:
         style_manager = StyleManager()
@@ -277,9 +265,9 @@ def create_and_run_bot(parameters, llm_api_key):
 
         job_application_profile_object = JobApplicationProfile(plain_text_resume)
 
-        browser = init_uc_browser()
+        browser = init_browser()
         job_portal = get_job_portal(
-            driver=browser, portal_name=LINKEDIN, work_preferences=parameters[WORK_PREFERENCES]
+            driver=browser, portal_name=LEVER, work_preferences=parameters[WORK_PREFERENCES]
         )
         login_component = job_portal.authenticator
         apply_component = AIHawkJobManager(job_portal)

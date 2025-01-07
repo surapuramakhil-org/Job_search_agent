@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from re import A
 
-from constants import LINKEDIN
+from constants import LEVER, LINKEDIN
 from src.job_portals.application_form_elements import SelectQuestion, TextBoxQuestion
 from src.ai_hawk.authenticator import AIHawkAuthenticator
 from src.job import Job
@@ -26,7 +26,7 @@ class BaseJobsPage(WebPage):
         self.work_preferences = work_preferences
 
     @abstractmethod
-    def next_job_page(self, position, location, page_number):
+    def next_job_page(self, position, location, page_number) -> None:
         """
             This method will be called first, before get_jobs_from_page
         """
@@ -214,8 +214,11 @@ class BaseJobPortal(ABC):
 
 def get_job_portal(portal_name, driver, work_preferences):
     from src.job_portals.linkedIn.linkedin import LinkedIn
+    from src.job_portals.lever.lever import Lever
 
-    if portal_name == LINKEDIN:
+    if portal_name == LEVER:
+        return Lever(driver, work_preferences)
+    elif portal_name == LINKEDIN:
         return LinkedIn(driver, work_preferences)
     else:
         raise ValueError(f"Unknown job portal: {portal_name}")

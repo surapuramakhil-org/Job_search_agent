@@ -3223,6 +3223,16 @@ pymysql = ["pymysql"]
 sqlcipher = ["sqlcipher3_binary"]
 
 [[package]]
+name = "stringcase"
+version = "1.2.0"
+description = "String case converter."
+optional = false
+python-versions = "*"
+files = [
+    {file = "stringcase-1.2.0.tar.gz", hash = "sha256:48a06980661908efe8d9d34eab2b6c13aefa2163b3ced26972902e3bdfd87008"},
+]
+
+[[package]]
 name = "tenacity"
 version = "9.0.0"
 description = "Retry code until it succeeds"
@@ -3654,4 +3664,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.13"
-content-hash = "5b519fef6bb8557062188028cb955c169f1efdb86b5c63a01a7b16d27bb2ec51"
+content-hash = "af01678b69b4864e4faba9fa945c3e4d46f0ee5bfb9cd491d99a43df27b21add"

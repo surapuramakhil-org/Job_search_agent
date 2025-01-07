@@ -4,6 +4,7 @@ DATE_WEEK = "week"
 DATE_24_HOURS = "24_hours"
 
 LINKEDIN = "linkedin"
+LEVER = "lever"
 
 GOOGLE = "google"
 BING = "bing"
