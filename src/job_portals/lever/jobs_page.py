@@ -2,7 +2,8 @@ from typing import List, Optional
 from src.job import Job
 from src.job_portals.base_job_portal import BaseJobsPage
 from src.logger import logger
-from web_search_engine import SearchResult
+import stringcase
+from  src.services.web_search_engine import SearchResult, WebSearchEngineFactory
 
 
 #TODO: serch engine shoun't be constants, it can be dynamic, it serach engine changes, offset will be rest, limit will be differnt
@@ -23,12 +24,11 @@ class SearchLeverJobs(BaseJobsPage):
         super().__init__(driver, work_preferences)
         self.search_engine = WebSearchEngineFactory.get_search_engine() 
         self.search_offset = 0
-        self.search_limit = DEFAULT_SEARCH_LIMIT  # Or define your own constant
+        self.search_limit = self.search_engine.DEFAULT_SEARCH_LIMIT 
         self.jobs = []
         self.current_query = None
 
-
-    #TODO: implement complete filters of work preferences
+    #TODO: this method is be made as serach engine independent, 
     def next_job_page(self, position: str, location: str, page_number: int) -> None:
         """
         Moves to the next 'page' of search results by using offset-based
@@ -39,21 +39,84 @@ class SearchLeverJobs(BaseJobsPage):
         :param location: The location to search in (e.g., "Germany").
         :param page_number: The page number being requested.
         """
-        # Calculate offset based on page_number (which can be zero-based or one-based).
-        # Here we’ll assume page_number is zero-based.
+        
         self.search_offset = page_number * self.search_limit
-        self.current_query = f"site:jobs.lever.co {position} in {location}"
+
+        # Base query with position and location
+        base_query = f"site:jobs.lever.co {position} {location}"
+
+        # Apply location blacklist
+        if 'location_blacklist' in self.work_preferences:
+            for loc_bl in self.work_preferences['location_blacklist']:
+                base_query += f" -{loc_bl}"
+
+        # Apply company blacklist
+        if 'company_blacklist' in self.work_preferences:
+            for company_bl in self.work_preferences['company_blacklist']:
+                base_query += f" -{company_bl}"
+
+        # Apply title blacklist
+        if 'title_blacklist' in self.work_preferences:
+            for title_bl in self.work_preferences['title_blacklist']:
+                base_query += f" -{title_bl}"
+
+        # Filter by date (e.g., last 24 hours)
+        if 'date' in self.work_preferences:
+            if self.work_preferences['date'].get('24_hours', False):
+                base_query += " after:1d"
+            elif self.work_preferences['date'].get('week', False):
+                base_query += " after:7d"
+            elif self.work_preferences['date'].get('month', False):
+                base_query += " after:30d"
+
+        # Filter by job type
+        job_types = []
+        if 'job_types' in self.work_preferences:
+            for job_type, enabled in self.work_preferences['job_types'].items():
+                if enabled:
+                    job_types.append(stringcase.titlecase(job_type))
+        
+        if job_types:
+            base_query += f" ({' OR '.join(job_types)})"
+
+        # Filter by experience level
+        experience_levels = []
+        if 'experience_level' in self.work_preferences:
+            for level, enabled in self.work_preferences['experience_level'].items():
+                if enabled:
+                    experience_levels.append(stringcase.titlecase(level))
+        
+        if experience_levels:
+            base_query += f" ({' OR '.join(experience_levels)})"
+
+        # Filter by keywords whitelist (if provided)
+        if 'keywords_whitelist' in self.work_preferences and self.work_preferences['keywords_whitelist']:
+            keywords = " OR ".join(self.work_preferences['keywords_whitelist'])
+            base_query += f" ({keywords})"
+
+        # Apply distance filter (if applicable)
+        if 'distance' in self.work_preferences:
+            base_query += f" within:{self.work_preferences['distance']}km"
+
+        # Store the final query
+        self.current_query = base_query
         logger.info(f"Querying '{self.current_query}' with offset={self.search_offset} and limit={self.search_limit}")
 
+        # Make the search request using the chosen engine
         response = self.search_engine.search(
             query=self.current_query,
             offset=self.search_offset,
             limit=self.search_limit
         )
-        # Store new batch of links
+
+        logger.info(f"Found {len(response.results)} results for query '{self.current_query}'")
+
+        # Store the results
         self.jobs = response.results
 
+
     def job_tile_to_job(self, job_tile: SearchResult) -> Job:
+        raise NotImplementedError
         """
         Converts a single search result (title, link, snippet) to a Job object
         if it passes all blacklists and preference checks. The snippet can be
@@ -89,7 +152,6 @@ class SearchLeverJobs(BaseJobsPage):
             company=self._extract_company_from_link(job_tile.link),
             location="",  # Could parse snippet or further detail
             link=job_tile.link,
-            source="Lever"
         )
         return job
 
@@ -102,7 +164,6 @@ class SearchLeverJobs(BaseJobsPage):
                        scroll for dynamic pages.
         :return: A list of Job objects from the current set of results.
         """
-        
         return self.jobs
 
     def _extract_company_from_link(self, url: str) -> str:

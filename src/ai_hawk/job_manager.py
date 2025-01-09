@@ -12,6 +12,8 @@ from inputimeout import inputimeout, TimeoutOccurred
 from ai_hawk.job_applier import AIHawkJobApplier
 import config
 
+from constants import WORK_PREFERENCES
+from job_application_profile import WorkPreferences
 from job_portals.base_job_portal import BaseJobPortal, get_job_portal
 from custom_exception import JobNotSuitableException
 from job import Job
@@ -58,13 +60,14 @@ class AIHawkJobManager:
 
     def set_parameters(self, parameters):
         logger.debug("Setting parameters for AIHawkJobManager")
-        self.company_blacklist = parameters.get('company_blacklist', []) or []
-        self.title_blacklist = parameters.get('title_blacklist', []) or []
-        self.location_blacklist = parameters.get('location_blacklist', []) or []
-        self.positions = parameters.get('positions', [])
-        self.locations = parameters.get('locations', [])
+        self.workPreferences = parameters.get(WORK_PREFERENCES)
+        self.company_blacklist = self.workPreferences.get('company_blacklist', []) or []
+        self.title_blacklist = self.workPreferences.get('title_blacklist', []) or []
+        self.location_blacklist = self.workPreferences.get('location_blacklist', []) or []
+        self.positions = self.workPreferences.get('positions', [])
+        self.locations = self.workPreferences.get('locations', [])
         self.seen_jobs = []
-        self.keywords_whitelist = parameters.get('keywords_whitelist', []) or []
+        self.keywords_whitelist = self.workPreferences.get('keywords_whitelist', []) or []
 
         self.min_applicants = config.JOB_MIN_APPLICATIONS
         self.max_applicants = config.JOB_MAX_APPLICATIONS
