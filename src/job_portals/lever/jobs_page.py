@@ -3,10 +3,9 @@ from src.job import Job
 from src.job_portals.base_job_portal import BaseJobsPage
 from src.logger import logger
 import stringcase
-from  src.services.web_search_engine import SearchResult, WebSearchEngineFactory
+from  src.services.web_search_engine import SearchQueryBuilder, SearchResult, SearchTimeRange, WebSearchEngine, WebSearchEngineFactory
 
 
-#TODO: serch engine shoun't be constants, it can be dynamic, it serach engine changes, offset will be rest, limit will be differnt
 class SearchLeverJobs(BaseJobsPage):
     """
     Searches for job postings on Lever-hosted pages by querying a web
@@ -28,83 +27,70 @@ class SearchLeverJobs(BaseJobsPage):
         self.jobs = []
         self.current_query = None
 
-    #TODO: this method is be made as serach engine independent, 
+     
     def next_job_page(self, position: str, location: str, page_number: int) -> None:
         """
-        Moves to the next 'page' of search results by using offset-based
-        pagination for the chosen search engine. The results are stored
-        internally for later processing.
+        Moves to the next 'page' of search results by using offset-based pagination.
         
-        :param position: The role or title to search for (e.g., "Software engineer").
+        :param position: The role or title to search for (e.g., "Software Engineer").
         :param location: The location to search in (e.g., "Germany").
         :param page_number: The page number being requested.
         """
         
+        # Update pagination offset
         self.search_offset = page_number * self.search_limit
 
-        # Base query with position and location
-        base_query = f"site:jobs.lever.co {position} {location}"
+        # Build a unified query using SearchQueryBuilder
+        query_builder = SearchQueryBuilder.create()
+        
+        # Add position and location to keywords
+        query_builder.add_to_keywords(position)
+        query_builder.set_geolocation(location)
 
-        # Apply location blacklist
+        # Apply blacklists (location, company, title)
         if 'location_blacklist' in self.work_preferences:
-            for loc_bl in self.work_preferences['location_blacklist']:
-                base_query += f" -{loc_bl}"
-
-        # Apply company blacklist
+            query_builder.add_to_blacklist(self.work_preferences['location_blacklist'])
+        
         if 'company_blacklist' in self.work_preferences:
-            for company_bl in self.work_preferences['company_blacklist']:
-                base_query += f" -{company_bl}"
-
-        # Apply title blacklist
+            query_builder.add_to_blacklist(self.work_preferences['company_blacklist'])
+        
         if 'title_blacklist' in self.work_preferences:
-            for title_bl in self.work_preferences['title_blacklist']:
-                base_query += f" -{title_bl}"
+            query_builder.add_to_blacklist(self.work_preferences['title_blacklist'])
 
-        # Filter by date (e.g., last 24 hours)
+        # Add date range filters
         if 'date' in self.work_preferences:
             if self.work_preferences['date'].get('24_hours', False):
-                base_query += " after:1d"
+                query_builder.set_date_range(SearchTimeRange.LAST_24_HOURS)
             elif self.work_preferences['date'].get('week', False):
-                base_query += " after:7d"
+                query_builder.set_date_range(SearchTimeRange.LAST_WEEK)
             elif self.work_preferences['date'].get('month', False):
-                base_query += " after:30d"
+                query_builder.set_date_range(SearchTimeRange.LAST_MONTH)
 
-        # Filter by job type
-        job_types = []
+        # Add job types and experience levels as whitelists
         if 'job_types' in self.work_preferences:
-            for job_type, enabled in self.work_preferences['job_types'].items():
-                if enabled:
-                    job_types.append(stringcase.titlecase(job_type))
-        
-        if job_types:
-            base_query += f" ({' OR '.join(job_types)})"
+            job_types = [key for key, enabled in self.work_preferences['job_types'].items() if enabled]
+            query_builder.add_to_whitelist(job_types)
 
-        # Filter by experience level
-        experience_levels = []
         if 'experience_level' in self.work_preferences:
-            for level, enabled in self.work_preferences['experience_level'].items():
-                if enabled:
-                    experience_levels.append(stringcase.titlecase(level))
-        
-        if experience_levels:
-            base_query += f" ({' OR '.join(experience_levels)})"
+            experience_levels = [key for key, enabled in self.work_preferences['experience_level'].items() if enabled]
+            query_builder.add_to_whitelist(experience_levels)
 
-        # Filter by keywords whitelist (if provided)
+        # whitelist as per work_preferences is not same as whitelist in search engine, workpreferences whitelist forces all words to be present in search result
         if 'keywords_whitelist' in self.work_preferences and self.work_preferences['keywords_whitelist']:
-            keywords = " OR ".join(self.work_preferences['keywords_whitelist'])
-            base_query += f" ({keywords})"
-
-        # Apply distance filter (if applicable)
-        if 'distance' in self.work_preferences:
-            base_query += f" within:{self.work_preferences['distance']}km"
-
-        # Store the final query
-        self.current_query = base_query
+            query_builder.add_to_keywords(self.work_preferences['keywords_whitelist'])
+        
+        # Translate the unified query into a search-engine-specific query
+        final_query, params = query_builder.build_query_for_engine(self.search_engine)
+        
+        # Store the final query for logging/debugging purposes
+        self.current_query = final_query
+        
         logger.info(f"Querying '{self.current_query}' with offset={self.search_offset} and limit={self.search_limit}")
 
-        # Make the search request using the chosen engine
+        # Execute the search request using the chosen engine
         response = self.search_engine.search(
-            query=self.current_query,
+            query=final_query,
+            params=params,
             offset=self.search_offset,
             limit=self.search_limit
         )
@@ -184,4 +170,5 @@ class SearchLeverJobs(BaseJobsPage):
             return parts[idx+1]
         except ValueError:
             return ""
+        
 

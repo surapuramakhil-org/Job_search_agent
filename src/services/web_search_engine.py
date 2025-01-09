@@ -61,6 +61,15 @@ class UnifiedQuery:
 
 
 class WebSearchEngine(ABC):
+
+    @property
+    @abstractmethod
+    def DEFAULT_SEARCH_LIMIT(self) -> int:
+        """
+        Returns the default search limit for the search engine.
+        """
+        pass
+
     """
     Abstract base class for web search engines.
     Each subclass's search method returns a PaginatedSearchResponse object.
@@ -189,7 +198,9 @@ class SearchQueryBuilder:
 
 class GoogleSearchEngine(WebSearchEngine):
     GOOGLE_SEARCH_URL = "https://www.googleapis.com/customsearch/v1"
-    DEFAULT_SEARCH_LIMIT = 10
+    @property
+    def DEFAULT_SEARCH_LIMIT(self) -> int:
+        return 10
 
     def __init__(self):
         self.api_key = config.GOOGLE_API_KEY
@@ -273,7 +284,9 @@ class GoogleSearchEngine(WebSearchEngine):
 
 class BingSearchEngine(WebSearchEngine):
     BING_SEARCH_URL = "https://api.bing.microsoft.com/v7.0/search"
-    DEFAULT_SEARCH_LIMIT = 50
+    @property
+    def DEFAULT_SEARCH_LIMIT(self) -> int:
+        return 50
 
     def __init__(self):
         self.api_key = config.BING_API_KEY
@@ -349,7 +362,9 @@ class BingSearchEngine(WebSearchEngine):
 
 class BraveSearchEngine(WebSearchEngine):
     BRAVE_SEARCH_URL = "https://api.search.brave.com/res/v1/web/search"
-    DEFAULT_SEARCH_LIMIT = 20
+    @property
+    def DEFAULT_SEARCH_LIMIT(self) -> int:
+        return 20
 
     def __init__(self):
         self.api_key = config.BRAVE_API_KEY
