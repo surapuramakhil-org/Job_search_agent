@@ -106,7 +106,7 @@ class BaseApplicationPage(WebPage):
         pass
 
     @abstractmethod
-    def get_input_elements(self) -> List[WebElement]:
+    def get_input_elements(self, form_section : WebElement) -> List[WebElement]:
         """this method will update to Enum / other easy way (in future) instead of webList"""
         pass
 
@@ -116,6 +116,7 @@ class BaseApplicationPage(WebPage):
 
     @abstractmethod
     def get_file_upload_elements(self) -> List[WebElement]:
+        """ Deprecated """
         pass
 
     @abstractmethod

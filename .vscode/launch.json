@@ -6,7 +6,8 @@
             "name": "Launch Program",
             "program": "${workspaceFolder}/src/main.py",
             "args": [],
-            "console": "internalConsole"
+            "console": "integratedTerminal",
+            "justMyCode": false
         }
     ]
 }

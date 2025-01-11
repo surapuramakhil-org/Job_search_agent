@@ -2,8 +2,8 @@ import re
 from src.job_portals.base_job_portal import BaseJobPortal
 from src.job_portals.lever.authenticator import LeverAuthenticator
 from src.job_portals.lever.jobs_page import SearchLeverJobs
-from src.job_portals.lever.application_page import LeverEasyApplicationPage
-from src.job_portals.lever.job_page import LeverEasyApplyJobPage
+from src.job_portals.lever.application_page import LeverApplicationPage
+from src.job_portals.lever.job_page import LeverJobPage
 
 class Lever(BaseJobPortal):
 
@@ -11,8 +11,8 @@ class Lever(BaseJobPortal):
         self.driver = driver
         self._authenticator = LeverAuthenticator(driver)
         self._jobs_page = SearchLeverJobs(driver, work_preferences)
-        self._application_page = LeverEasyApplicationPage(driver)
-        self._job_page = LeverEasyApplyJobPage(driver)
+        self._application_page = LeverApplicationPage(driver)
+        self._job_page = LeverJobPage(driver)
     
     @property
     def jobs_page(self):

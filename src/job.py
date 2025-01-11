@@ -1,5 +1,20 @@
 from dataclasses import dataclass
+from enum import Enum
+from http.client import CONTINUE
+from os import link
 from logger import logger
+from typing import Optional
+
+
+#Todo: job state enum, right now its is string
+class JobState(Enum):
+    APPLY = "Apply"
+    CONTINUE = "Continue"
+    APPLIED = "Applied"
+    INTERVIEWING = "Interviewing"
+    OFFERED = "Offered"
+    REJECTED = "Rejected"
+    HIRED = "Hired"
 
 @dataclass
 class Job:
@@ -9,7 +24,8 @@ class Job:
     company: str = ""
     location: str = ""
     link: str = ""
-    apply_method: str = ""
+    #Todo: this will move to enum
+    job_state: str | JobState = ""
     description: str = ""
     summarize_job_description: str = ""
     recruiter_link: str = ""

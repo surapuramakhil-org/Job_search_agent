@@ -66,7 +66,9 @@ class ConfigValidator:
 
     @staticmethod
     def validate_work_preferences(work_preferences_file: Path) -> dict:
+
         parameters = ConfigValidator.validate_yaml_file(work_preferences_file)
+
         required_keys = {
             "remote": bool,
             "experience_level": dict,
@@ -78,6 +80,7 @@ class ConfigValidator:
             "distance": int,
             "company_blacklist": list,
             "title_blacklist": list,
+            "keywords_whitelist": list,
         }
 
         for key, expected_type in required_keys.items():

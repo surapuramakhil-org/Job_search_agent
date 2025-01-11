@@ -139,7 +139,7 @@ class AIHawkJobManager:
     def start_applying(self):
         logger.debug("Starting job application process")
         self.easy_applier_component = AIHawkJobApplier(self.job_portal, self.resume_path, self.set_old_answers,
-                                                          self.gpt_answerer, self.resume_generator_manager)
+                                                          self.gpt_answerer,self.workPreferences , self.resume_generator_manager)
         searches = list(product(self.positions, self.locations))
         random.shuffle(searches)
         page_sleep = 0
@@ -147,7 +147,6 @@ class AIHawkJobManager:
         minimum_page_time = time.time() + minimum_time
 
         for position, location in searches:
-            location_url = "&location=" + location
             job_page_number = -1
             logger.debug(f"Starting the search for {position} in {location}.")
 
@@ -156,7 +155,7 @@ class AIHawkJobManager:
                     page_sleep += 1
                     job_page_number += 1
                     logger.debug(f"Going to job page {job_page_number}")
-                    self.job_portal.jobs_page.next_job_page(position, location_url, job_page_number)
+                    self.job_portal.jobs_page.next_job_page(position, location, job_page_number)
                     utils.time_utils.medium_sleep()
                     logger.debug("Starting the application process for this page...")
 
@@ -336,22 +335,11 @@ class AIHawkJobManager:
                 self.write_to_file(job, "skipped", "Already applied to this company")
                 continue
             
-            # Add the new keyword check
-            if hasattr(self, 'keywords_whitelist') and self.keywords_whitelist:
-                try:
-                    # Navigate to the job's page
-                    self.driver.get(job.link)
-                    
-                    if not self._check_keywords_whitelist():
-                        logger.debug(f"Job description keywords not found for {job.title} at {job.company}")
-                        self.write_to_file(job, "skipped")
-                        continue
-                except Exception as e:
-                    logger.error(f"Error checking job description keywords: {e}")
-                    continue        
             
+            self.job_portal.job_page.goto_job_page(job)
+                
             try:
-                if job.apply_method not in {"Continue", "Applied", "Apply"}:
+                if job.job_state not in {"Continue", "Applied", "Apply"}:
                     self.easy_applier_component.job_apply(job)
                     self.write_to_file(job, "success")
                     logger.debug(f"Applied to job: {job.title} at {job.company}")
@@ -456,47 +444,3 @@ class AIHawkJobManager:
                 return True
                 
         return False
-
-    def _check_keywords_whitelist(self):
-        """
-        Check if job description contains any of the specified keywords.
-        
-        Returns:
-            bool: True if any keyword is found in description, False otherwise
-        """
-        logger.debug(f"Checking job description for keywords: {self.keywords_whitelist}")
-        try:
-            # Wait for job description to load
-            description_element = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, "div#job-details"))
-            )
-            
-            # Try to find and click the "Show more" button
-            try:
-                show_more_button = self.driver.find_element(By.CSS_SELECTOR, 
-                    "button.jobs-description__footer-button")
-                if show_more_button.is_displayed() and show_more_button.get_attribute('aria-expanded') == 'false':
-                    logger.debug("Clicking 'Show more' button to expand description")
-                    show_more_button.click()
-                    time.sleep(1)  # Give time for expansion animation
-            except NoSuchElementException:
-                logger.debug("No 'Show more' button found - description might already be expanded")
-            
-            # Get the full description text
-            description_text = description_element.text.lower()
-            
-            # Check if any keyword exists in the description
-            for keyword in self.keywords_whitelist:
-                if keyword.lower() in description_text:
-                    logger.debug(f"Found keyword '{keyword}' in job description")
-                    return True
-                    
-            logger.debug("No matching keywords found in job description")
-            return False
-            
-        except TimeoutException:
-            logger.warning("Timeout waiting for job description to load")
-            return False
-        except Exception as e:
-            logger.error(f"Error checking job description keywords: {e}")
-            return False
