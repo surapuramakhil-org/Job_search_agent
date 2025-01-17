@@ -12,7 +12,9 @@ from src.job_portals.application_form_elements import (
 )
 from src.job_portals.base_job_portal import BaseApplicationPage
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException
+
+from utils import browser_utils
 
 
 class LeverApplicationPage(BaseApplicationPage):
@@ -30,7 +32,12 @@ class LeverApplicationPage(BaseApplicationPage):
         except NoSuchElementException:
             logger.error("Submit button not found.")
             raise JobSkipException("Submit button not found.")
+        
+        except ElementClickInterceptedException as e:
+            logger.warning("submit button has been intercepted / interrupted, solve checks & submit application then do keyborad interrupt")
+            browser_utils.security_check(self.driver)
         except Exception as e:
+
             logger.error(
                 f"Error occurred while clicking submit button: {e} {traceback.format_exc()}"
             )

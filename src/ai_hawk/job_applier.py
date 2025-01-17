@@ -501,6 +501,7 @@ class AIHawkJobApplier:
         logger.debug("Processing form section")
 
         browser_utils.handle_security_checks()
+        time_utils.tiny_sleep()
 
         if self.job_application_page.is_upload_field(form_element):
             self._handle_upload_fields(form_element, job_context)

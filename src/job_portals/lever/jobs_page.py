@@ -126,7 +126,7 @@ class SearchLeverJobs(BaseJobsPage):
             company = parts[-2]
             logger.debug(f"Extracted job ID: {job_id} and company: {company}")
         except Exception as e:
-            logger.warning(f"Failed to extract job ID and company from link: {url}, error: {e}")
+            logger.warning(f"Failed to extract job ID and company from link: {link}, error: {e}")
 
         # Create and populate Job object
         job = Job(
@@ -135,7 +135,7 @@ class SearchLeverJobs(BaseJobsPage):
             title=job_tile.title,
             company=company,
             link=job_tile.link,
-            job_state=JobState.APPLY,
+            job_state=JobState.APPLY.value,
         )
 
         logger.debug(f"Created Job object: {job}")

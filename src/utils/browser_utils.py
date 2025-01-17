@@ -1,4 +1,3 @@
-
 from gc import callbacks
 import random
 import time
@@ -14,6 +13,7 @@ import constants
 # Module-level variable to store the default driver
 __DEFAULT_DRIVER: Optional[webdriver.Chrome] = None
 
+
 def set_default_driver(driver: webdriver.Chrome):
     """
     Store the main.py's driver in a module-level variable so other
@@ -22,6 +22,7 @@ def set_default_driver(driver: webdriver.Chrome):
     global __DEFAULT_DRIVER
     __DEFAULT_DRIVER = driver
     logger.debug("Default driver has been set for browser_utils.")
+
 
 def _get_driver(driver: Optional[webdriver.Chrome]) -> webdriver.Chrome:
     """
@@ -41,12 +42,16 @@ def is_scrollable(element):
     scroll_height = element.get_attribute("scrollHeight")
     client_height = element.get_attribute("clientHeight")
     scrollable = int(scroll_height) > int(client_height)
-    logger.debug(f"Element scrollable check: scrollHeight={scroll_height}, clientHeight={client_height}, scrollable={scrollable}")
+    logger.debug(
+        f"Element scrollable check: scrollHeight={scroll_height}, clientHeight={client_height}, scrollable={scrollable}"
+    )
     return scrollable
 
 
 def scroll_slow(driver, scrollable_element, start=0, end=3600, step=300, reverse=False):
-    logger.debug(f"Starting slow scroll: start={start}, end={end}, step={step}, reverse={reverse}")
+    logger.debug(
+        f"Starting slow scroll: start={start}, end={end}, step={step}, reverse={reverse}"
+    )
 
     if reverse:
         start, end = end, start
@@ -67,7 +72,9 @@ def scroll_slow(driver, scrollable_element, start=0, end=3600, step=300, reverse
         logger.debug(f"Adjusted start position for upward scroll: {start}")
     else:
         if end > max_scroll_height:
-            logger.warning(f"End value exceeds the scroll height. Adjusting end to {max_scroll_height}")
+            logger.warning(
+                f"End value exceeds the scroll height. Adjusting end to {max_scroll_height}"
+            )
             end = max_scroll_height
 
     script_scroll_to = "arguments[0].scrollTop = arguments[1];"
@@ -79,19 +86,27 @@ def scroll_slow(driver, scrollable_element, start=0, end=3600, step=300, reverse
                 return
 
             if (step > 0 and start >= end) or (step < 0 and start <= end):
-                logger.warning("No scrolling will occur due to incorrect start/end values.")
+                logger.warning(
+                    "No scrolling will occur due to incorrect start/end values."
+                )
                 return
 
             position = start
-            previous_position = None  # Tracking the previous position to avoid duplicate scrolls
+            previous_position = (
+                None  # Tracking the previous position to avoid duplicate scrolls
+            )
             while (step > 0 and position < end) or (step < 0 and position > end):
                 if position == previous_position:
                     # Avoid re-scrolling to the same position
-                    logger.debug(f"Stopping scroll as position hasn't changed: {position}")
+                    logger.debug(
+                        f"Stopping scroll as position hasn't changed: {position}"
+                    )
                     break
 
                 try:
-                    driver.execute_script(script_scroll_to, scrollable_element, position)
+                    driver.execute_script(
+                        script_scroll_to, scrollable_element, position
+                    )
                     logger.debug(f"Scrolled to position: {position}")
                 except Exception as e:
                     logger.error(f"Error during scrolling: {e}")
@@ -113,10 +128,13 @@ def scroll_slow(driver, scrollable_element, start=0, end=3600, step=300, reverse
     except Exception as e:
         logger.error(f"Exception occurred during scrolling: {e}")
 
+
 def remove_focus_active_element(driver):
     driver.execute_script("document.activeElement.blur();")
     logger.debug("Removed focus from active element.")
 
+
+# Todo: detection of captcha won't work
 def handle_security_checks(driver=None):
     """
     Handles security checks like CAPTCHAs by notifying the user and waiting for completion.
@@ -133,33 +151,26 @@ def handle_security_checks(driver=None):
     try:
         logger.debug("Checking for CAPTCHA...")
         # Locate the hCaptcha iframe
-        captcha_iframe = driver.find_element(By.XPATH, "//iframe[contains(@src, 'hcaptcha')]")
+        captcha_iframe = driver.find_element(
+            By.XPATH, "//iframe[contains(@src, 'hcaptcha')]"
+        )
 
         # Switch to the iframe
         driver.switch_to.frame(captcha_iframe)
 
         try:
             # Check for specific elements inside the iframe that indicate an active CAPTCHA
-            captcha_challenge = driver.find_element(By.XPATH, "//div[contains(@class, 'challenge-container')]")
-            
-            if captcha_challenge.is_displayed():
+            visible_elements = driver.find_elements(
+                By.XPATH, "//*[contains(@style, 'visibility: visible')]"
+            )
+
+            if len(visible_elements) > 0:
                 logger.info("CAPTCHA detected. Bringing browser to the foreground.")
 
                 # Bring browser window to foreground
                 driver.switch_to.default_content()
-                driver.switch_to.window(driver.current_window_handle)
+                security_check(driver)
 
-                # Play a notification sound
-                logger.info("Playing notification sound...")
-                pygame.mixer.init()
-                pygame.mixer.music.load(constants.SECURITY_CHECK_ALERT_AUDIO)
-                pygame.mixer.music.play()
-
-                logger.info("Waiting for user to solve CAPTCHA...")
-                
-                # Wait for user to acknowledge by pressing any key
-                input("Press Enter after solving the CAPTCHA to continue...")
-                
         except NoSuchElementException:
             logger.debug("No active CAPTCHA challenge detected inside iframe.")
 
@@ -171,3 +182,24 @@ def handle_security_checks(driver=None):
         logger.debug("No CAPTCHA detected on the page.")
     except Exception as e:
         logger.error(f"An error occurred: {e}")
+
+
+def security_check(driver=None):
+
+    if driver is None:
+        driver = _get_driver(driver)
+        if driver is None:
+            raise ValueError("No driver provided and no default driver set.")
+
+    driver.switch_to.window(driver.current_window_handle)
+
+    # Play a notification sound
+    logger.info("Playing notification sound...")
+    pygame.mixer.init()
+    pygame.mixer.music.load(constants.SECURITY_CHECK_ALERT_AUDIO)
+    pygame.mixer.music.play()
+
+    logger.info("Waiting for user to solve CAPTCHA...")
+
+    # Wait for user to acknowledge by pressing any key
+    input("Press Enter after solving the CAPTCHA to continue...")
