@@ -117,7 +117,7 @@ def remove_focus_active_element(driver):
     driver.execute_script("document.activeElement.blur();")
     logger.debug("Removed focus from active element.")
 
-def handle_security_checks(driver = None):
+def handle_security_checks(driver=None):
     """
     Handles security checks like CAPTCHAs by notifying the user and waiting for completion.
     Assumes the page is already loaded.
@@ -125,7 +125,6 @@ def handle_security_checks(driver = None):
     Args:
         driver (WebDriver): Selenium WebDriver instance.
     """
-
     if driver is None:
         driver = _get_driver(driver)
         if driver is None:
@@ -133,36 +132,40 @@ def handle_security_checks(driver = None):
 
     try:
         logger.debug("Checking for CAPTCHA...")
-        # Check if hcaptcha is present
-        captcha_element = driver.find_element(By.XPATH, "//iframe[contains(@src, 'hcaptcha')]")
+        # Locate the hCaptcha iframe
+        captcha_iframe = driver.find_element(By.XPATH, "//iframe[contains(@src, 'hcaptcha')]")
 
-        if captcha_element.is_displayed():
-            logger.info("CAPTCHA detected. Bringing browser to the foreground.")
+        # Switch to the iframe
+        driver.switch_to.frame(captcha_iframe)
 
-            # Bring the browser window to the foreground
-            driver.switch_to.window(driver.current_window_handle)
-
-            # Play a notification sound to alert the user
-            logger.info("Playing notification sound...")
-            pygame.mixer.init()
-            pygame.mixer.music.load(constants.SECURITY_CHECK_ALERT_AUDIO)
-            pygame.mixer.music.play()
-
-            logger.info("Waiting for user to solve CAPTCHA...")
+        try:
+            # Check for specific elements inside the iframe that indicate an active CAPTCHA
+            captcha_challenge = driver.find_element(By.XPATH, "//div[contains(@class, 'challenge-container')]")
             
-            # Wait for user to solve CAPTCHA (polling)
-            while True:
-                try:
-                    # Check if CAPTCHA iframe is gone
-                    if not captcha_element.is_displayed():
-                        logger.info("CAPTCHA solved.")
-                        break
-                    logger.info("CAPTCHA still present. Waiting...")
-                    time.sleep(5)  # Poll every 5 seconds
+            if captcha_challenge.is_displayed():
+                logger.info("CAPTCHA detected. Bringing browser to the foreground.")
+
+                # Bring browser window to foreground
+                driver.switch_to.default_content()
+                driver.switch_to.window(driver.current_window_handle)
+
+                # Play a notification sound
+                logger.info("Playing notification sound...")
+                pygame.mixer.init()
+                pygame.mixer.music.load(constants.SECURITY_CHECK_ALERT_AUDIO)
+                pygame.mixer.music.play()
+
+                logger.info("Waiting for user to solve CAPTCHA...")
                 
-                except NoSuchElementException:
-                    logger.info("CAPTCHA solved.")
-                    break
+                # Wait for user to acknowledge by pressing any key
+                input("Press Enter after solving the CAPTCHA to continue...")
+                
+        except NoSuchElementException:
+            logger.debug("No active CAPTCHA challenge detected inside iframe.")
+
+        finally:
+            # Switch back to default content
+            driver.switch_to.default_content()
 
     except NoSuchElementException:
         logger.debug("No CAPTCHA detected on the page.")
