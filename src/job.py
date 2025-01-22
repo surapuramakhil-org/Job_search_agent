@@ -25,7 +25,7 @@ class Job:
     location: str = ""
     link: str = ""
     #Todo: this will move to enum
-    job_state: str | JobState = ""
+    job_state: str = ""
     description: str = ""
     summarize_job_description: str = ""
     recruiter_link: str = ""
@@ -64,3 +64,42 @@ class Job:
         formatted_information = job_information.strip()
         logger.debug(f"Formatted job information: {formatted_information}")
         return formatted_information
+
+    # def to_dict(self):
+    #     """
+    #     Converts the Job object to a dictionary, making it JSON serializable.
+    #     """
+    #     return {
+    #         "portal": self.portal,
+    #         "id": self.id,
+    #         "title": self.title,
+    #         "company": self.company,
+    #         "location": self.location,
+    #         "link": self.link,
+    #         "job_state": self.job_state.value if isinstance(self.job_state, JobState) else self.job_state,
+    #         "description": self.description,
+    #         "summarize_job_description": self.summarize_job_description,
+    #         "recruiter_link": self.recruiter_link,
+    #         "resume_path": self.resume_path,
+    #         "cover_letter_path": self.cover_letter_path,
+    #     }
+
+    # @classmethod
+    # def from_dict(cls, data: dict):
+    #     """
+    #     Creates a Job object from a dictionary.
+    #     """
+    #     return cls(
+    #         portal=data.get("portal", ""),
+    #         id=data.get("id", ""),
+    #         title=data.get("title", ""),
+    #         company=data.get("company", ""),
+    #         location=data.get("location", ""),
+    #         link=data.get("link", ""),
+    #         job_state=JobState(data["job_state"]) if data.get("job_state") in JobState.__members__.values() else data.get("job_state", ""),
+    #         description=data.get("description", ""),
+    #         summarize_job_description=data.get("summarize_job_description", ""),
+    #         recruiter_link=data.get("recruiter_link", ""),
+    #         resume_path=data.get("resume_path", ""),
+    #         cover_letter_path=data.get("cover_letter_path", ""),
+    #     )
