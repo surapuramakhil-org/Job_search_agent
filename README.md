@@ -125,7 +125,7 @@ place to find release tags: https://github.com/surapuramakhil-org/Job_search_ass
 git checkout <tag_name>
 ```
 
-example tag ()
+example:
 ```bash
 git checkout v0.1.0-beta
 ```
