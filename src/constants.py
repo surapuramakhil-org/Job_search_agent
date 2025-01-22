@@ -1,17 +1,22 @@
+SECURITY_CHECK_ALERT_AUDIO = 'funny_sounds/security_check.wav'
+
+# String constants used in the application
 DATE_ALL_TIME = "all_time"
 DATE_MONTH = "month"
 DATE_WEEK = "week"
 DATE_24_HOURS = "24_hours"
 
 LINKEDIN = "linkedin"
+LEVER = "lever"
 
-# constants used in application
+GOOGLE = "google"
+BING = "bing"
+BRAVE = "brave"
+
 SECRETS_YAML = "secrets.yaml"
 WORK_PREFERENCES_YAML = "work_preferences.yaml"
 PLAIN_TEXT_RESUME_YAML = "plain_text_resume.yaml"
 
-
-# String constants used in the application
 DEBUG = "DEBUG"
 INFO = "INFO"
 WARNING = "WARNING"
@@ -20,7 +25,11 @@ CRITICAL = "CRITICAL"
 
 MINIMUM_LOG_LEVEL = "MINIMUM_LOG_LEVEL"
 
-# Constants in llm_manager.py
+WORK_PREFERENCES = "work_preferences"
+UPLOADS = "uploads"
+OUTPUT_FIELE_DIRECTORY = "outputFileDirectory"
+COLLECT_MODE = "collectMode"
+
 USAGE_METADATA = "usage_metadata"
 OUTPUT_TOKENS = "output_tokens"
 INPUT_TOKENS = "input_tokens"
