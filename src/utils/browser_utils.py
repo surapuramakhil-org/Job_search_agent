@@ -10,7 +10,7 @@ from logger import logger
 import pygame
 import constants
 
-# Module-level variable to store the default driver
+# Module-level variable to store the default driver, make sure your imports are exactly same when you are using this
 __DEFAULT_DRIVER: Optional[webdriver.Chrome] = None
 
 

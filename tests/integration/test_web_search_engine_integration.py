@@ -1,5 +1,5 @@
 import pytest
-from src.services.web_search_engine import GoogleSearchEngine, BingSearchEngine, BraveSearchEngine
+from services.web_search_engine import GoogleSearchEngine, BingSearchEngine, BraveSearchEngine
 
 @pytest.mark.integration
 def test_google_search_engine_integration():
