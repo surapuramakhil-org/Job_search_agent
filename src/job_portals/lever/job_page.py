@@ -1,7 +1,7 @@
 import traceback
 from loguru import logger
 from custom_exception import JobNotSuitableException, JobSkipException
-from src.job_portals.base_job_portal import BaseJobPage
+from job_portals.base_job_portal import BaseJobPage
 from selenium.webdriver.common.by import By
 
 from utils import time_utils

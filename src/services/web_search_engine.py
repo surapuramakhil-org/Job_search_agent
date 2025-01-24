@@ -5,9 +5,9 @@ from typing import Any, Dict, List, Optional, Union, Tuple
 import requests
 from abc import ABC, abstractmethod
 
-import src.config as config
-from src.config import ALLOWED_SEARCH_ENGINES, GOOGLE, BING, BRAVE
-from src.logger import logger
+import config as config
+from config import ALLOWED_SEARCH_ENGINES, GOOGLE, BING, BRAVE
+from logger import logger
 
 @dataclass
 class SearchResult:

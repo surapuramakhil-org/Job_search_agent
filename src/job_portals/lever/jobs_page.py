@@ -1,10 +1,10 @@
 from typing import List, Optional
 from constants import COMPANY
-from src.job import Job, JobState
-from src.job_portals.base_job_portal import BaseJobsPage
-from src.logger import logger
+from job import Job, JobState
+from job_portals.base_job_portal import BaseJobsPage
+from logger import logger
 import stringcase
-from  src.services.web_search_engine import SearchQueryBuilder, SearchResult, SearchTimeRange, WebSearchEngine, WebSearchEngineFactory
+from  services.web_search_engine import SearchQueryBuilder, SearchResult, SearchTimeRange, WebSearchEngine, WebSearchEngineFactory
 
 
 class SearchLeverJobs(BaseJobsPage):

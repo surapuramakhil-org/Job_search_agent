@@ -28,8 +28,8 @@ from constants import (
     WORK_PREFERENCES_YAML,
     WORK_PREFERENCES,
 )
-from src.job_portals.base_job_portal import get_job_portal
-from src.utils.chrome_utils import chrome_browser_options
+from job_portals.base_job_portal import get_job_portal
+from utils.chrome_utils import chrome_browser_options
 
 from job_application_profile import JobApplicationProfile
 from logger import logger

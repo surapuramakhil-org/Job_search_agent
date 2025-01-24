@@ -4,13 +4,13 @@ from regex import E
 from selenium.webdriver.remote.webelement import WebElement
 from custom_exception import JobSkipException
 from logger import logger
-from src.job_portals.application_form_elements import (
+from job_portals.application_form_elements import (
     SelectQuestion,
     SelectQuestionType,
     TextBoxQuestion,
     TextBoxQuestionType,
 )
-from src.job_portals.base_job_portal import BaseApplicationPage
+from job_portals.base_job_portal import BaseApplicationPage
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException
 

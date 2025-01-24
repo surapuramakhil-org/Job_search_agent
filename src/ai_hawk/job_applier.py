@@ -28,8 +28,8 @@ from job_portals.application_form_elements import SelectQuestion, TextBoxQuestio
 from job_portals.base_job_portal import BaseJobPage, BaseJobPortal
 
 
-from src.job import Job
-from src.ai_hawk.llm.llm_manager import GPTAnswerer
+from job import Job
+from ai_hawk.llm.llm_manager import GPTAnswerer
 from utils import browser_utils, time_utils
 
 

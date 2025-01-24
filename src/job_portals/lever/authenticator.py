@@ -1,4 +1,4 @@
-from src.ai_hawk.authenticator import AIHawkAuthenticator
+from ai_hawk.authenticator import AIHawkAuthenticator
 
 class LeverAuthenticator(AIHawkAuthenticator):
 

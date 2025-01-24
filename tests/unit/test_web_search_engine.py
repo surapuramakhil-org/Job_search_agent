@@ -1,11 +1,11 @@
 import pytest
 from unittest.mock import patch, MagicMock
-from src.services.web_search_engine import GoogleSearchEngine, BingSearchEngine, BraveSearchEngine
+from services.web_search_engine import GoogleSearchEngine, BingSearchEngine, BraveSearchEngine
 
 # Unit test for GoogleSearchEngine
 @patch("requests.get")
-@patch("src.config.GOOGLE_API_KEY", "mock_api_key")  # Mocking the Google API key
-@patch("src.config.GOOGLE_SEARCH_ENGINE_ID", "mock_id")  # Mocking the Google Search Engine ID
+@patch("config.GOOGLE_API_KEY", "mock_api_key")  # Mocking the Google API key
+@patch("config.GOOGLE_SEARCH_ENGINE_ID", "mock_id")  # Mocking the Google Search Engine ID
 def test_google_search_engine(mock_get):
     mock_response = MagicMock()
     # Mocking a valid Google API response
@@ -32,7 +32,7 @@ def test_google_search_engine(mock_get):
 
 # Unit test for BingSearchEngine
 @patch("requests.get")
-@patch("src.config.BING_API_KEY", "mock_bing_api_key")  # Mocking the Bing API key
+@patch("config.BING_API_KEY", "mock_bing_api_key")  # Mocking the Bing API key
 def test_bing_search_engine(mock_get):
     mock_response = MagicMock()
     # Mocking a valid Bing API response
@@ -62,7 +62,7 @@ def test_bing_search_engine(mock_get):
 
 # Unit test for BraveSearchEngine
 @patch("requests.get")
-@patch("src.config.BRAVE_API_KEY", "mock_brave_api_key")  # Mocking the Brave API key
+@patch("config.BRAVE_API_KEY", "mock_brave_api_key")  # Mocking the Brave API key
 def test_brave_search_engine(mock_get):
     mock_response = MagicMock()
     # Mocking a valid Brave API response
