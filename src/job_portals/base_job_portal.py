@@ -214,13 +214,10 @@ class BaseJobPortal(ABC):
 
 
 def get_job_portal(portal_name, driver, work_preferences):
-    from src.job_portals.linkedIn.linkedin import LinkedIn
     from src.job_portals.lever.lever import Lever
 
     if portal_name == LEVER:
         return Lever(driver, work_preferences)
-    elif portal_name == LINKEDIN:
-        return LinkedIn(driver, work_preferences)
     else:
         raise ValueError(f"Unknown job portal: {portal_name}")
 
