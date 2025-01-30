@@ -2,10 +2,10 @@ from abc import ABC, abstractmethod
 from re import A
 
 from constants import LEVER, LINKEDIN
-from src.job_portals.application_form_elements import SelectQuestion, TextBoxQuestion
-from src.ai_hawk.authenticator import AIHawkAuthenticator
-from src.job import Job
-from src.jobContext import JobContext
+from job_portals.application_form_elements import SelectQuestion, TextBoxQuestion
+from ai_hawk.authenticator import AIHawkAuthenticator
+from job import Job
+from jobContext import JobContext
 
 from selenium.webdriver.remote.webelement import WebElement
 from typing import List, TypeVar
@@ -214,19 +214,16 @@ class BaseJobPortal(ABC):
 
 
 def get_job_portal(portal_name, driver, work_preferences):
-    from src.job_portals.linkedIn.linkedin import LinkedIn
-    from src.job_portals.lever.lever import Lever
+    from job_portals.lever.lever import Lever
 
     if portal_name == LEVER:
         return Lever(driver, work_preferences)
-    elif portal_name == LINKEDIN:
-        return LinkedIn(driver, work_preferences)
     else:
         raise ValueError(f"Unknown job portal: {portal_name}")
 
 
 def get_authenticator(driver, platform):
-    from src.job_portals.linkedIn.authenticator import LinkedInAuthenticator
+    from job_portals.linkedIn.authenticator import LinkedInAuthenticator
 
     if platform == LINKEDIN:
         return LinkedInAuthenticator(driver)

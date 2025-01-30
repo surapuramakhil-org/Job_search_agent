@@ -19,9 +19,9 @@ from langchain_core.prompts import ChatPromptTemplate
 from Levenshtein import distance
 from loguru import logger
 
-import src.ai_hawk.llm.prompts as prompts
-from src.config import JOB_SUITABILITY_SCORE
-from src.constants import (
+import ai_hawk.llm.prompts as prompts
+from config import JOB_SUITABILITY_SCORE
+from constants import (
     AVAILABILITY,
     CERTIFICATIONS,
     CLAUDE,
@@ -72,9 +72,9 @@ from src.constants import (
     USAGE_METADATA,
     WORK_PREFERENCES,
 )
-from src.job import Job
+from job import Job
 
-import src.config as cfg
+import config as cfg
 
 load_dotenv()
 

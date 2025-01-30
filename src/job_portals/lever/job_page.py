@@ -1,7 +1,7 @@
 import traceback
 from loguru import logger
 from custom_exception import JobNotSuitableException, JobSkipException
-from src.job_portals.base_job_portal import BaseJobPage
+from job_portals.base_job_portal import BaseJobPage
 from selenium.webdriver.common.by import By
 
 from utils import time_utils
@@ -15,6 +15,7 @@ class LeverJobPage(BaseJobPage):
     def goto_job_page(self, job):
         try:
             self.driver.get(job.link)
+            time_utils.medium_sleep()
             logger.debug(f"Navigated to job link: {job.link}")
         except Exception as e:
             logger.error(f"Failed to navigate to job link: {job.link}, error: {str(e)}")

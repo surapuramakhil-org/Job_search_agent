@@ -5,9 +5,9 @@ from typing import Any, Dict, List, Optional, Union, Tuple
 import requests
 from abc import ABC, abstractmethod
 
-import src.config as config
-from src.config import ALLOWED_SEARCH_ENGINES, GOOGLE, BING, BRAVE
-from src.logger import logger
+import config as config
+from config import ALLOWED_SEARCH_ENGINES, GOOGLE, BING, BRAVE
+from logger import logger
 
 @dataclass
 class SearchResult:
@@ -206,7 +206,10 @@ class GoogleSearchEngine(WebSearchEngine):
         self.api_key = config.GOOGLE_API_KEY
         self.search_engine_id = config.GOOGLE_SEARCH_ENGINE_ID
 
-    def search(self, query: str, params: dict = {}, offset: int = 0, limit: int = DEFAULT_SEARCH_LIMIT) -> PaginatedSearchResponse:
+    def search(self, query: str, params: dict = {}, offset: int = 0, limit: Optional[int] = None) -> PaginatedSearchResponse:
+        
+        if limit is None:
+            limit = self.DEFAULT_SEARCH_LIMIT
         """
         Google uses 'start' to represent offset. 
         If offset is 0, start=1. If offset is 10, start=11, etc.
@@ -291,10 +294,13 @@ class BingSearchEngine(WebSearchEngine):
     def __init__(self):
         self.api_key = config.BING_API_KEY
 
-    def search(self, query: str, params: dict = {}, offset: int = 0, limit: int = DEFAULT_SEARCH_LIMIT) -> PaginatedSearchResponse:
+    def search(self, query: str, params: dict = {}, offset: int = 0, limit: Optional[int] = None) -> PaginatedSearchResponse:
         """
         Bing uses 'offset' in addition to 'count' (our limit).
         """
+        if limit is None:
+            limit = self.DEFAULT_SEARCH_LIMIT
+
         headers = {"Ocp-Apim-Subscription-Key": self.api_key}
         params.update({
             "q": query,
@@ -369,7 +375,9 @@ class BraveSearchEngine(WebSearchEngine):
     def __init__(self):
         self.api_key = config.BRAVE_API_KEY
 
-    def search(self, query: str, params: dict = {}, offset: int = 0, limit: int = DEFAULT_SEARCH_LIMIT) -> PaginatedSearchResponse:
+    def search(self, query: str, params: dict = {}, offset: int = 0, limit: Optional[int] = None) -> PaginatedSearchResponse:
+        if limit is None:
+            limit = self.DEFAULT_SEARCH_LIMIT
         """
         Brave also supports 'offset' (number of items to skip) and 'limit'.
         """

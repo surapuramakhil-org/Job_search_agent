@@ -97,7 +97,7 @@ Before you begin, ensure you have met the following requirements:
 
 ### Download and Install Python
 
-Ensure you have the latest Python version installed (Python 3.8 or higher is required for Poetry). If not, download and install it from Python's official website. For detailed instructions, refer to the tutorials:
+Ensure you have the latest Python version installed (Python 3.11 or higher is required for this project). If not, download and install it from Python's official website. For detailed instructions, refer to the tutorials:
 - [How to Install Python on Windows](https://docs.python.org/3/using/windows.html)
 - [How to Install Python on Linux](https://docs.python.org/3/using/unix.html)
 - [How to Download and Install Python on macOS](https://docs.python.org/3/using/mac.html)
