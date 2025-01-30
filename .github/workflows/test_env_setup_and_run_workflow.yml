@@ -40,6 +40,4 @@ jobs:
       - name: Run tests with PyTest configuration
         env:
           PYTHONPATH: ${{ env.PYTHONPATH }} # Explicitly pass PYTHONPATH to the test environment
-          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }} # Pass the Google API key as an environment variable
-          GOOGLE_SEARCH_ENGINE_ID: ${{ secrets.GOOGLE_SEARCH_ENGINE_ID }} # Pass the Google Search Engine ID as an environment variable
         run: ${{ inputs.test_command }}
