@@ -192,7 +192,7 @@ After copying, open the `.env` file and fill in the required values. Ensure you 
   ```
 
 - **Using the collect mode:**
-  If you want to collect job data only to perform any type of data analytics you can use the bot with the `--collect` option. This will store in output/data.json file all data found from linkedin jobs offers.
+  If you want to collect job data only to perform any type of data analytics you can use the bot with the `--collect` option. This will store in output/data.json file all data found,
 
   ```bash
   poetry run python main.py --collect
@@ -208,11 +208,6 @@ After copying, open the `.env` file and fill in the required values. Ensure you 
 
 - [Workflow diagrams](docs/workflow_diagrams.md)
 
-- If you encounter any issues, you can open an issue on [GitHub](https://github.com/surapuramakhil-org/Job_hunt_assistant/issues).
-  Please add valuable details to the subject and to the description. If you need new feature then please reflect this.  
-  I'll be more than happy to assist you!
-
-- Note for Contributors: If you would like to submit a Pull Request (PR), please target the `release` branch instead of `main`. The `release` branch is used for testing new code changes and will be periodically merged into `main` after validation. This approach ensures that only tested features make it into the main branch.
 ## Supporting This Project
 
 Supporting job search assistant helps us continue to develop and improve this valuable tool for job seekers worldwide. Here are a few ways you can contribute:
@@ -239,7 +234,7 @@ Supporting job search assistant helps us continue to develop and improve this va
 
 2. **Join the Community**: Join our [Discord](https://discord.gg/MYYwG8JyrQ) to connect with other users and contributors. Your participation helps build a supportive community around the project.
 
-3. **Report Issues**: If you encounter any bugs or have suggestions for improvements, please open an issue on GitHub. Your feedback is crucial for the project's growth.
+3. **Report Issues / Feature requests**: If you encounter any bugs or have suggestions for improvements, please open an issue on [GitHub](https://github.com/surapuramakhil-org/Job_hunt_assistant/issues). Your feedback is crucial for the project's growth.
 
 4. **Contribute Code**: If you're a developer, consider contributing code to the project. Check out our [Contribution Guidelines](docs/CONTRIBUTING.md), [PM docs](/docs/project_management.md)  for more information on how to get started.
 
