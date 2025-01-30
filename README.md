@@ -221,14 +221,18 @@ Supporting job search assistant helps us continue to develop and improve this va
 
 2. **Spread the Word**: Share this project with your network. Whether it's through social media, blog posts, or word of mouth, spreading the word helps us reach more people who could benefit from job search assistant.
 
-  - [Share on Twitter](https://twitter.com/intent/tweet?text=Check%20out%20this%20awesome%20job%20search%20assistant%20tool%20powered%20by%20AI!%20Automate%20your%20job%20applications%20and%20land%20your%20dream%20job%20faster.%20%23JobSearchAssistant%20%23AI%20%23JobHunt%20%23Automation&url=https://github.com/surapuramakhil-org/Job_hunt_assistant)
+<div align="center">
 
-  - [Share on LinkedIn](https://www.linkedin.com/sharing/share-offsite/?url=https://github.com/surapuramakhil-org/Job_hunt_assistant)
-  - [Share on Facebook](https://www.facebook.com/sharer/sharer.php?u=https://github.com/surapuramakhil-org/Job_hunt_assistant)
-  
-  - [Share on Reddit](https://reddit.com/submit?url=https://github.com/surapuramakhil-org/Job_hunt_assistant&title=Check%20out%20this%20awesome%20job%20search%20assistant%20tool%20powered%20by%20AI!)
-  - [Share on WhatsApp](https://api.whatsapp.com/send?text=Check%20out%20this%20awesome%20job%20search%20assistant%20tool%20powered%20by%20AI!%20Automate%20your%20job%20applications%20and%20land%20your%20dream%20job%20faster.%20%23JobSearchAssistant%20%23AI%20%23JobHunt%20%23Automation%20https://github.com/surapuramakhil-org/Job_hunt_assistant)
-  - [Share on Telegram](https://t.me/share/url?url=https://github.com/surapuramakhil-org/Job_hunt_assistant&text=Check%20out%20this%20awesome%20job%20search%20assistant%20tool%20powered%20by%20AI!%20Automate%20your%20job%20applications%20and%20land%20your%20dream%20job%20faster.%20%23JobSearchAssistant%20%23AI%20%23JobHunt%20%23Automation)
+[![X](https://img.shields.io/badge/X-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/intent/tweet?text=Check%20out%20this%20awesome%20job%20search%20assistant%20tool%20powered%20by%20AI!%20Automate%20your%20job%20applications%20and%20land%20your%20dream%20job%20faster.%20%23JobSearchAssistant%20%23AI%20%23JobHunt%20%23Automation&url=https://github.com/surapuramakhil-org/Job_hunt_assistant)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/sharing/share-offsite/?url=https://github.com/surapuramakhil-org/Job_hunt_assistant)
+[![Facebook](https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white)](https://www.facebook.com/sharer/sharer.php?u=https://github.com/surapuramakhil-org/Job_hunt_assistant)
+[![Reddit](https://img.shields.io/badge/Reddit-FF4500?style=for-the-badge&logo=reddit&logoColor=white)](https://reddit.com/submit?url=https://github.com/surapuramakhil-org/Job_hunt_assistant&title=Check%20out%20this%20awesome%20job%20search%20assistant%20tool%20powered%20by%20AI!)
+[![WhatsApp](https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://api.whatsapp.com/send?text=Check%20out%20this%20awesome%20job%20search%20assistant%20tool%20powered%20by%20AI!%20Automate%20your%20job%20applications%20and%20land%20your%20dream%20job%20faster.%20%23JobSearchAssistant%20%23AI%20%23JobHunt%20%23Automation%20https://github.com/surapuramakhil-org/Job_hunt_assistant)
+[![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/share/url?url=https://github.com/surapuramakhil-org/Job_hunt_assistant&text=Check%20out%20this%20awesome%20job%20search%20assistant%20tool%20powered%20by%20AI!%20Automate%20your%20job%20applications%20and%20land%20your%20dream%20job%20faster.%20%23JobSearchAssistant%20%23AI%20%23JobHunt%20%23Automation)
+
+[![Bluesky](https://img.shields.io/badge/Bluesky-1DA1F2?style=for-the-badge&logo=bluesky&logoColor=white)](https://bsky.app/profile/surapuramakhil-org.bsky.social)
+
+</div>
 
 3. **Star the Repository**: If you find this project useful, please star the repository on GitHub. It helps increase the project's visibility and shows your appreciation.
 
