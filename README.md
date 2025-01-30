@@ -230,17 +230,18 @@ Supporting job search assistant helps us continue to develop and improve this va
 [![WhatsApp](https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://api.whatsapp.com/send?text=Check%20out%20this%20awesome%20job%20search%20assistant%20tool%20powered%20by%20AI!%20Automate%20your%20job%20applications%20and%20land%20your%20dream%20job%20faster.%20%23JobSearchAssistant%20%23AI%20%23JobHunt%20%23Automation%20https://github.com/surapuramakhil-org/Job_hunt_assistant)
 [![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/share/url?url=https://github.com/surapuramakhil-org/Job_hunt_assistant&text=Check%20out%20this%20awesome%20job%20search%20assistant%20tool%20powered%20by%20AI!%20Automate%20your%20job%20applications%20and%20land%20your%20dream%20job%20faster.%20%23JobSearchAssistant%20%23AI%20%23JobHunt%20%23Automation)
 
-[![Bluesky](https://img.shields.io/badge/Bluesky-1DA1F2?style=for-the-badge&logo=bluesky&logoColor=white)](https://bsky.app/profile/surapuramakhil-org.bsky.social)
+[![Bluesky](https://img.shields.io/badge/Bluesky-0285FF?style=for-the-badge&logo=bluesky&logoColor=white)](https://bsky.app/intent/compose?text=Check%20out%20this%20awesome%20job%20search%20assistant%20tool%20powered%20by%20AI!%20Automate%20your%20job%20applications%20and%20land%20your%20dream%20job%20faster.%20%23JobSearchAssistant%20%23AI%20%23JobHunt%20%23Automation%20https://github.com/surapuramakhil-org/Job_hunt_assistant)
+
 
 </div>
 
-3. **Star the Repository**: If you find this project useful, please star the repository on GitHub. It helps increase the project's visibility and shows your appreciation.
+1. **Star the Repository**: If you find this project useful, please star the repository on GitHub. It helps increase the project's visibility and shows your appreciation.
 
-4. **Join the Community**: Join our [Discord](https://discord.gg/MYYwG8JyrQ) to connect with other users and contributors. Your participation helps build a supportive community around the project.
+2. **Join the Community**: Join our [Discord](https://discord.gg/MYYwG8JyrQ) to connect with other users and contributors. Your participation helps build a supportive community around the project.
 
-5. **Report Issues**: If you encounter any bugs or have suggestions for improvements, please open an issue on GitHub. Your feedback is crucial for the project's growth.
+3. **Report Issues**: If you encounter any bugs or have suggestions for improvements, please open an issue on GitHub. Your feedback is crucial for the project's growth.
 
-6. **Contribute Code**: If you're a developer, consider contributing code to the project. Check out our [Contribution Guidelines](docs/CONTRIBUTING.md), [PM docs](/docs/project_management.md)  for more information on how to get started.
+4. **Contribute Code**: If you're a developer, consider contributing code to the project. Check out our [Contribution Guidelines](docs/CONTRIBUTING.md), [PM docs](/docs/project_management.md)  for more information on how to get started.
 
 Your support is greatly appreciated and helps us make job search assistant a powerful tool for job seekers everywhere.
 
