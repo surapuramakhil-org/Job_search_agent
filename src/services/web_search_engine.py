@@ -182,12 +182,13 @@ class SearchQueryBuilder:
         # 2. Build whitelist portion as (whitelist1 OR whitelist2 OR ...)
         whitelist_part = ""
         if unified_query.whitelist:
-            whitelist_part = "(" + " OR ".join(unified_query.whitelist) + ")"
+            quoted_whitelist = [f'"{w}"' if ' ' in w else w for w in unified_query.whitelist]
+            whitelist_part = "(" + " OR ".join(quoted_whitelist) + ")"
 
         # 3. Build blacklist portion as (-blacklist1 OR -blacklist2 OR ...)
         blacklist_part = ""
         if unified_query.blacklist:
-            negated = [f"-{b}" for b in unified_query.blacklist]
+            negated = [f'-"{b}"' if ' ' in b else f'-{b}' for b in unified_query.blacklist]
             blacklist_part = "(" + " OR ".join(negated) + ")"
 
         # Combine them, skipping empty parts
