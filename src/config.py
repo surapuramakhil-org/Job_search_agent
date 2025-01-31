@@ -6,12 +6,12 @@ from constants import BING, BRAVE, DEBUG, GOOGLE, INFO, TRACE
 load_dotenv()
 
 #config related to logging must have prefix LOG_
-LOG_LEVEL = INFO
+LOG_LEVEL = TRACE
 LOG_SELENIUM_LEVEL = INFO
 LOG_TO_FILE = True
 LOG_TO_CONSOLE = True
 
-MINIMUM_WAIT_TIME_IN_SECONDS = 60
+MINIMUM_WAIT_TIME_IN_SECONDS = 5
 
 JOB_APPLICATIONS_DIR = "job_applications"
 JOB_SUITABILITY_SCORE = 7
