@@ -20,7 +20,7 @@ from reportlab.pdfbase.pdfmetrics import stringWidth
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 
-from custom_exception import JobNotSuitableException
+from custom_exception import JobNotSuitableException, JobSkipException
 from jobContext import JobContext
 from job_application import JobApplication
 from job_application_saver import ApplicationSaver
@@ -218,7 +218,7 @@ class AIHawkJobApplier:
             
             else:
                 logger.warning(f"submit button not found, discarding application {job}")
-                return
+                raise JobSkipException(f" No next or submit button found, discarding application {job}")
 
     def fill_up(self, job_context: JobContext) -> None:
         job = job_context.job
@@ -493,6 +493,7 @@ class AIHawkJobApplier:
         logger.debug("Filling additional questions")
         form_elements = self.job_application_page.get_input_elements(form_section=form_section)
         for form_element in form_elements:
+            logger.debug(f"Processing form element with text: {form_element.text}")
             self._process_form_element(job_context, form_element)
 
     def _process_form_element(

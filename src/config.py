@@ -1,13 +1,13 @@
 # In this file, you can set the configurations of the app.
 import os
 from dotenv import load_dotenv
-from constants import BING, BRAVE, DEBUG, GOOGLE
+from constants import BING, BRAVE, DEBUG, GOOGLE, INFO, TRACE
 
 load_dotenv()
 
 #config related to logging must have prefix LOG_
-LOG_LEVEL = DEBUG
-LOG_SELENIUM_LEVEL = DEBUG
+LOG_LEVEL = INFO
+LOG_SELENIUM_LEVEL = INFO
 LOG_TO_FILE = True
 LOG_TO_CONSOLE = True
 
