@@ -1,3 +1,5 @@
+from asyncio import base_events
+from operator import is_
 from logger import logger
 import os
 import json
@@ -20,12 +22,18 @@ class ApplicationSaver:
         self.job_application_files_path = None
 
     # Function to create a directory for each job application
-    def create_application_directory(self):
+    def create_application_directory(self, is_failed: bool):
         job = self.job_application.job
 
         # Create a unique directory name using the application ID and company name
         dir_name = f"{job.id} - {job.company} {job.title}"
-        dir_path = os.path.join(BASE_DIR, dir_name)
+
+        base_dir = BASE_DIR
+
+        if is_failed:
+            base_dir = f"failed_{base_dir}"
+
+        dir_path = os.path.join(base_dir, dir_name)
 
         # Create the directory if it doesn't exist
         os.makedirs(dir_path, exist_ok=True)
@@ -44,17 +52,8 @@ class ApplicationSaver:
             self.job_application_files_path, "job_application.json"
         )
         with open(json_file_path, "w") as json_file:
-            json.dump(self.job_application.application, json_file, indent=4)
-
-    # Function to save files like Resume and CV
-    def save_file(self, dir_path, file_path, new_filename):
-        if dir_path is None:
-            raise ValueError("dir path cannot be None")
-
-        # Copy the file to the application directory with a new name
-        destination = os.path.join(dir_path, new_filename)
-        shutil.copy(file_path, destination)
-
+            json.dump(self.job_application.application_form, json_file, indent=4)
+    
     # Function to save job description as a text file
     def save_job_description(self):
         if self.job_application_files_path is None:
@@ -70,10 +69,19 @@ class ApplicationSaver:
         with open(json_file_path, "w") as json_file:
             json.dump(asdict(job), json_file, indent=4)
 
+    # Function to save files like Resume and CV
+    def save_file(self, dir_path, file_path, new_filename):
+        if dir_path is None:
+            raise ValueError("dir path cannot be None")
+
+        # Copy the file to the application directory with a new name
+        destination = os.path.join(dir_path, new_filename)
+        shutil.copy(file_path, destination)
+
     @staticmethod
-    def save(job_application: JobApplication):
+    def save(job_application: JobApplication, is_failed : bool = False):
         saver = ApplicationSaver(job_application)
-        saver.create_application_directory()
+        saver.create_application_directory(is_failed)
         saver.save_application_details()
         saver.save_job_description()
         # todo: tempory fix, to rely on resume and cv path from job object instead of job application object

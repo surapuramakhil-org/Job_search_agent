@@ -194,7 +194,7 @@ class LeverApplicationPage(BaseApplicationPage):
 
     def get_input_elements(self, form_section: WebElement) -> List[WebElement]:
         try:
-            input_elements = form_section.find_elements(By.XPATH, ".//ul/li")
+            input_elements = form_section.find_elements(By.XPATH, ".//ul/li[contains(@class, 'application-question')]")
 
             if not input_elements:
                 input_elements = form_section.find_elements(
