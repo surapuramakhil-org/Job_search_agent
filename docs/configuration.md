@@ -413,3 +413,28 @@ Using this folder as a guide can be particularly helpful for:
 1. Understanding the correct structure of each configuration file
 2. Seeing examples of valid data for each field
 3. Having a reference point while filling out your personal files
+
+## Documentation
+
+### For Users
+
+- Ollama & Gemini Setup
+  - To install and configure **Ollama** and **Gemini**, [Download Ollama and Gemini Setup Guide (PDF)](docs/guide_to_setup_ollama_and_gemini.pdf)
+  - Follow the instructions in these guides to ensure proper configuration of **AIHawk** with **Ollama** and **Gemini**.
+  - Written by Rushi, [Linkedin](https://www.linkedin.com/in/rushichaganti/), support him by following.
+
+- Editing YAML Files
+  - For detailed instructions on editing YAML configuration sections for **AIHawk**, refer to this document:
+  - [Download YAML Editing Guide (PDF)](docs/guide_yaml_sections.pdf)
+  - Written by Rushi, [Linkedin](https://www.linkedin.com/in/rushichaganti/), support him by following.
+
+- Auto-start AIHawk
+  - To make **AIHawk** automatically start when your system boots, follow the steps in this guide:
+  - [Download Auto-start AIHawk Guide (PDF)](docs/guide_to_autostart_aihawk.pdf)
+  - Written by Rushi, [Linkedin](https://www.linkedin.com/in/rushichaganti/), support him by following.
+
+- Video Tutorial
+  - [How to set up job search assistant](https://youtu.be/gdW9wogHEUM)
+  - Written by Rushi, [Linkedin](https://www.linkedin.com/in/rushichaganti/), support him by following.
+
+- [OpenAI API Documentation](https://platform.openai.com/docs/)

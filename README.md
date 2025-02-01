@@ -4,7 +4,7 @@
 
 # AIHawk the first Jobs Applier AI Agent
 
-  ![CI](https://github.com/surapuramakhil-org/Job_hunt_assistant/actions/workflows/ci.yml/badge.svg)
+  [![Python Test Suite](https://github.com/surapuramakhil-org/Job_search_assistant/actions/workflows/py_test.yml/badge.svg?branch=main)](https://github.com/surapuramakhil-org/Job_search_assistant/actions/workflows/py_test.yml)
 
 **🤖🔍 Your AI-powered job search assistant. Automate applications, get personalized recommendations, and land your dream job faster.**
 
@@ -12,14 +12,12 @@
 
 </div>
 
-**Creator** [feder-cr](https://github.com/feder-cr), Co-Founder of AIHawk </br>
-As AIHawk is focusing on their proprietary product - solving problems in hiring for companies, currently this project is led, managed, and maintained by a group of open-source contributors, with a focus on building tools to help job seekers land the jobs they deserve.
-
-**Project Maintainers / Leads**: [surapuramakhil](https://github.com/surapuramakhil), [sarob](https://github.com/sarob), [cjbbb](https://github.com/cjbbb)
-
 [Special thanks](#special-thanks) 
 
-Auto_Jobs_Applier_AIHawk is continuously evolving, and your feedback, suggestions, and contributions are highly valued. Feel free to open issues, suggest enhancements, or submit pull requests to help improve the project. Let's work together to make Auto_Jobs_Applier_AIHawk a powerful tool for job seekers worldwide.
+job search assistant is continuously evolving, and your feedback, suggestions, and contributions are highly valued. Feel free to open issues, suggest enhancements, or submit pull requests to help improve the project. Let's work together to make job search assistant a powerful tool for job seekers worldwide.
+
+[Project Management Documentation](docs/project_management.md)
+ 
 
 ## Table of Contents
 
@@ -37,15 +35,15 @@ Auto_Jobs_Applier_AIHawk is continuously evolving, and your feedback, suggestion
 
 ## Introduction
 
-Auto_Jobs_Applier_AIHawk is a cutting-edge, automated tool designed to revolutionize the job search and application process. In today's fiercely competitive job market, where opportunities can vanish in the blink of an eye, this program offers job seekers a significant advantage. By leveraging the power of automation and artificial intelligence, Auto_Jobs_Applier_AIHawk enables users to apply to a vast number of relevant positions efficiently and in a personalized manner, maximizing their chances of landing their dream job.
+job search assistant is a cutting-edge, automated tool designed to revolutionize the job search and application process. In today's fiercely competitive job market, where opportunities can vanish in the blink of an eye, this program offers job seekers a significant advantage. By leveraging the power of automation and artificial intelligence, job search assistant enables users to apply to a vast number of relevant positions efficiently and in a personalized manner, maximizing their chances of landing their dream job.
 
 ### The Challenge of Modern Job Hunting
 
 In the digital age, the job search landscape has undergone a dramatic transformation. While online platforms have opened up a world of opportunities, they have also intensified competition. Job seekers often find themselves spending countless hours scrolling through listings, tailoring applications, and repetitively filling out forms. This process can be not only time-consuming but also emotionally draining, leading to job search fatigue and missed opportunities.
 
-### Enter Auto_Jobs_Applier_AIHawk: Your Personal Job Search Assistant
+### Enter job search assistant: Your Personal Job Search Assistant
 
-Auto_Jobs_Applier_AIHawk steps in as a game-changing solution to these challenges. It's not just a tool; it's your tireless, 24/7 job search partner. By automating the most time-consuming aspects of the job search process, it allows you to focus on what truly matters - preparing for interviews and developing your professional skills.
+job search assistant steps in as a game-changing solution to these challenges. It's not just a tool; it's your tireless, 24/7 job search partner. By automating the most time-consuming aspects of the job search process, it allows you to focus on what truly matters - preparing for interviews and developing your professional skills.
 
 ## Features
 
@@ -152,18 +150,7 @@ cp .env.template .env
 
 After copying, open the `.env` file and fill in the required values. Ensure you do not share this file or commit it to version control, as it contains sensitive information.
 
-#### Run the Program
-
-After installing dependencies, run the program using:
-
-```bash
-poetry run python src/main.py
-```
-
-### For configuration refer [this docs](/docs/configuration.md)
-### For troubleshooting refer [this docs](/docs/troubleshooting.md)
-
-## Usage
+### Usage 
 
 0. **Account language**
    To ensure the bot works, your account language must be set to English.
@@ -173,6 +160,8 @@ poetry run python src/main.py
    - `secrets.yaml`
    - `config.yaml`
    - `plain_text_resume.yaml`
+
+### For configuration refer [this docs](/docs/configuration.md)
 
 2. **Output Folder:**
     Contains the output of the bot.
@@ -186,7 +175,7 @@ poetry run python src/main.py
 
 3. **Run the Bot:**
 
-   Auto_Jobs_Applier_AIHawk offers flexibility in how it handles your pdf resume:
+   job search assistant offers flexibility in how it handles your pdf resume:
 
 - **Dynamic Resume Generation:**
   If you don't use the `--resume` option, the bot will automatically generate a unique resume for each application. This feature uses the information from your `plain_text_resume.yaml` file and tailors it to each specific job application, potentially increasing your chances of success by customizing your resume for each position.
@@ -203,36 +192,13 @@ poetry run python src/main.py
   ```
 
 - **Using the collect mode:**
-  If you want to collect job data only to perform any type of data analytics you can use the bot with the `--collect` option. This will store in output/data.json file all data found from linkedin jobs offers.
+  If you want to collect job data only to perform any type of data analytics you can use the bot with the `--collect` option. This will store in output/data.json file all data found,
 
   ```bash
   poetry run python main.py --collect
   ```
   
-## Documentation
-
-### For Users
-
-- Ollama & Gemini Setup
-  - To install and configure **Ollama** and **Gemini**, [Download Ollama and Gemini Setup Guide (PDF)](docs/guide_to_setup_ollama_and_gemini.pdf)
-  - Follow the instructions in these guides to ensure proper configuration of **AIHawk** with **Ollama** and **Gemini**.
-  - Written by Rushi, [Linkedin](https://www.linkedin.com/in/rushichaganti/), support him by following.
-
-- Editing YAML Files
-  - For detailed instructions on editing YAML configuration sections for **AIHawk**, refer to this document:
-  - [Download YAML Editing Guide (PDF)](docs/guide_yaml_sections.pdf)
-  - Written by Rushi, [Linkedin](https://www.linkedin.com/in/rushichaganti/), support him by following.
-
-- Auto-start AIHawk
-  - To make **AIHawk** automatically start when your system boots, follow the steps in this guide:
-  - [Download Auto-start AIHawk Guide (PDF)](docs/guide_to_autostart_aihawk.pdf)
-  - Written by Rushi, [Linkedin](https://www.linkedin.com/in/rushichaganti/), support him by following.
-
-- Video Tutorial
-  - [How to set up Auto_Jobs_Applier_AIHawk](https://youtu.be/gdW9wogHEUM)
-  - Written by Rushi, [Linkedin](https://www.linkedin.com/in/rushichaganti/), support him by following.
-
-- [OpenAI API Documentation](https://platform.openai.com/docs/)
+### For troubleshooting refer [this docs](/docs/troubleshooting.md)
 
 ### For Developers
 
@@ -242,15 +208,38 @@ poetry run python src/main.py
 
 - [Workflow diagrams](docs/workflow_diagrams.md)
 
-- If you encounter any issues, you can open an issue on [GitHub](https://github.com/surapuramakhil-org/Job_hunt_assistant/issues).
-  Please add valuable details to the subject and to the description. If you need new feature then please reflect this.  
-  I'll be more than happy to assist you!
+## Supporting This Project
 
-- Note for Contributors: If you would like to submit a Pull Request (PR), please target the `release` branch instead of `main`. The `release` branch is used for testing new code changes and will be periodically merged into `main` after validation. This approach ensures that only tested features make it into the main branch.
+Supporting job search assistant helps us continue to develop and improve this valuable tool for job seekers worldwide. Here are a few ways you can contribute:
 
-## Conclusion
+1. **Financial Contributions**: Consider making a donation. Your contributions help cover the costs of development, hosting, and other expenses. You can donate via [Giveth](https://giveth.io/project/job_hunt_assistant). Financial support enables faster development and more frequent releases.
 
-Auto_Jobs_Applier_AIHawk provides a significant advantage in the modern job market by automating and enhancing the job application process. With features like dynamic resume generation and AI-powered personalization, it offers unparalleled flexibility and efficiency. Whether you're a job seeker aiming to maximize your chances of landing a job, a recruiter looking to streamline application submissions, or a career advisor seeking to offer better services, Auto_Jobs_Applier_AIHawk is an invaluable resource. By leveraging cutting-edge automation and artificial intelligence, this tool not only saves time but also significantly increases the effectiveness and quality of job applications in today's competitive landscape.
+2. **Spread the Word**: Share this project with your network. Whether it's through social media, blog posts, or word of mouth, spreading the word helps us reach more people who could benefit from job search assistant.
+
+<div align="center">
+
+[![X](https://img.shields.io/badge/X-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/intent/tweet?text=Check%20out%20this%20awesome%20job%20search%20assistant%20tool%20powered%20by%20AI!%20Automate%20your%20job%20applications%20and%20land%20your%20dream%20job%20faster.%20%23JobSearchAssistant%20%23AI%20%23JobHunt%20%23Automation&url=https://github.com/surapuramakhil-org/Job_hunt_assistant)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/sharing/share-offsite/?url=https://github.com/surapuramakhil-org/Job_hunt_assistant)
+[![Facebook](https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white)](https://www.facebook.com/sharer/sharer.php?u=https://github.com/surapuramakhil-org/Job_hunt_assistant)
+[![Reddit](https://img.shields.io/badge/Reddit-FF4500?style=for-the-badge&logo=reddit&logoColor=white)](https://reddit.com/submit?url=https://github.com/surapuramakhil-org/Job_hunt_assistant&title=Check%20out%20this%20awesome%20job%20search%20assistant%20tool%20powered%20by%20AI!)
+[![WhatsApp](https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://api.whatsapp.com/send?text=Check%20out%20this%20awesome%20job%20search%20assistant%20tool%20powered%20by%20AI!%20Automate%20your%20job%20applications%20and%20land%20your%20dream%20job%20faster.%20%23JobSearchAssistant%20%23AI%20%23JobHunt%20%23Automation%20https://github.com/surapuramakhil-org/Job_hunt_assistant)
+[![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/share/url?url=https://github.com/surapuramakhil-org/Job_hunt_assistant&text=Check%20out%20this%20awesome%20job%20search%20assistant%20tool%20powered%20by%20AI!%20Automate%20your%20job%20applications%20and%20land%20your%20dream%20job%20faster.%20%23JobSearchAssistant%20%23AI%20%23JobHunt%20%23Automation)
+
+[![Bluesky](https://img.shields.io/badge/Bluesky-0285FF?style=for-the-badge&logo=bluesky&logoColor=white)](https://bsky.app/intent/compose?text=Check%20out%20this%20awesome%20job%20search%20assistant%20tool%20powered%20by%20AI!%20Automate%20your%20job%20applications%20and%20land%20your%20dream%20job%20faster.%20%23JobSearchAssistant%20%23AI%20%23JobHunt%20%23Automation%20https://github.com/surapuramakhil-org/Job_hunt_assistant)
+
+
+</div>
+
+1. **Star the Repository**: If you find this project useful, please star the repository on GitHub. It helps increase the project's visibility and shows your appreciation.
+
+2. **Join the Community**: Join our [Discord](https://discord.gg/MYYwG8JyrQ) to connect with other users and contributors. Your participation helps build a supportive community around the project.
+
+3. **Report Issues / Feature requests**: If you encounter any bugs or have suggestions for improvements, please open an issue on [GitHub](https://github.com/surapuramakhil-org/Job_hunt_assistant/issues). Your feedback is crucial for the project's growth.
+
+4. **Contribute Code**: If you're a developer, consider contributing code to the project. Check out our [Contribution Guidelines](docs/CONTRIBUTING.md), [PM docs](/docs/project_management.md)  for more information on how to get started.
+
+Your support is greatly appreciated and helps us make job search assistant a powerful tool for job seekers everywhere.
+
 
 ## Star History
 
@@ -278,6 +267,6 @@ The CC BY License permits others to distribute, remix, adapt, and build upon you
 
 ## Disclaimer
 
-This tool, Auto_Jobs_Applier_AIHawk, is intended for use at your own risk. The creators / maintainers / contributors assume no responsibility for any consequences arising from its use. Users are advised to comply with the terms of service of relevant platforms and adhere to all applicable laws, regulations, and ethical guidelines. The use of automated tools for job applications may carry risks, including potential impacts on user accounts. Proceed with caution and at your own discretion.
+This tool, job search assistant, is intended for use at your own risk. The creators / maintainers / contributors assume no responsibility for any consequences arising from its use. Users are advised to comply with the terms of service of relevant platforms and adhere to all applicable laws, regulations, and ethical guidelines. The use of automated tools for job applications may carry risks, including potential impacts on user accounts. Proceed with caution and at your own discretion.
 
 [Back to top 🚀](#top)

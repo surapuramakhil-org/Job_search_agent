@@ -15,8 +15,8 @@ import config
 from constants import WORK_PREFERENCES
 from job_application_profile import WorkPreferences
 from job_portals.base_job_portal import BaseJobPortal, get_job_portal
-from custom_exception import JobNotSuitableException
-from job import Job
+from custom_exception import JobNotSuitableException, JobSkipException
+from job import Job, JobState
 from logger import logger
 
 from selenium.webdriver.support import expected_conditions as EC
@@ -338,10 +338,13 @@ class AIHawkJobManager:
             self.job_portal.job_page.goto_job_page(job)
                 
             try:
-                if job.job_state not in {"Continue", "Applied", "Apply"}:
-                    self.easy_applier_component.job_apply(job)
-                    self.write_to_file(job, "success")
-                    logger.debug(f"Applied to job: {job.title} at {job.company}")
+
+                if job.job_state in {JobState.APPLIED.value, JobState.CONTINUE.value}:
+                    raise JobSkipException(f"Job state is {job.job_state}")
+
+                self.easy_applier_component.job_apply(job)
+                self.write_to_file(job, "success")
+                logger.debug(f"Applied to job: {job.title} at {job.company}")
             except JobNotSuitableException as e:
                 logger.debug(f"Job not suitable for application: {job.title} at {job.company}")
                 self.write_to_file(job, "skipped", f"{str(e)} {traceback.format_exc()}")

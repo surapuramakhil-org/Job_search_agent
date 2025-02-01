@@ -64,7 +64,7 @@ class JobApplicationProfile:
     salary_expectations: SalaryExpectations
 
     def __init__(self, yaml_str: str):
-        logger.debug("Initializing JobApplicationProfile with provided YAML string")
+        logger.info("Initializing JobApplicationProfile with provided YAML string")
         try:
             data = yaml.safe_load(yaml_str)
             logger.debug(f"YAML data successfully parsed: {data}")
@@ -169,7 +169,7 @@ class JobApplicationProfile:
             logger.error(f"An unexpected error occurred while processing salary_expectations: {e}")
             raise RuntimeError("An unexpected error occurred while processing salary_expectations.") from e
 
-        logger.debug("JobApplicationProfile initialization completed successfully.")
+        logger.info("JobApplicationProfile initialization completed successfully.")
 
     def __str__(self):
         logger.debug("Generating string representation of JobApplicationProfile")

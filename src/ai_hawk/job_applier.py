@@ -20,10 +20,11 @@ from reportlab.pdfbase.pdfmetrics import stringWidth
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 
-from custom_exception import JobNotSuitableException
+from custom_exception import JobNotSuitableException, JobSkipException
 from jobContext import JobContext
 from job_application import JobApplication
 from job_application_saver import ApplicationSaver
+import job_application_saver
 from job_portals.application_form_elements import SelectQuestion, TextBoxQuestionType
 from job_portals.base_job_portal import BaseJobPage, BaseJobPortal
 
@@ -160,9 +161,12 @@ class AIHawkJobApplier:
             tb_str = traceback.format_exc()
             logger.error(f"Failed to apply to job: {job}, error: {tb_str}")
 
-            logger.debug("Saving application process due to failure")
+            logger.debug("marking save in job application page")
             self.job_application_page.save()
             
+            logger.debug("Saving application details")
+            ApplicationSaver.save(job_context.job_application, is_failed=True)
+
             raise e
     
     def _check_keywords_whitelist(self, job : Job) -> Tuple[bool, Optional[str]]:
@@ -218,7 +222,7 @@ class AIHawkJobApplier:
             
             else:
                 logger.warning(f"submit button not found, discarding application {job}")
-                return
+                raise JobSkipException(f" No next or submit button found, discarding application {job}")
 
     def fill_up(self, job_context: JobContext) -> None:
         job = job_context.job
@@ -493,6 +497,8 @@ class AIHawkJobApplier:
         logger.debug("Filling additional questions")
         form_elements = self.job_application_page.get_input_elements(form_section=form_section)
         for form_element in form_elements:
+            logger.debug(f"Processing form element with text: {form_element.text}")
+            job_context.job_application.add_question_to_form(form_element.text)
             self._process_form_element(job_context, form_element)
 
     def _process_form_element(
