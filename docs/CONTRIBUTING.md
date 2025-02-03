@@ -4,7 +4,7 @@
 
 - [Contributing to Auto\_Jobs\_Applier\_AIHawk](#contributing-to-auto_jobs_applier_aihawk)
   - [Table of Contents](#table-of-contents)
-  - [Issue Labels](#issue-labels)
+- [Filing Github issue](#filing-github-issue)
   - [Bug Reports](#bug-reports)
   - [Feature Requests](#feature-requests)
   - [Branch Rules](#branch-rules)
@@ -17,17 +17,11 @@
   - [Testing](#testing)
   - [Communication](#communication)
 
-Thank you for your interest in contributing to Auto_Jobs_Applier_AIHawk. This document provides guidelines for contributing to the project.
+[Development Diagrams](./docs/development_diagrams.md)
 
-## Issue Labels
+# Filing Github issue
 
-The project uses the following labels:
-
-- **bug**: Something isn't working correctly
-- **enhancement**: New feature requests
-- **good first issue**: Good for newcomers
-- **help wanted**: Extra attention needed
-- **documentation**: Documentation improvements
+Refer to [project management docs](/docs/project_management.md#issue-labels) for tagging appropriate labels.
 
 ## Bug Reports
 
@@ -39,6 +33,7 @@ When submitting a bug report, please include:
 - Actual behavior
 - Any error messages or screenshots
 - Your environment details (OS, Python version, etc.)
+- Check skipped.json, error.json - make sure you add job portal link so that others can reproduce and fix the issue.
 
 ## Feature Requests
 
@@ -46,18 +41,14 @@ For feature requests, please:
 
 - Prefix the title with [FEATURE]
 - Include a feature summary
-- Provide detailed feature description
+- Provide a detailed feature description
 - Explain your motivation for the feature
 - List any alternatives you've considered
 
 ## Branch Rules
 
-- `main` - Production-ready code, protected branch
-- `develop` - Integration branch for features
-- `feature/*` - New features
-- `release/*` - Release preparation
-- `bugfix/*` - Bug fixes for development
-- `hotfix/*` - Emergency production fixes
+- `main` - tested code, protected branch
+- Contributors need to create their working branch from `main` and point pull requests to `main`
 
 ## Version Control
 
@@ -67,29 +58,29 @@ For feature requests, please:
 
 ## Release Process
 
-week one for `release/v4.1.0`
+Week one for `release/v4.1.0`:
 
 - Planning meeting for `release/v4.1.0` with release scope and milestone objectives set by the maintainers. Release and maintainer meeting agendas and schedules are posted on the project repository [wiki](https://github.com/AIHawk/AIHawk/wiki) and shared in the `#releases` channel on Discord.
 - `release/v4.0.0` release candidate ready for release
 - `release/v4.0.0` merge into `develop`, `main`
-- tag `main` as `release/v4.0.0`
+- Tag `main` as `release/v4.0.0`
 - `release/v4.0.0` published to AIHawk/releases and PyPI as a package with release documentation
-- delete `release/v4.0.0` branch
+- Delete `release/v4.0.0` branch
 
-release/v4.1.0 release weeks
+Release/v4.1.0 release weeks:
 
-- Contributers work on issues and PRs, prioritizing next milestone
+- Contributors work on issues and PRs, prioritizing next milestone
 - Maintainers review PRs from `feature/*`, `bugfix/*` branches and issues, merging into `develop`
 - Maintainers review PRs from `hotfix/*` branches and issues, merged into `main` and `develop`, `main` tagged and merged into `4.0.1` package and `release/v4.0.1` and `release/v4.1.0`, documentation is updated
 
-last week, release candidate
+Last week, release candidate:
 
 - `develop` is frozen, only bug fixes
-- create release branch `release/v4.1.0` from `develop`
-- only bug fixes are merged into `release/v4.1.0`
-- additional testing and release candidate review
+- Create release branch `release/v4.1.0` from `develop`
+- Only bug fixes are merged into `release/v4.1.0`
+- Additional testing and release candidate review
 
-week one is repeated for `release/v4.2.0`
+Week one is repeated for `release/v4.2.0`.
 
 ```mermaid
 gantt
@@ -128,7 +119,7 @@ gantt
 ## Merging Pull Requests
 
 - All PRs are reviewed by maintainers
-- At least 2 Maintainers approve PRs for merge
+- At least 2 maintainers approve PRs for merge
 - PRs are merged into `develop`
 - PRs are tested and verified to work as expected
 
