@@ -100,14 +100,84 @@ class LeverApplicationPage(BaseApplicationPage):
         return False
 
     def is_radio_question(self, element: WebElement) -> bool:
-        return False
+        try:
+            element.find_element(By.XPATH, ".//input[@type='checkbox']")
+            return True
+        except NoSuchElementException:
+            return False
+        except Exception as e:
+            logger.error(
+                f"Error occurred while checking if element is a radio question: {e} {traceback.format_exc()}"
+            )
+            raise JobSkipException(
+                f"Error occurred while checking if element is a radio question {e} {traceback.format_exc()}"
+            )
 
-    def web_element_to_radio_question(self, element: WebElement):
-        raise NotImplementedError
+    def web_element_to_radio_question(self, element: WebElement) -> SelectQuestion:
+        try:
+            # Extract question text from application-label div
+            question_label = element.find_element(
+                By.XPATH, ".//div[contains(@class, 'application-label')]"
+            ).text.strip()
+
+            # Find all radio/checkbox input elements
+            inputs = element.find_elements(
+                By.XPATH, ".//input[@type='radio' or @type='checkbox']"
+            )
+
+            # Collect non-empty option values
+            options = []
+            for input_elem in inputs:
+                value = input_elem.get_attribute("value")
+                if value and value not in options:  # Prevent duplicates
+                    options.append(value)
+
+            # Determine question type based on input types
+            question_type = SelectQuestionType.MULTI_SELECT if any(
+                input_elem.get_attribute("type") == "checkbox" for input_elem in inputs
+            ) else SelectQuestionType.SINGLE_SELECT
+
+            # Check for required status using description text
+            required = True
+            description_elements = element.find_elements(
+                By.XPATH, ".//p[contains(@class, 'description')]"
+            )
+            for desc in description_elements:
+                if "(Optional)" in desc.text:
+                    required = False
+                    break
+
+            return SelectQuestion(
+                question=question_label,
+                options=options,
+                type=question_type,
+                required=required
+            )
+            
+        except Exception as e:
+            logger.error(
+                f"Error converting element to radio question: {e} {traceback.format_exc()}"
+            )
+            raise JobSkipException(
+                f"Error converting element to radio question: {e} {traceback.format_exc()}"
+            )
+
 
     def select_radio_option(
         self, radio_question_web_element: WebElement, answer: str
     ) -> None:
+        try:
+            radio_input = radio_question_web_element.find_element(
+                By.XPATH, f".//input[@value='{answer}']"
+            )
+            radio_input.click()
+        except Exception as e:
+            logger.error(
+                f"Error occurred while selecting radio option: {e} {traceback.format_exc()}"
+            )
+            raise JobSkipException(
+                f"Error occurred while selecting radio option {e} {traceback.format_exc()}"
+            )
         raise NotImplementedError
 
     def is_textbox_question(self, element: WebElement) -> bool:
@@ -168,6 +238,7 @@ class LeverApplicationPage(BaseApplicationPage):
             input_element = element.find_element(
                 By.XPATH, ".//input[@type='text' or @type='number']"
             )
+            input_element.clear()
             input_element.send_keys(answer)
         except Exception as e:
             logger.error(

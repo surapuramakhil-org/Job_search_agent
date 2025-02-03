@@ -151,6 +151,7 @@ class BaseApplicationPage(WebPage):
     def select_radio_option(
         self, radio_question_web_element: WebElement, answer: str
     ) -> None:
+        """ Current aswer is sigle select, later we will add multi select, this method will be updated accordingly"""
         raise NotImplementedError
 
     @abstractmethod

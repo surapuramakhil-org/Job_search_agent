@@ -536,6 +536,7 @@ class AIHawkJobApplier:
             logger.debug("Handled dropdown question")
             return
 
+    #TODO: Enhance this method to handle multi-select questions
     def _handle_radio_question(
         self,
         job_context: JobContext,
