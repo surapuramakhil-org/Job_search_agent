@@ -74,6 +74,10 @@ class BaseApplicationPage(WebPage):
 
     def __init__(self, driver):
         super().__init__(driver)
+    
+    @abstractmethod
+    def wait_until_ready(self):
+        raise NotImplementedError
 
     @abstractmethod
     def has_next_button(self) -> bool:

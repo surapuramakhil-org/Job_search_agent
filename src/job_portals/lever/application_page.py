@@ -1,3 +1,4 @@
+import time
 import traceback
 from typing import List, Text
 from regex import E
@@ -12,17 +13,35 @@ from job_portals.application_form_elements import (
 )
 from job_portals.base_job_portal import BaseApplicationPage
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException
+from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException, TimeoutException
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.keys import Keys
 
 from utils import browser_utils
 
 
 class LeverApplicationPage(BaseApplicationPage):
+
     def save(self) -> None:
         raise NotImplementedError
 
     def discard(self) -> None:
         raise NotImplementedError
+    
+    def wait_until_ready(self):
+        try:
+            WebDriverWait(self.driver, 120).until(
+                EC.invisibility_of_element_located(
+                    (By.XPATH, "//div[@class='loading-indicator']")
+                )
+            )
+        except TimeoutException as e:
+            logger.error(f"Loading indicator did not disappear within timeout: {str(e)}")
+            raise JobSkipException("Page load timeout - loading indicator remained visible")
+        except Exception as e:
+            logger.error(f"Error occurred while waiting for page to load: {e} {traceback.format_exc()}")
+            raise JobSkipException(f"Error occurred while waiting for page to load {e} {traceback.format_exc()}")
 
     def click_submit_button(self) -> None:
         try:
@@ -182,25 +201,25 @@ class LeverApplicationPage(BaseApplicationPage):
 
     def is_textbox_question(self, element: WebElement) -> bool:
         try:
+            if element.find_elements(By.XPATH, ".//textarea"):
+                return True
+                
             input_element = element.find_element(
                 By.XPATH, ".//input[@type='text' or @type='number']"
             )
             return input_element.is_displayed() and input_element.is_enabled()
+            
         except NoSuchElementException:
             return False
         except Exception as e:
-            logger.error(
-                f"Error occurred while checking if element is a textbox question: {e} {traceback.format_exc()}"
-            )
-            raise JobSkipException(
-                f"Error occurred while checking if element is a textbox question {e} {traceback.format_exc()}"
-            )
+            logger.error(f"Textbox check error: {e} {traceback.format_exc()}")
+            raise JobSkipException(f"Textbox verification failed: {e}")
 
     def web_element_to_textbox_question(self, element: WebElement) -> TextBoxQuestion:
         try:
             # Extract the question text from the label div
             question_label = element.find_element(
-                By.XPATH, ".//div[@class='application-label']"
+                By.XPATH, ".//div[contains(@class, 'application-label')]"
             ).text
 
             # Locate the input element (type can be 'text' or 'number')
@@ -234,19 +253,66 @@ class LeverApplicationPage(BaseApplicationPage):
             )
 
     def fill_textbox_question(self, element: WebElement, answer: str) -> None:
+        """Handles text input fields with special handling for location inputs"""
         try:
-            input_element = element.find_element(
-                By.XPATH, ".//input[@type='text' or @type='number']"
-            )
+            if self._is_location_input(element):
+                self._handle_location_input(element, answer)
+                return
+
+            input_element = element.find_element(By.XPATH, ".//textarea | .//input[@type='text' or @type='number']")
             input_element.clear()
             input_element.send_keys(answer)
+
         except Exception as e:
-            logger.error(
-                f"Error occurred while filling textbox question: {e} {traceback.format_exc()}"
+            logger.error(f"Input handling failed: {e} {traceback.format_exc()}")
+            raise JobSkipException(f"Text input error: {str(e)}")
+
+    def _is_location_input(self, element: WebElement) -> bool:
+        """Check if the element contains a location input field"""
+        return len(element.find_elements(
+            By.CSS_SELECTOR, "input.location-input[data-qa='location-input']"
+        )) > 0
+
+    def _handle_location_input(self, element: WebElement, answer: str) -> None:
+        """Specialized handler for location autocomplete inputs"""
+        input_element = element.find_element(
+            By.CSS_SELECTOR, "input.location-input[data-qa='location-input']"
+        )
+        
+        # Clear existing input
+        input_element.send_keys(Keys.CONTROL + "a")
+        input_element.send_keys(Keys.DELETE)
+        
+        # Type answer to trigger suggestions
+        for char in answer:
+            input_element.send_keys(char)
+            time.sleep(0.1)
+        
+        # Handle dropdown interaction
+        try:
+            dropdown = WebDriverWait(self.driver, 5).until(
+                EC.visibility_of_element_located(
+                    (By.CSS_SELECTOR, "div.dropdown-container")
+                )
             )
-            raise JobSkipException(
-                f"Error occurred while filling textbox question {e} {traceback.format_exc()}"
+            first_result = WebDriverWait(self.driver, 3).until(
+                EC.element_to_be_clickable(
+                    (By.CSS_SELECTOR, "div.dropdown-results > div:first-child")
+                )
             )
+            first_result.click()
+        except TimeoutException:
+            if "No location found" in element.text:
+                raise JobSkipException("Invalid location entered")
+            raise
+        
+        # Verify selection
+        hidden_value = element.find_element(
+            By.CSS_SELECTOR, "input#selected-location"
+        ).get_attribute("value")
+        
+        if not hidden_value:
+            raise ValueError("Location selection validation failed")
 
     def is_date_question(self, element: WebElement) -> bool:
         return False
