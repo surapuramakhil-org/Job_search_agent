@@ -67,6 +67,3 @@ class Job:
         formatted_information = job_information.strip()
         logger.debug(f"Formatted job information: {formatted_information}")
         return formatted_information
-
-    def to_dict(self):
-        return {field: getattr(self, field) for field in self.__dataclass_fields__}

@@ -260,7 +260,7 @@ class AIHawkJobApplier:
                 resume_file_path = os.path.abspath(self.resume_path)
                 self.job_application_page.upload_file(element, resume_file_path)
                 job_context.job.resume_path = resume_file_path
-                job_context.job_application.resume_path = str(resume_file_path)
+                job_context.job_application.resume_path = resume_file_path
                 logger.debug(f"Resume uploaded from path: {resume_file_path}")
             else:
                 logger.debug(

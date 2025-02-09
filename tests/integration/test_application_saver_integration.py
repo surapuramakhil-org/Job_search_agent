@@ -59,7 +59,7 @@ class TestApplicationSaverIntegration:
 
         # Validate JSON contents
         with open(expected_dir / "job_application.json") as f:
-            app_data = json.load(f)
+            app_data = json.loads(f.read())
             assert app_data["job"]["id"] == "PYDEV-2025"
             assert app_data["application_form"][0]["question"] == "Experience"
 
@@ -100,9 +100,12 @@ class TestApplicationSaverIntegration:
             title="Lead Developer (Python)",
             company="Tech & Code: Solutions",
             portal="Indeed",
-            resume_path="dummy.pdf",
-            cover_letter_path="dummy.pdf"
+            resume_path=str(tmp_path / "dummy.pdf"),
+            cover_letter_path=str(tmp_path / "dummy.pdf")
         )
+        
+        # Create dummy files
+        (tmp_path / "dummy.pdf").write_text("Dummy content")
         app = JobApplication(job)
         
         with patch('job_application_saver.get_base_dir', return_value=str(tmp_path)):

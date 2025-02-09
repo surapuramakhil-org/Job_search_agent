@@ -68,6 +68,7 @@ class ApplicationSaver:
 
     @staticmethod
     def save(job_application: JobApplication, is_failed: bool = False):
+
         saver = ApplicationSaver(job_application)
         saver.create_application_directory(is_failed)
         saver._save()
