@@ -23,6 +23,9 @@ from utils import browser_utils
 
 class LeverApplicationPage(BaseApplicationPage):
 
+    def __init__(self, driver):
+        super().__init__(driver)
+
     def save(self) -> None:
         raise NotImplementedError
 
@@ -222,24 +225,24 @@ class LeverApplicationPage(BaseApplicationPage):
                 By.XPATH, ".//div[contains(@class, 'application-label')]"
             ).text
 
-            # Locate the input element (type can be 'text' or 'number')
+            # Locate the input element (type can be 'text', 'number', or 'textarea')
             input_element = element.find_element(
-                By.XPATH, ".//input[@type='text' or @type='number']"
+                By.XPATH, ".//input[@type='text' or @type='number'] | .//textarea"
             )
 
             # Determine the type of input field
-            input_type = input_element.get_attribute("type")
+            input_type = input_element.tag_name if input_element.tag_name == "textarea" else input_element.get_attribute("type")
 
-            is_required = bool(
-                element.find_elements(By.XPATH, ".//span[@class='required']")
-            )
-
-            if input_type == "text":
-                question_type = TextBoxQuestionType.TEXTBOX
+            if input_type == "text" or input_type == "textarea":
+                question_type = TextBoxQuestionType.TEXT
             elif input_type == "number":
                 question_type = TextBoxQuestionType.NUMERIC
             else:
                 raise ValueError(f"Unsupported input type: {input_type}")
+
+            is_required = bool(
+                element.find_elements(By.XPATH, ".//span[@class='required']")
+            )
 
             return TextBoxQuestion(
                 question=question_label, type=question_type, required=is_required
