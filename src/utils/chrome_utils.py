@@ -1,8 +1,7 @@
 import os
 from loguru import logger
 from selenium import webdriver
-
-
+import undetected_chromedriver as uc
 
 chromeProfilePath = os.path.join(os.getcwd(), "chrome_profile", "linkedin_profile")
 
@@ -20,7 +19,7 @@ def ensure_chrome_profile():
 def chrome_browser_options():
     logger.debug("Setting Chrome browser options")
     ensure_chrome_profile()
-    options = webdriver.ChromeOptions()
+    options = uc.ChromeOptions()
     
     # Essential arguments only
     options.add_argument("--no-sandbox")

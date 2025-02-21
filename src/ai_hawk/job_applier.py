@@ -63,6 +63,7 @@ class AIHawkJobApplier:
             resume_dir = None
         self.job_page = job_portal.job_page
         self.job_application_page = job_portal.application_page
+        self.job_portal = job_portal
         self.resume_path = resume_dir
         self.set_old_answers = set_old_answers
         self.gpt_answerer = gpt_answerer
@@ -114,6 +115,9 @@ class AIHawkJobApplier:
             raise e
 
     def job_apply(self, job: Job):
+
+        self.job_page.goto_job_page(job)
+
         logger.debug(f"Starting job application for job: {job}")
         job_context = JobContext()
         job_context.job = job
@@ -238,6 +242,7 @@ class AIHawkJobApplier:
             logger.error(
                 f"Failed to fill up form sections: {e} {traceback.format_exc()}"
             )
+            raise e
 
     def _handle_upload_fields(
         self, element: WebElement, job_context: JobContext

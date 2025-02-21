@@ -10,25 +10,31 @@ from job import Job
 from ai_hawk.llm.llm_manager import GPTAnswerer
 from job_application_saver import ApplicationSaver
 import os
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
+from job_portals.lever.job_page import LeverJobPage
 from main import init_browser
-
+from utils import browser_utils
 class TestLeverJobPortalIntegration(unittest.TestCase):
+    
     def setUp(self):
         self.driver = init_browser()
+        browser_utils.set_default_driver(self.driver)
 
         # Mock dependencies
-        self.mock_job_page = MagicMock()
-        self.mock_application_page = MagicMock(spec=LeverApplicationPage)
+        self.mock_job_page = LeverJobPage(self.driver)
+        self.mock_application_page = LeverApplicationPage(self.driver)
         self.mock_job_portal = MagicMock(spec=BaseJobPortal)
-        self.mock_job_portal.get_application_page.return_value = self.mock_application_page
+        self.mock_job_portal.application_page = self.mock_application_page
+        self.mock_job_portal.job_page = self.mock_job_page
+
         self.mock_gpt_answerer = MagicMock(spec=GPTAnswerer)
         self.mock_gpt_answerer.answer_question_from_options.side_effect = lambda question, options: options[0]
         self.mock_gpt_answerer.answer_question_textual_wide_range.side_effect = lambda question: "Sample answer"
         self.mock_gpt_answerer.answer_question_numeric.side_effect = lambda question: "12345"
         self.mock_gpt_answerer.is_job_suitable.return_value = (True, 0.9, "Suitable job")
         self.mock_resume_generator_manager = MagicMock()
-        self.mock_work_preferences = {"keywords_whitelist": ["Python", "Django"]}
+        self.mock_work_preferences = {"keywords_whitelist": []}
 
         # Initialize AIHawkJobApplier with mocks
         self.job_applier = AIHawkJobApplier(
@@ -44,37 +50,37 @@ class TestLeverJobPortalIntegration(unittest.TestCase):
         # Quit the WebDriver
         self.driver.quit()
 
-    def get_job_url(self, relative_path: str) ->str:
-        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-        file_path = os.path.join(project_root, relative_path)
-
-        return f"file://{file_path}"
+    def get_job_url(self, relative_path: str) -> str:
+        from pathlib import Path
+        path = Path(relative_path).resolve()
+        return path.as_uri()
+        
 
     @patch.object(ApplicationSaver, 'save')
     def test_lever_apply_to_job_success(self, mock_save):
+        
         # Mock job object
         self.mock_job = Job(
             title="Software Engineer",
             company="Tech Company",
             description="Looking for a Python developer with Django experience.",
-            link=self.get_job_url("tests/resources/lever_application_pages/Nielsen - Senior Software Engineer - Bigdata ( Java _ Scala _ Python , Spark, SQL , AWS).html")
+            link=self.get_job_url("tests/resources/lever_application_pages/job1/https-:jobs.lever.co:nielsen:f221a3f5-4045-49f0-a443-62b0030dc56f.html")
         )
 
-        # Add logging
         print(f"Testing Lever job {self.mock_job.link} ")
 
-        # Mock methods to simulate successful job application
-        self.mock_job_page.goto_job_page.return_value = None
-        self.mock_job_page.get_job_description.return_value = self.mock_job.description
-        self.mock_job_page.get_recruiter_link.return_value = "https://linkedin.com/recruiter"
+        # Mock the click on the apply button
+        self.mock_job_page.click_apply_button = MagicMock()
+        self.mock_job_page.click_apply_button.side_effect = lambda: self.driver.get(self.get_job_url("tests/resources/lever_application_pages/job1/https-:jobs.lever.co:nielsen:f221a3f5-4045-49f0-a443-62b0030dc56f:apply.html"))
+        self.mock_job_page.click_apply_button()
 
-        # Call the method under test
-        self.job_applier.apply_to_job(self.mock_job)
-
-        # Assertions
-        self.mock_job_page.goto_job_page.assert_called_once_with(self.mock_job)
-        self.mock_job_page.get_job_description.assert_called_once_with(self.mock_job)
-        self.mock_job_page.get_recruiter_link.assert_called_once()
+        try:
+            self.job_applier.apply_to_job(self.mock_job)
+        except Exception as e:
+            self.fail(f"apply_to_job raised an exception: {e}")
+        
         self.mock_gpt_answerer.is_job_suitable.assert_called_once()
-        self.mock_application_page.has_submit_button.assert_called_once()
+        mock_save.assert_called_once()
+
+        self.mock_gpt_answerer.is_job_suitable.assert_called_once()
         mock_save.assert_called_once()

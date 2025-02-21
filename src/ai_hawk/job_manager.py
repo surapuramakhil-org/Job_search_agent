@@ -334,8 +334,6 @@ class AIHawkJobManager:
                 self.write_to_file(job, "skipped", "Already applied to this company")
                 continue
             
-            
-            self.job_portal.job_page.goto_job_page(job)
                 
             try:
 

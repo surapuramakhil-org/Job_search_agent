@@ -239,8 +239,7 @@ class FileManager:
 def init_browser() -> webdriver.Chrome:
     try:
         options = chrome_browser_options()
-        service = ChromeService(ChromeDriverManager().install())
-        return uc.Chrome(service=service, options=options)
+        return uc.Chrome(options=options)
     except Exception as e:
         raise RuntimeError(f"Failed to initialize browser: {str(e)}")
 
