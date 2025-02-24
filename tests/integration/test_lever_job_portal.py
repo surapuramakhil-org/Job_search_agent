@@ -71,8 +71,7 @@ class TestLeverJobPortalIntegration(unittest.TestCase):
 
         # Mock the click on the apply button
         self.mock_job_page.click_apply_button = MagicMock()
-        self.mock_job_page.click_apply_button.side_effect = lambda: self.driver.get(self.get_job_url("tests/resources/lever_application_pages/job1/https-:jobs.lever.co:nielsen:f221a3f5-4045-49f0-a443-62b0030dc56f:apply.html"))
-        self.mock_job_page.click_apply_button()
+        self.mock_job_page.click_apply_button.side_effect = lambda _: self.driver.get(self.get_job_url("tests/resources/lever_application_pages/job1/https-:jobs.lever.co:nielsen:f221a3f5-4045-49f0-a443-62b0030dc56f:apply.html"))
 
         try:
             self.job_applier.apply_to_job(self.mock_job)
