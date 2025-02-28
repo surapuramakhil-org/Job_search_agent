@@ -12,12 +12,21 @@
         {
             "type": "debugpy",
             "request": "launch",
-            "name": "Run Unit Tests",
+            "name": "Run Tests",
             "console": "integratedTerminal",
             "justMyCode": false,
             "purpose": ["debug-test"],
             "env": {},
             "args": ["-m", "pytest", "${workspaceFolder}/tests"]
+        },
+        {
+            "name": "Run Lever Tests",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "args": ["-s", "tests/integration/test_lever_job_portal.py"],
+            "console": "integratedTerminal",
+            "justMyCode": false
         }
     ]
 }
