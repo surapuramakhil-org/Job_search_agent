@@ -116,14 +116,47 @@ class LeverApplicationPage(BaseApplicationPage):
             )
 
     def accept_terms_of_service(self, element: WebElement) -> None:
-        raise NotImplementedError
+        try:
+            # Directly locate and click the consent checkbox using JS
+            checkbox = element.find_element(
+                By.XPATH, 
+                ".//input[@type='checkbox' and starts-with(@name, 'consent')]"
+            )
+            self.driver.execute_script("arguments[0].click();", checkbox)
+            
+        except NoSuchElementException:
+            raise JobSkipException("Consent checkbox not found in terms section")
+        except Exception as e:
+            logger.error(
+                f"Terms acceptance error: {e} {traceback.format_exc()}"
+            )
+            raise JobSkipException(
+                f"Failed to check consent box: {e} {traceback.format_exc()}"
+            )
+
 
     def is_terms_of_service(self, element: WebElement) -> bool:
-        return False
+        try:
+            # XPath for checkbox with name starting with 'consent'
+            element.find_element(
+                By.XPATH, 
+                ".//input[@type='checkbox' and starts-with(@name, 'consent')]"
+            )
+            return True
+        except NoSuchElementException:
+            return False
+        except Exception as e:
+            logger.error(
+                f"Error checking terms of service element: {e} {traceback.format_exc()}"
+            )
+            raise JobSkipException(
+                f"Terms check failed: {e} {traceback.format_exc()}"
+            )
+
 
     def is_radio_question(self, element: WebElement) -> bool:
         try:
-            element.find_element(By.XPATH, ".//input[@type='checkbox']")
+            element.find_element(By.XPATH, ".//input[@type='checkbox' or @type='radio']")
             return True
         except NoSuchElementException:
             return False
@@ -188,11 +221,13 @@ class LeverApplicationPage(BaseApplicationPage):
     def select_radio_option(
         self, radio_question_web_element: WebElement, answer: str
     ) -> None:
+        
         try:
             radio_input = radio_question_web_element.find_element(
                 By.XPATH, f".//input[@value='{answer}']"
             )
             radio_input.click()
+
         except Exception as e:
             logger.error(
                 f"Error occurred while selecting radio option: {e} {traceback.format_exc()}"
@@ -200,7 +235,6 @@ class LeverApplicationPage(BaseApplicationPage):
             raise JobSkipException(
                 f"Error occurred while selecting radio option {e} {traceback.format_exc()}"
             )
-        raise NotImplementedError
 
     def is_textbox_question(self, element: WebElement) -> bool:
         try:
@@ -208,7 +242,7 @@ class LeverApplicationPage(BaseApplicationPage):
                 return True
                 
             input_element = element.find_element(
-                By.XPATH, ".//input[@type='text' or @type='number']"
+                By.XPATH, ".//input[@type='text' or @type='number' or @type='email']"
             )
             return input_element.is_displayed() and input_element.is_enabled()
             
@@ -227,7 +261,7 @@ class LeverApplicationPage(BaseApplicationPage):
 
             # Locate the input element (type can be 'text', 'number', or 'textarea')
             input_element = element.find_element(
-                By.XPATH, ".//input[@type='text' or @type='number'] | .//textarea"
+                By.XPATH, ".//input[@type='text' or @type='number' or @type='email'] | .//textarea"
             )
 
             # Determine the type of input field
@@ -237,6 +271,8 @@ class LeverApplicationPage(BaseApplicationPage):
                 question_type = TextBoxQuestionType.TEXT
             elif input_type == "number":
                 question_type = TextBoxQuestionType.NUMERIC
+            elif input_type == "email":
+                question_type = TextBoxQuestionType.EMAIL
             else:
                 raise ValueError(f"Unsupported input type: {input_type}")
 
@@ -262,7 +298,7 @@ class LeverApplicationPage(BaseApplicationPage):
                 self._handle_location_input(element, answer)
                 return
 
-            input_element = element.find_element(By.XPATH, ".//textarea | .//input[@type='text' or @type='number']")
+            input_element = element.find_element(By.XPATH, ".//textarea | .//input[@type='text' or @type='number' or @type='email']")
             input_element.clear()
             input_element.send_keys(answer)
 
@@ -380,17 +416,19 @@ class LeverApplicationPage(BaseApplicationPage):
 
     def is_dropdown_question(self, element: WebElement) -> bool:
         try:
-            element.find_element(By.XPATH, ".//select")
+            # Check for either dropdown <select> OR radio buttons
+            element.find_element(By.XPATH, ".//select | .//input[@type='radio']")
             return True
         except NoSuchElementException:
             return False
         except Exception as e:
             logger.error(
-                f"Error occurred while checking for dropdown question: {e} {traceback.format_exc()}"
+                f"Error checking for multiple-choice question: {e} {traceback.format_exc()}"
             )
             raise JobSkipException(
-                f"Error occurred while checking for dropdown question {e} {traceback.format_exc()}"
+                f"Error checking multiple-choice question: {e} {traceback.format_exc()}"
             )
+
 
     def web_element_to_dropdown_question(self, element: WebElement) -> SelectQuestion:
         try:

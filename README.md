@@ -181,21 +181,21 @@ After copying, open the `.env` file and fill in the required values. Ensure you 
   If you don't use the `--resume` option, the bot will automatically generate a unique resume for each application. This feature uses the information from your `plain_text_resume.yaml` file and tailors it to each specific job application, potentially increasing your chances of success by customizing your resume for each position.
 
    ```bash
-   poetry run python main.py
+   poetry run python src/main.py
    ```
 
 - **Using a Specific Resume:**
   If you want to use a specific PDF resume for all applications, place your resume PDF in the `data_folder` directory and run the bot with the `--resume` option:
 
   ```bash
-  poetry run python main.py --resume /path/to/your/resume.pdf
+  poetry run python src/main.py --resume /path/to/your/resume.pdf
   ```
 
 - **Using the collect mode:**
   If you want to collect job data only to perform any type of data analytics you can use the bot with the `--collect` option. This will store in output/data.json file all data found,
 
   ```bash
-  poetry run python main.py --collect
+  poetry run python src/main.py --collect
   ```
   
 ### For troubleshooting refer [this docs](/docs/troubleshooting.md)
