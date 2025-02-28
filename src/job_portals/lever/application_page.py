@@ -293,12 +293,12 @@ class LeverApplicationPage(BaseApplicationPage):
         
         # Handle dropdown interaction
         try:
-            dropdown = WebDriverWait(self.driver, 5).until(
+            dropdown = WebDriverWait(self.driver, 30).until(
                 EC.visibility_of_element_located(
                     (By.CSS_SELECTOR, "div.dropdown-container")
                 )
             )
-            first_result = WebDriverWait(self.driver, 3).until(
+            first_result = WebDriverWait(self.driver, 30).until(
                 EC.element_to_be_clickable(
                     (By.CSS_SELECTOR, "div.dropdown-results > div:first-child")
                 )
