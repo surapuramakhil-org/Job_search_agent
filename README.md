@@ -11,7 +11,7 @@
        onloadeddata="this.playbackRate = 2">
 </video> -->
 
-![Job Search Assistant Demo](docs/Job%20Search%20Assistant%20demo.mp4)
+[job search assistant demo](https://github.com/user-attachments/assets/3cb23ee2-5128-4045-adfb-c90ad5b16611)
 
 [![Python Test Suite](https://github.com/surapuramakhil-org/Job_search_assistant/actions/workflows/py_test.yml/badge.svg?branch=main)](https://github.com/surapuramakhil-org/Job_search_assistant/actions/workflows/py_test.yml)
 
