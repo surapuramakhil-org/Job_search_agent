@@ -4,6 +4,7 @@ from unittest.mock import MagicMock, patch
 from selenium import webdriver
 from ai_hawk.job_applier import AIHawkJobApplier
 from selenium.webdriver.common.by import By
+from parameterized import parameterized
 from job_portals.lever.application_page import LeverApplicationPage
 from job_portals.base_job_portal import BaseJobPortal
 from job import Job
@@ -15,6 +16,7 @@ from utils import browser_utils
 
 
 class TestLeverJobPortalIntegration(unittest.TestCase):
+
     def setUp(self):
         # Initialize browser once per test
         self.driver = init_browser()
@@ -63,27 +65,33 @@ class TestLeverJobPortalIntegration(unittest.TestCase):
     def tearDown(self):
         self.driver.quit()
 
+    @parameterized.expand([
+        # (
+        #     "job1", 
+        #     "tests/resources/lever_application_pages/job1/https-:jobs.lever.co:nielsen:f221a3f5-4045-49f0-a443-62b0030dc56f.html",
+        #     "tests/resources/lever_application_pages/job1/https-:jobs.lever.co:nielsen:f221a3f5-4045-49f0-a443-62b0030dc56f:apply.html"
+        # ),
+        (
+            "job2",
+            "tests/resources/lever_application_pages/job2/https-:jobs.lever.co:catalist:b569aed8-57a5-45f8-bd7f-efbda74dff7d.html",
+            "tests/resources/lever_application_pages/job2/https-:jobs.lever.co:catalist:b569aed8-57a5-45f8-bd7f-efbda74dff7d:apply.html"
+        )
+    ])
     @patch.object(ApplicationSaver, "save")
-    def test_apply_flow(self, mock_save):
+    def test_apply_flow(self, name, job_link, apply_link, mock_save):
         job = Job(
             title="Software Engineer",
             company="Tech Corp",
             description="Python development position",
-            link=self._local_url(
-                "tests/resources/lever_application_pages/job1/https-:jobs.lever.co:nielsen:f221a3f5-4045-49f0-a443-62b0030dc56f.html"
-            ),
+            link=self._local_url(job_link),
         )
 
-        # Mock application button click
         self.mock_job_page.click_apply_button = MagicMock(
             side_effect=lambda _: self.driver.get(
-                self._local_url(
-                    "tests/resources/lever_application_pages/job1/https-:jobs.lever.co:nielsen:f221a3f5-4045-49f0-a443-62b0030dc56f:apply.html"
-                )
+                self._local_url(apply_link)
             )
         )
 
-        # Execute and verify
         self.job_applier.apply_to_job(job)
         mock_save.assert_called_once()
         self.mock_gpt_answerer.is_job_suitable.assert_called_once()

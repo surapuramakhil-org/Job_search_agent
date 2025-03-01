@@ -137,6 +137,7 @@ class BaseApplicationPage(WebPage):
 
     @abstractmethod
     def is_terms_of_service(self, element: WebElement) -> bool:
+        """ This method updated to agree methods """
         raise NotImplementedError
 
     @abstractmethod

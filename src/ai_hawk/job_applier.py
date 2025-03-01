@@ -509,6 +509,14 @@ class AIHawkJobApplier:
     def _process_form_element(
         self, job_context: JobContext, form_element: WebElement
     ) -> None:
+        """
+        application page will be unified into 4 categories
+        1. file uploads
+        2. Agree questions like terms of service (checkbox boxes where unckeck is considered as not agreed)
+        3. text inputs (number, text, email, long answer, short answer, textfield with limits)
+        4. select options (radio, dropdown, check boxes like options)
+        """
+
         logger.debug("Processing form section")
 
         browser_utils.handle_security_checks()
@@ -542,6 +550,8 @@ class AIHawkJobApplier:
             self._handle_dropdown_question(job_context, form_element)
             logger.debug("Handled dropdown question")
             return
+        
+        logger.warning("No matching form element found")            
 
     #TODO: Enhance this method to handle multi-select questions
     def _handle_radio_question(
