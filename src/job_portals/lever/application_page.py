@@ -13,12 +13,16 @@ from job_portals.application_form_elements import (
 )
 from job_portals.base_job_portal import BaseApplicationPage
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException, TimeoutException
+from selenium.common.exceptions import (
+    NoSuchElementException,
+    ElementClickInterceptedException,
+    TimeoutException,
+)
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 
-from utils import browser_utils
+from utils import browser_utils, time_utils
 
 
 class LeverApplicationPage(BaseApplicationPage):
@@ -31,7 +35,7 @@ class LeverApplicationPage(BaseApplicationPage):
 
     def discard(self) -> None:
         raise NotImplementedError
-    
+
     def wait_until_ready(self):
         try:
             WebDriverWait(self.driver, 120).until(
@@ -40,23 +44,33 @@ class LeverApplicationPage(BaseApplicationPage):
                 )
             )
         except TimeoutException as e:
-            logger.error(f"Loading indicator did not disappear within timeout: {str(e)}")
-            raise JobSkipException("Page load timeout - loading indicator remained visible")
+            logger.error(
+                f"Loading indicator did not disappear within timeout: {str(e)}"
+            )
+            raise JobSkipException(
+                "Page load timeout - loading indicator remained visible"
+            )
         except Exception as e:
-            logger.error(f"Error occurred while waiting for page to load: {e} {traceback.format_exc()}")
-            raise JobSkipException(f"Error occurred while waiting for page to load {e} {traceback.format_exc()}")
+            logger.error(
+                f"Error occurred while waiting for page to load: {e} {traceback.format_exc()}"
+            )
+            raise JobSkipException(
+                f"Error occurred while waiting for page to load {e} {traceback.format_exc()}"
+            )
 
     def click_submit_button(self) -> None:
         try:
             submit_button = self.driver.find_element(By.ID, "btn-submit")
             submit_button.click()
-            
+
         except NoSuchElementException:
             logger.error("Submit button not found.")
             raise JobSkipException("Submit button not found.")
-        
+
         except ElementClickInterceptedException as e:
-            logger.warning("submit button has been intercepted / interrupted, solve checks & submit application then do keyborad interrupt")
+            logger.warning(
+                "submit button has been intercepted / interrupted, solve checks & submit application then do keyborad interrupt"
+            )
             browser_utils.security_check(self.driver)
         except Exception as e:
 
@@ -119,28 +133,23 @@ class LeverApplicationPage(BaseApplicationPage):
         try:
             # Directly locate and click the consent checkbox using JS
             checkbox = element.find_element(
-                By.XPATH, 
-                ".//input[@type='checkbox' and starts-with(@name, 'consent')]"
+                By.XPATH, ".//input[@type='checkbox' and starts-with(@name, 'consent')]"
             )
             self.driver.execute_script("arguments[0].click();", checkbox)
-            
+
         except NoSuchElementException:
             raise JobSkipException("Consent checkbox not found in terms section")
         except Exception as e:
-            logger.error(
-                f"Terms acceptance error: {e} {traceback.format_exc()}"
-            )
+            logger.error(f"Terms acceptance error: {e} {traceback.format_exc()}")
             raise JobSkipException(
                 f"Failed to check consent box: {e} {traceback.format_exc()}"
             )
-
 
     def is_terms_of_service(self, element: WebElement) -> bool:
         try:
             # XPath for checkbox with name starting with 'consent'
             element.find_element(
-                By.XPATH, 
-                ".//input[@type='checkbox' and starts-with(@name, 'consent')]"
+                By.XPATH, ".//input[@type='checkbox' and starts-with(@name, 'consent')]"
             )
             return True
         except NoSuchElementException:
@@ -149,14 +158,13 @@ class LeverApplicationPage(BaseApplicationPage):
             logger.error(
                 f"Error checking terms of service element: {e} {traceback.format_exc()}"
             )
-            raise JobSkipException(
-                f"Terms check failed: {e} {traceback.format_exc()}"
-            )
-
+            raise JobSkipException(f"Terms check failed: {e} {traceback.format_exc()}")
 
     def is_radio_question(self, element: WebElement) -> bool:
         try:
-            element.find_element(By.XPATH, ".//input[@type='checkbox' or @type='radio']")
+            element.find_element(
+                By.XPATH, ".//input[@type='checkbox' or @type='radio']"
+            )
             return True
         except NoSuchElementException:
             return False
@@ -188,9 +196,14 @@ class LeverApplicationPage(BaseApplicationPage):
                     options.append(value)
 
             # Determine question type based on input types
-            question_type = SelectQuestionType.MULTI_SELECT if any(
-                input_elem.get_attribute("type") == "checkbox" for input_elem in inputs
-            ) else SelectQuestionType.SINGLE_SELECT
+            question_type = (
+                SelectQuestionType.MULTI_SELECT
+                if any(
+                    input_elem.get_attribute("type") == "checkbox"
+                    for input_elem in inputs
+                )
+                else SelectQuestionType.SINGLE_SELECT
+            )
 
             # Check for required status using description text
             required = True
@@ -206,9 +219,9 @@ class LeverApplicationPage(BaseApplicationPage):
                 question=question_label,
                 options=options,
                 type=question_type,
-                required=required
+                required=required,
             )
-            
+
         except Exception as e:
             logger.error(
                 f"Error converting element to radio question: {e} {traceback.format_exc()}"
@@ -216,7 +229,6 @@ class LeverApplicationPage(BaseApplicationPage):
             raise JobSkipException(
                 f"Error converting element to radio question: {e} {traceback.format_exc()}"
             )
-
 
     def select_radio_option(
         self, radio_question_web_element: WebElement, answer: str
@@ -226,6 +238,7 @@ class LeverApplicationPage(BaseApplicationPage):
             radio_input = radio_question_web_element.find_element(
                 By.XPATH, f".//input[@value='{answer}']"
             )
+            time_utils.short_sleep()
             radio_input.click()
 
         except Exception as e:
@@ -240,12 +253,12 @@ class LeverApplicationPage(BaseApplicationPage):
         try:
             if element.find_elements(By.XPATH, ".//textarea"):
                 return True
-                
+
             input_element = element.find_element(
                 By.XPATH, ".//input[@type='text' or @type='number' or @type='email']"
             )
             return input_element.is_displayed() and input_element.is_enabled()
-            
+
         except NoSuchElementException:
             return False
         except Exception as e:
@@ -261,11 +274,16 @@ class LeverApplicationPage(BaseApplicationPage):
 
             # Locate the input element (type can be 'text', 'number', or 'textarea')
             input_element = element.find_element(
-                By.XPATH, ".//input[@type='text' or @type='number' or @type='email'] | .//textarea"
+                By.XPATH,
+                ".//input[@type='text' or @type='number' or @type='email'] | .//textarea",
             )
 
             # Determine the type of input field
-            input_type = input_element.tag_name if input_element.tag_name == "textarea" else input_element.get_attribute("type")
+            input_type = (
+                input_element.tag_name
+                if input_element.tag_name == "textarea"
+                else input_element.get_attribute("type")
+            )
 
             if input_type == "text" or input_type == "textarea":
                 question_type = TextBoxQuestionType.TEXT
@@ -298,7 +316,10 @@ class LeverApplicationPage(BaseApplicationPage):
                 self._handle_location_input(element, answer)
                 return
 
-            input_element = element.find_element(By.XPATH, ".//textarea | .//input[@type='text' or @type='number' or @type='email']")
+            input_element = element.find_element(
+                By.XPATH,
+                ".//textarea | .//input[@type='text' or @type='number' or @type='email']",
+            )
             input_element.clear()
             input_element.send_keys(answer)
 
@@ -308,25 +329,30 @@ class LeverApplicationPage(BaseApplicationPage):
 
     def _is_location_input(self, element: WebElement) -> bool:
         """Check if the element contains a location input field"""
-        return len(element.find_elements(
-            By.CSS_SELECTOR, "input.location-input[data-qa='location-input']"
-        )) > 0
+        return (
+            len(
+                element.find_elements(
+                    By.CSS_SELECTOR, "input.location-input[data-qa='location-input']"
+                )
+            )
+            > 0
+        )
 
     def _handle_location_input(self, element: WebElement, answer: str) -> None:
         """Specialized handler for location autocomplete inputs"""
         input_element = element.find_element(
             By.CSS_SELECTOR, "input.location-input[data-qa='location-input']"
         )
-        
+
         # Clear existing input
         input_element.send_keys(Keys.CONTROL + "a")
         input_element.send_keys(Keys.DELETE)
-        
+
         # Type answer to trigger suggestions
         for char in answer:
             input_element.send_keys(char)
             time.sleep(0.1)
-        
+
         # Handle dropdown interaction
         try:
             dropdown = WebDriverWait(self.driver, 30).until(
@@ -344,12 +370,12 @@ class LeverApplicationPage(BaseApplicationPage):
             if "No location found" in element.text:
                 raise JobSkipException("Invalid location entered")
             raise
-        
+
         # Verify selection
         hidden_value = element.find_element(
             By.CSS_SELECTOR, "input#selected-location"
         ).get_attribute("value")
-        
+
         if not hidden_value:
             raise ValueError("Location selection validation failed")
 
@@ -370,7 +396,9 @@ class LeverApplicationPage(BaseApplicationPage):
 
     def get_input_elements(self, form_section: WebElement) -> List[WebElement]:
         try:
-            input_elements = form_section.find_elements(By.XPATH, ".//ul/li[contains(@class, 'application-question')]")
+            input_elements = form_section.find_elements(
+                By.XPATH, ".//ul/li[contains(@class, 'application-question')]"
+            )
 
             if not input_elements:
                 input_elements = form_section.find_elements(
@@ -429,12 +457,15 @@ class LeverApplicationPage(BaseApplicationPage):
                 f"Error checking multiple-choice question: {e} {traceback.format_exc()}"
             )
 
-
     def web_element_to_dropdown_question(self, element: WebElement) -> SelectQuestion:
         try:
+
+            # Debug log the element's HTML for troubleshooting
+            logger.debug(f"Element HTML: {element.get_attribute('outerHTML')}")
+
             # Extract the question text from the label div
             question_label = element.find_element(
-                By.XPATH, ".//div[@class='application-label']"
+                By.XPATH, ".//div[contains(@class, 'application-label')]"
             ).text
 
             # Locate the select element
