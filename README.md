@@ -3,15 +3,17 @@
 
 # Job Search Assistant
 
-<video src="docs/Job Search Assistant demo.mp4" 
+<!-- for testing purpose on vs code -->
+<!-- <video src="docs/Job Search Assistant demo.mp4" 
        width="1280" 
        height="720" 
        controls 
        onloadeddata="this.playbackRate = 2">
-</video>
+</video> -->
 
+![Job Search Assistant Demo](docs/Job%20Search%20Assistant%20demo.mp4)
 
-  [![Python Test Suite](https://github.com/surapuramakhil-org/Job_search_assistant/actions/workflows/py_test.yml/badge.svg?branch=main)](https://github.com/surapuramakhil-org/Job_search_assistant/actions/workflows/py_test.yml)
+[![Python Test Suite](https://github.com/surapuramakhil-org/Job_search_assistant/actions/workflows/py_test.yml/badge.svg?branch=main)](https://github.com/surapuramakhil-org/Job_search_assistant/actions/workflows/py_test.yml)
 
 [![Discord](https://img.shields.io/discord/1300208460788400159?style=for-the-badge&color=5865F2&logo=discord&logoColor=white&label=Discord)](https://discord.gg/MYYwG8JyrQ)
 
