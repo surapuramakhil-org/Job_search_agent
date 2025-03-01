@@ -1,14 +1,19 @@
 <a name="top"></a>
 <div align="center">
-<img src="./assets/AIHawk.png">
 
-# AIHawk the first Jobs Applier AI Agent
+<video src="docs/Job Search Assistant demo.mp4" 
+       width="1280" 
+       height="720" 
+       controls 
+       onloadeddata="this.playbackRate = 2">
+</video>
+
 
   [![Python Test Suite](https://github.com/surapuramakhil-org/Job_search_assistant/actions/workflows/py_test.yml/badge.svg?branch=main)](https://github.com/surapuramakhil-org/Job_search_assistant/actions/workflows/py_test.yml)
 
-**🤖🔍 Your AI-powered job search assistant. Automate applications, get personalized recommendations, and land your dream job faster.**
-
 [![Discord](https://img.shields.io/discord/1300208460788400159?style=for-the-badge&color=5865F2&logo=discord&logoColor=white&label=Discord)](https://discord.gg/MYYwG8JyrQ)
+
+**🤖🔍 Your AI-powered job search assistant. Automate applications, get personalized recommendations, and land your dream job faster.**
 
 </div>
 
