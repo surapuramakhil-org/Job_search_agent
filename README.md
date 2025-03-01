@@ -1,6 +1,8 @@
 <a name="top"></a>
 <div align="center">
 
+# Job Search Assistant
+
 <video src="docs/Job Search Assistant demo.mp4" 
        width="1280" 
        height="720" 
