@@ -1,4 +1,5 @@
-from ai_hawk.job_manager import AIHawkJobManager
+
+from job_manager import AIHawkJobManager
 from logger import logger
 
 

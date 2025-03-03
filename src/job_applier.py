@@ -30,7 +30,7 @@ from job_portals.base_job_portal import BaseJobPage, BaseJobPortal
 
 
 from job import Job
-from ai_hawk.llm.llm_manager import GPTAnswerer
+from llm.llm_manager import GPTAnswerer
 from utils import browser_utils, time_utils
 
 
@@ -222,6 +222,10 @@ class AIHawkJobApplier:
                 ApplicationSaver.save(job_application)
                 browser_utils.handle_security_checks()
                 logger.debug("Application form submitted")
+                
+                if not self.job_application_page.application_submission_confirmation():
+                    raise JobSkipException(f"Application submission confrimation is missing for job:{job}")
+                
                 return
             
             else:
