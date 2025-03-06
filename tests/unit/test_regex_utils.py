@@ -1,5 +1,6 @@
 import pytest
-from ai_hawk.job_manager import AIHawkJobManager
+
+from job_manager import AIHawkJobManager
 from regex_utils import look_ahead_patterns
 
 apply_component = AIHawkJobManager(None) # For this test we dont need the web driver

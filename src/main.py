@@ -18,6 +18,7 @@ from lib_resume_builder_AIHawk import (
     StyleManager,
 )
 from typing import Optional
+from bot_facade import AIHawkBotFacade
 from constants import (
     COLLECT_MODE,
     LEVER,
@@ -29,7 +30,9 @@ from constants import (
     WORK_PREFERENCES_YAML,
     WORK_PREFERENCES,
 )
+from job_manager import AIHawkJobManager
 from job_portals.base_job_portal import get_job_portal
+from llm.llm_manager import GPTAnswerer
 from utils.chrome_utils import chrome_browser_options
 
 from job_application_profile import JobApplicationProfile
@@ -37,9 +40,7 @@ from logger import logger
 from utils import browser_utils
 
 
-from ai_hawk.bot_facade import AIHawkBotFacade
-from ai_hawk.job_manager import AIHawkJobManager
-from ai_hawk.llm.llm_manager import GPTAnswerer
+
 
 
 class ConfigError(Exception):

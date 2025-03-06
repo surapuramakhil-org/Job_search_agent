@@ -36,6 +36,20 @@ class LeverApplicationPage(BaseApplicationPage):
     def discard(self) -> None:
         raise NotImplementedError
 
+    def application_submission_confirmation(self) -> bool:
+        try:
+            confirmation = WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located(
+                    (By.XPATH, "//*[contains(normalize-space(), 'Application submitted')]")
+                )
+            )
+            return confirmation.is_displayed()
+        except NoSuchElementException:
+            return False
+        except Exception as e:
+            logger.error(f"Confirmation check error: {e}")
+            return False
+
     def wait_until_ready(self):
         try:
             WebDriverWait(self.driver, 120).until(
@@ -233,7 +247,7 @@ class LeverApplicationPage(BaseApplicationPage):
     def select_radio_option(
         self, radio_question_web_element: WebElement, answer: str
     ) -> None:
-        
+
         try:
             radio_input = radio_question_web_element.find_element(
                 By.XPATH, f".//input[@value='{answer}']"
