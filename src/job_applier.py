@@ -19,6 +19,7 @@ from reportlab.pdfbase.pdfmetrics import stringWidth
 
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
 
 from custom_exception import JobNotSuitableException, JobSkipException
 from jobContext import JobContext
@@ -30,7 +31,7 @@ from job_portals.base_job_portal import BaseJobPage, BaseJobPortal
 
 
 from job import Job
-from ai_hawk.llm.llm_manager import GPTAnswerer
+from llm.llm_manager import GPTAnswerer
 from utils import browser_utils, time_utils
 
 
@@ -222,6 +223,14 @@ class AIHawkJobApplier:
                 ApplicationSaver.save(job_application)
                 browser_utils.handle_security_checks()
                 logger.debug("Application form submitted")
+
+                time_utils.short_sleep()
+                
+                if not self.job_application_page.application_submission_confirmation():
+                    raise JobSkipException(f"Application submission confrimation is missing for job:{job}")
+                
+                logger.debug("Application submission confirmaed")
+
                 return
             
             else:

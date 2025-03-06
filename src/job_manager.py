@@ -9,11 +9,12 @@ from datetime import datetime
 
 from inputimeout import inputimeout, TimeoutOccurred
 
-from ai_hawk.job_applier import AIHawkJobApplier
+
 import config
 
 from constants import WORK_PREFERENCES
 from job_application_profile import WorkPreferences
+from job_applier import AIHawkJobApplier
 from job_portals.base_job_portal import BaseJobPortal, get_job_portal
 from custom_exception import JobNotSuitableException, JobSkipException
 from job import Job, JobState

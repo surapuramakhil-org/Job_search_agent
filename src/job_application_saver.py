@@ -72,7 +72,7 @@ class ApplicationSaver:
         saver = ApplicationSaver(job_application)
         saver.create_application_directory(is_failed)
         saver._save()
-        # todo: tempory fix, to rely on resume and cv path from job object instead of job application object
+        
         if job_application.resume_path:
             saver.save_file(
                 saver.job_application_files_path,

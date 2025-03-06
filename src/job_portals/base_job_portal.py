@@ -3,7 +3,7 @@ from re import A
 
 from constants import LEVER, LINKEDIN
 from job_portals.application_form_elements import SelectQuestion, TextBoxQuestion
-from ai_hawk.authenticator import AIHawkAuthenticator
+from authenticator import AIHawkAuthenticator
 from job import Job
 from jobContext import JobContext
 
@@ -93,6 +93,10 @@ class BaseApplicationPage(WebPage):
 
     @abstractmethod
     def click_submit_button(self) -> None:
+        raise NotImplementedError
+    
+    @abstractmethod
+    def application_submission_confirmation(self) -> bool:
         raise NotImplementedError
 
     @abstractmethod
@@ -228,11 +232,3 @@ def get_job_portal(portal_name, driver, work_preferences):
     else:
         raise ValueError(f"Unknown job portal: {portal_name}")
 
-
-def get_authenticator(driver, platform):
-    from job_portals.linkedIn.authenticator import LinkedInAuthenticator
-
-    if platform == LINKEDIN:
-        return LinkedInAuthenticator(driver)
-    else:
-        raise NotImplementedError(f"Platform {platform} not implemented yet.")

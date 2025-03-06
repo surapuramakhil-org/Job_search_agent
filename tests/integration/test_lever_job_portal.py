@@ -2,15 +2,17 @@ import json
 import unittest
 from unittest.mock import MagicMock, patch
 from selenium import webdriver
-from ai_hawk.job_applier import AIHawkJobApplier
+
 from selenium.webdriver.common.by import By
 from parameterized import parameterized
+from job_applier import AIHawkJobApplier
 from job_portals.lever.application_page import LeverApplicationPage
 from job_portals.base_job_portal import BaseJobPortal
 from job import Job
-from ai_hawk.llm.llm_manager import GPTAnswerer
+
 from job_application_saver import ApplicationSaver
 from job_portals.lever.job_page import LeverJobPage
+from llm.llm_manager import GPTAnswerer
 from main import init_browser
 from utils import browser_utils
 
@@ -74,11 +76,12 @@ class TestLeverJobPortalIntegration(unittest.TestCase):
         (
             "job2",
             "tests/resources/lever_application_pages/job2/https-:jobs.lever.co:catalist:b569aed8-57a5-45f8-bd7f-efbda74dff7d.html",
-            "tests/resources/lever_application_pages/job2/https-:jobs.lever.co:catalist:b569aed8-57a5-45f8-bd7f-efbda74dff7d:apply.html"
+            "tests/resources/lever_application_pages/job2/https-:jobs.lever.co:catalist:b569aed8-57a5-45f8-bd7f-efbda74dff7d:apply.html",
+            "tests/resources/lever_application_pages/job2/https-:jobs.lever.co:catalist:b569aed8-57a5-45f8-bd7f-efbda74dff7d:thanks.html"
         )
     ])
     @patch.object(ApplicationSaver, "save")
-    def test_apply_flow(self, name, job_link, apply_link, mock_save):
+    def test_apply_flow(self, name, job_link, apply_link, confirmation_link, mock_save):
         job = Job(
             title="Software Engineer",
             company="Tech Corp",
@@ -89,6 +92,12 @@ class TestLeverJobPortalIntegration(unittest.TestCase):
         self.mock_job_page.click_apply_button = MagicMock(
             side_effect=lambda _: self.driver.get(
                 self._local_url(apply_link)
+            )
+        )
+
+        self.mock_application_page.click_submit_button = MagicMock(
+            side_effect=lambda: self.driver.get(
+            self._local_url(confirmation_link)
             )
         )
 

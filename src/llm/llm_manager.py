@@ -19,7 +19,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from Levenshtein import distance
 from loguru import logger
 
-import ai_hawk.llm.prompts as prompts
+import llm.prompts as prompts
 from config import JOB_SUITABILITY_SCORE
 from constants import (
     AVAILABILITY,
