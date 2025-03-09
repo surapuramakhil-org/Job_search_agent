@@ -38,11 +38,44 @@ class LeverJobPage(BaseJobPage):
             logger.error(f"Failed to click apply button: {e}, { traceback.format_exc()}")
             raise JobSkipException("Failed to click apply button")
 
-    def _find_easy_apply_button(self, job_context):
-        raise NotImplementedError
+    def get_location(self) -> str:
+        try:
+            location_element = self.driver.find_element(
+                By.XPATH,
+                "//div[contains(@class, 'location') and contains(@class, 'posting-category')]"
+            )
+            return location_element.text.strip()
+        except Exception as e:
+            logger.error(f"Failed to get location: {e}, {traceback.format_exc()}")
+            raise JobSkipException("Failed to retrieve job location")
+    
+    def get_job_categories(self) -> dict:
+        try:
+            categories = {}
+            posting_categories = self.driver.find_element(
+                By.XPATH,
+                "//div[contains(@class, 'posting-categories')]"
+            )
 
-    def _scroll_page(self) -> None:
-        raise NotImplementedError
+            inner_elements = posting_categories.find_elements(By.XPATH, ".//div[contains(@class, 'posting-category')]")
+            
+            for element in inner_elements:
+                class_attr = element.get_attribute("class")
+                class_list = class_attr.split()
+                # The last class name is assumed to be the category key (e.g., location, department)
+                category_key = class_list[-1]
+                category_value = element.text.strip().rstrip('/').strip()
+                categories[category_key] = category_value
+
+            if not categories:
+                raise ValueError("No job categories found")
+
+            return categories
+
+        except Exception as e:
+            logger.error(f"Failed to get job categories: {e}, {traceback.format_exc()}")
+            raise JobSkipException("Could not extract job categories")
+
 
     def get_job_description(self, job) -> str:
         try:

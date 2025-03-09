@@ -1,7 +1,8 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 from http.client import CONTINUE
 from os import link
+from unicodedata import category
 from logger import logger
 from typing import Optional
 
@@ -25,6 +26,7 @@ class Job:
     company: str = ""
     location: str = ""
     link: str = ""
+    categories: dict = field(default_factory=dict)
     # Todo: this will move to enum
     job_state: str = ""
     description: str = ""
