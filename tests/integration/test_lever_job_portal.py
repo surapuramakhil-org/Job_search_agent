@@ -75,9 +75,9 @@ class TestLeverJobPortalIntegration(unittest.TestCase):
         # ),
         (
             "job2",
-            "tests/resources/lever_application_pages/job2/https-:jobs.lever.co:catalist:b569aed8-57a5-45f8-bd7f-efbda74dff7d.html",
-            "tests/resources/lever_application_pages/job2/https-:jobs.lever.co:catalist:b569aed8-57a5-45f8-bd7f-efbda74dff7d:apply.html",
-            "tests/resources/lever_application_pages/job2/https-:jobs.lever.co:catalist:b569aed8-57a5-45f8-bd7f-efbda74dff7d:thanks.html"
+            "tests/resources/lever_application_pages/job2/https-|jobs.lever.co|catalist|b569aed8-57a5-45f8-bd7f-efbda74dff7d.html",
+            "tests/resources/lever_application_pages/job2/https-|jobs.lever.co|catalist|b569aed8-57a5-45f8-bd7f-efbda74dff7d|apply.html",
+            "tests/resources/lever_application_pages/job2/https-|jobs.lever.co|catalist|b569aed8-57a5-45f8-bd7f-efbda74dff7d|thanks.html"
         )
     ])
     @patch.object(ApplicationSaver, "save")

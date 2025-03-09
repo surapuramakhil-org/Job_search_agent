@@ -8,6 +8,7 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Union
+from enum import Enum
 
 import httpx
 from dotenv import load_dotenv
@@ -78,6 +79,9 @@ import config as cfg
 
 load_dotenv()
 
+# class AnsweringMode(Enum):
+#     NORMAL = "normal"  # Mode where answers are expected to be truthful
+#     STRATEGIC = "strategic"  # Mode where answers are optimized to avoid knockout questions
 
 class AIModel(ABC):
     @abstractmethod
@@ -461,6 +465,7 @@ class LoggerChatModel:
 
 
 class GPTAnswerer:
+
     def __init__(self, config, llm_api_key):
         self.ai_adapter = AIAdapter(config, llm_api_key)
         self.llm_cheap = LoggerChatModel(self.ai_adapter)

@@ -68,6 +68,14 @@ class BaseJobPage(WebPage):
     @abstractmethod
     def click_apply_button(self, job_context: JobContext) -> None:
         raise NotImplementedError
+    
+    @abstractmethod
+    def get_location(self) -> str:
+        raise NotImplementedError
+    
+    @abstractmethod
+    def get_job_categories(self) -> dict:
+        raise NotImplementedError
 
 
 class BaseApplicationPage(WebPage):

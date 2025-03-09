@@ -338,9 +338,6 @@ class AIHawkJobManager:
                 
             try:
 
-                if job.job_state in {JobState.APPLIED.value, JobState.CONTINUE.value}:
-                    raise JobSkipException(f"Job state is {job.job_state}")
-
                 self.easy_applier_component.job_apply(job)
                 self.write_to_file(job, "success")
                 logger.debug(f"Applied to job: {job.title} at {job.company}")
@@ -383,12 +380,16 @@ class AIHawkJobManager:
                 logger.debug(f"Job data appended to existing file: {file_name}")
 
     def is_blacklisted(self, job_title, company, link, job_location):
+
+        if not job_title or not company or not link or not job_location:
+            logger.warning(f"One or more input parameters are None or empty: job_title={job_title}, company={company}, link={link}, job_location={job_location}")
+
         logger.debug(f"Checking if job is blacklisted: {job_title} at {company} in {job_location}")
         title_blacklisted = any(re.search(pattern, job_title, re.IGNORECASE) for pattern in self.title_blacklist_patterns)
         company_blacklisted = any(re.search(pattern, company, re.IGNORECASE) for pattern in self.company_blacklist_patterns)
         location_blacklisted = any(re.search(pattern, job_location, re.IGNORECASE) for pattern in self.location_blacklist_patterns)
-        link_seen = link in self.seen_jobs
-        is_blacklisted = title_blacklisted or company_blacklisted or location_blacklisted or link_seen
+
+        is_blacklisted = title_blacklisted or company_blacklisted or location_blacklisted 
         logger.debug(f"Job blacklisted status: {is_blacklisted}")
 
         return is_blacklisted

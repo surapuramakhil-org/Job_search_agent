@@ -34,6 +34,7 @@ DEFAULT_SEARCH_ENGINE = GOOGLE
 
 APPLY_ONCE_PER_COMPANY = False
 
+
 def validate_config():
     """
     Validate that all required API keys and configurations are set.

@@ -30,7 +30,7 @@ from job_portals.application_form_elements import SelectQuestion, TextBoxQuestio
 from job_portals.base_job_portal import BaseJobPage, BaseJobPortal
 
 
-from job import Job
+from job import Job, JobState
 from llm.llm_manager import GPTAnswerer
 from utils import browser_utils, time_utils
 
@@ -119,6 +119,9 @@ class AIHawkJobApplier:
 
         self.job_page.goto_job_page(job)
 
+        if job.job_state in {JobState.APPLIED.value, JobState.CONTINUE.value}:
+            raise JobSkipException(f"Job state is {job.job_state}")
+
         logger.debug(f"Starting job application for job: {job}")
         job_context = JobContext()
         job_context.job = job
@@ -130,11 +133,13 @@ class AIHawkJobApplier:
 
             job_description = self.job_page.get_job_description(job)
             logger.debug(f"Job description set: {job_description[:100]}")
-
             job.set_job_description(job_description)
 
             recruiter_link = self.job_page.get_recruiter_link()
             job.set_recruiter_link(recruiter_link)
+
+            job.location = self.job_page.get_location()
+            job.categories = self.job_page.get_job_categories()
 
             self.current_job = job
 

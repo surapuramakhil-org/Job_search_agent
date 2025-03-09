@@ -166,9 +166,11 @@ After copying, open the `.env` file and fill in the required values. Ensure you 
 
 1. **Data Folder:**
    Ensure that your data_folder contains the following files:
-   - `secrets.yaml`
-   - `config.yaml`
-   - `plain_text_resume.yaml`
+      - `secrets.yaml`
+      - `work_preferences.yaml`
+      - `plain_text_resume.yaml`
+
+   Also, make sure you fill all placeholders. This is important!.
 
 ### For configuration refer [this docs](/docs/configuration.md)
 
