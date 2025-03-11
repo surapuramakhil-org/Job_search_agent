@@ -68,36 +68,33 @@ class TestLeverJobPortalIntegration(unittest.TestCase):
         self.driver.quit()
 
     @parameterized.expand([
-        # (
-        #     "job1", 
-        #     "tests/resources/lever_application_pages/job1/https-:jobs.lever.co:nielsen:f221a3f5-4045-49f0-a443-62b0030dc56f.html",
-        #     "tests/resources/lever_application_pages/job1/https-:jobs.lever.co:nielsen:f221a3f5-4045-49f0-a443-62b0030dc56f:apply.html"
-        # ),
         (
-            "job2",
+            "job1",
+            "https://jobs.lever.co/catalist/b569aed8-57a5-45f8-bd7f-efbda74dff7d"
             "tests/resources/lever_application_pages/job2/https-|jobs.lever.co|catalist|b569aed8-57a5-45f8-bd7f-efbda74dff7d.html",
             "tests/resources/lever_application_pages/job2/https-|jobs.lever.co|catalist|b569aed8-57a5-45f8-bd7f-efbda74dff7d|apply.html",
             "tests/resources/lever_application_pages/job2/https-|jobs.lever.co|catalist|b569aed8-57a5-45f8-bd7f-efbda74dff7d|thanks.html"
         )
     ])
     @patch.object(ApplicationSaver, "save")
-    def test_apply_flow(self, name, job_link, apply_link, confirmation_link, mock_save):
+    def test_apply_flow(self, name, lever_url , job_page, application_page, confirmation_page, mock_save):
+        
         job = Job(
-            title="Software Engineer",
-            company="Tech Corp",
-            description="Python development position",
-            link=self._local_url(job_link),
+            title="Test Job",
+            company="Test company",
+            description="Test description",
+            link=self._local_url(job_page),
         )
 
         self.mock_job_page.click_apply_button = MagicMock(
             side_effect=lambda _: self.driver.get(
-                self._local_url(apply_link)
+                self._local_url(application_page)
             )
         )
 
         self.mock_application_page.click_submit_button = MagicMock(
             side_effect=lambda: self.driver.get(
-            self._local_url(confirmation_link)
+            self._local_url(confirmation_page)
             )
         )
 
