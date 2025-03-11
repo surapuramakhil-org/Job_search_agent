@@ -3,6 +3,8 @@ from enum import Enum
 from http.client import CONTINUE
 from os import link
 from unicodedata import category
+
+from distro import like
 from logger import logger
 from typing import Optional
 
@@ -26,6 +28,8 @@ class Job:
     company: str = ""
     location: str = ""
     link: str = ""
+    # typical lever job categories look like
+    # {'location': 'Bangalore, India', 'department': 'Technology – Other', 'commitment': 'Full Time', 'workplaceTypes': 'Hybrid'}
     categories: dict = field(default_factory=dict)
     # Todo: this will move to enum
     job_state: str = ""

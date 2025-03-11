@@ -63,6 +63,7 @@ JOB_APPLICATION_PROFILE = "job_application_profile"
 RESUME_EDUCATIONS = "resume_educations"
 RESUME_JOBS = "resume_jobs"
 RESUME_PROJECTS = "resume_projects"
+JOB = "job"
 
 PERSONAL_INFORMATION = "personal_information"
 SELF_IDENTIFICATION = "self_identification"

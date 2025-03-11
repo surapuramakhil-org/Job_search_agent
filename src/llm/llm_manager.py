@@ -1,4 +1,7 @@
+from copy import deepcopy
+import traceback
 from typing import Tuple
+from pydantic import BaseModel, Field
 import json
 import os
 import re
@@ -14,12 +17,13 @@ import httpx
 from dotenv import load_dotenv
 from langchain_core.messages import BaseMessage
 from langchain_core.messages.ai import AIMessage
-from langchain_core.output_parsers import StrOutputParser
+from langchain_core.output_parsers import StrOutputParser, JsonOutputParser
 from langchain_core.prompt_values import StringPromptValue
 from langchain_core.prompts import ChatPromptTemplate
 from Levenshtein import distance
 from loguru import logger
 
+from job_application_profile import JobApplicationProfile
 import llm.prompts as prompts
 from config import JOB_SUITABILITY_SCORE
 from constants import (
@@ -37,6 +41,7 @@ from constants import (
     ID,
     INPUT_TOKENS,
     INTERESTS,
+    JOB,
     JOB_APPLICATION_PROFILE,
     JOB_DESCRIPTION,
     LANGUAGES,
@@ -463,6 +468,10 @@ class LoggerChatModel:
             logger.error(f"Unexpected error while parsing LLM result: {str(e)}")
             raise
 
+class WorkPreferenceMatch(BaseModel):
+        match: bool = Field(description="Whether work preferences match the job")
+        reason: str = Field(description="Reason for mismatch if applicable")
+
 
 class GPTAnswerer:
 
@@ -506,7 +515,7 @@ class GPTAnswerer:
             self.summarize_job_description(self.job.description)
         )
 
-    def set_job_application_profile(self, job_application_profile):
+    def set_job_application_profile(self, job_application_profile : JobApplicationProfile):
         logger.debug(f"Setting job application profile: {job_application_profile}")
         self.job_application_profile = job_application_profile
 
@@ -689,8 +698,63 @@ class GPTAnswerer:
             return "cover"
         else:
             return "resume"
+        
+    def is_work_preferences_match(self, job: Job, work_preferences: dict) -> bool:
+        """
+        Determine if candidate's work preferences match the job requirements.
+        
+        Args:
+            job: Job object containing details about the position
+            work_preferences: Dictionary of candidate's work preferences
+            
+        Returns:
+            bool: True if work preferences match the job, False otherwise
+        """
+        logger.debug("Checking if work preferences match template")
+        
+        # Create proper JSON parser with the expected schema
+        parser = JsonOutputParser(pydantic_object=WorkPreferenceMatch)
+        
+        # Get format instructions for the parser
+        format_instructions = parser.get_format_instructions()
+        
+        # Update the prompt to include parser instructions
+        prompt = ChatPromptTemplate.from_template(
+            prompts.is_work_preferences_match_template + "\n{format_instructions}"
+        )
+        
+        # Build the chain with the parser
+        chain = prompt | self.llm_cheap | parser
+        
+        # Create a copy of work_preferences to avoid modifying the input
+        combined_preferences = work_preferences.copy()
+        combined_preferences.update(self.job_application_profile.work_preferences.__dict__)
 
-    def is_job_suitable(self) -> Tuple[bool, Optional[int], Optional[str]]:
+        # Copy job object to avoid modifying the input , saving input tokens
+        job_copy = deepcopy(job)
+        job_copy.description = ""
+        job_copy.summarize_job_description = ""
+
+        try:
+            # Execute the chain with the format instructions
+            output = chain.invoke(
+                {
+                    WORK_PREFERENCES : combined_preferences,
+                    JOB : job_copy,
+                    "format_instructions": format_instructions
+                }
+            )
+            
+            logger.debug(f"Work preferences match output: {output}")
+
+            work_preferences_match = WorkPreferenceMatch(**output)
+            
+            return work_preferences_match.match
+        except Exception as e:
+            logger.error(f"Error in work preferences matching: {e} {traceback.format_exc()} ")
+            return True
+
+    def is_job_suitable(self, work_preferences : dict) -> Tuple[bool, Optional[int], Optional[str]]:
         """
         Determines if the job is suitable based on a score and reasoning extracted from LLM output.
 
@@ -711,6 +775,7 @@ class GPTAnswerer:
             {
                 RESUME: self.resume,
                 JOB_DESCRIPTION: self.job_description,
+                WORK_PREFERENCES: work_preferences
             }
         )
         

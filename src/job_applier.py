@@ -147,12 +147,16 @@ class AIHawkJobApplier:
             self.gpt_answerer.set_job(job)
 
             keywords_whitelist_check, _  = self._check_keywords_whitelist(job)
+
+            if not self.gpt_answerer.is_work_preferences_match(job, self.work_preferences):
+                logger.debug(f"Work preferences didn't match for {job.title} at {job.company}")
+                raise JobNotSuitableException(f"Work preferences didn't match, job: {job.title} at {job.company }")
             
             if not keywords_whitelist_check:
                 logger.debug(f"Job description keywords not found for {job.title} at {job.company}")
                 raise JobNotSuitableException(f"Keywords whitelist didn't pass, keywords:{self.keywords_whitelist} Job Description {job.description} ")
 
-            is_suitable, score, reasoning = self.gpt_answerer.is_job_suitable()
+            is_suitable, score, reasoning = self.gpt_answerer.is_job_suitable(self.work_preferences)
 
             if not is_suitable:
                 raise JobNotSuitableException(f"Job is not suitable, got score {score}, reasoning: {reasoning}")
