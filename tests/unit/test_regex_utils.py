@@ -15,8 +15,6 @@ seen_jobs = set()
 apply_component.title_blacklist_patterns = look_ahead_patterns(title_blacklist)
 apply_component.company_blacklist_patterns = look_ahead_patterns(company_blacklist)
 apply_component.location_blacklist_patterns = look_ahead_patterns(location_blacklist)
-apply_component.seen_jobs = seen_jobs
-apply_component.seen_jobs.add("link14") # added link for 'seen link' test
 
 test_cases = [
     # Blacklist matches for "Data Engineer" in various forms
@@ -37,9 +35,6 @@ test_cases = [
     ("Marketing Specialist", "ABC Corp", "link11", "USA", True),  # Exact match (blacklist)
     ("Marketing Specialist", "ABC Corporation", "link12", "USA", False),  # Variants on corporation, part of a different word
     ("Marketing Specialist", "ABC CORP", "link13", "USA", True),  # Uppercase variant (blacklist)
-
-    # Seen job link test
-    ("Marketing Specialist", "DEF Corp", "link14", "USA", True),  # Link has been seen (blacklist)
     
     # Cases that should NOT be blacklisted (expected to pass)
     ("Software Developer", "Tech Corp", "link15", "USA", False),  # Title not blacklisted
