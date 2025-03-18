@@ -21,6 +21,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
+from config import ANSWERS_CACHE_FILE
 from custom_exception import JobNotSuitableException, JobSkipException
 from jobContext import JobContext
 from job_application import JobApplication
@@ -69,14 +70,14 @@ class AIHawkJobApplier:
         self.set_old_answers = set_old_answers
         self.gpt_answerer = gpt_answerer
         self.resume_generator_manager = resume_generator_manager
-        self.all_data = self._load_questions_from_json()
+        self.answers_cache = self._load_answers_from_json()
         self.current_job : Job | None = None
         self.work_preferences = work_preferences
         self.keywords_whitelist = work_preferences.get("keywords_whitelist", [])
         logger.debug("AIHawkEasyApplier initialized successfully")
 
-    def _load_questions_from_json(self) -> List[dict]:
-        output_file = "answers.json"
+    def _load_answers_from_json(self) -> List[dict]:
+        output_file = ANSWERS_CACHE_FILE
         logger.debug(f"Loading questions from JSON file: {output_file}")
         try:
             with open(output_file, "r") as f:
@@ -585,7 +586,7 @@ class AIHawkJobApplier:
 
         existing_answer = None
         current_question_sanitized = self._sanitize_text(question_text)
-        for item in self.all_data:
+        for item in self.answers_cache:
             if (
                 current_question_sanitized in item["question"]
                 and item["type"] == "radio"
@@ -602,10 +603,10 @@ class AIHawkJobApplier:
             return
 
         answer = self.gpt_answerer.answer_question_from_options(question_text, options)
-        self._save_questions_to_json(
+        self._save_answer_to_json(
             {"type": "radio", "question": question_text, "answer": answer}
         )
-        self.all_data = self._load_questions_from_json()
+        self.answers_cache = self._load_answers_from_json()
         job_application.save_application_data(
             {"type": "radio", "question": question_text, "answer": answer}
         )
@@ -630,7 +631,7 @@ class AIHawkJobApplier:
         existing_answer = None
         if not is_cover_letter:
             current_question_sanitized = self._sanitize_text(question_text)
-            for item in self.all_data:
+            for item in self.answers_cache:
                 if (
                     item["question"] == current_question_sanitized
                     and item.get("type") == question_type
@@ -654,10 +655,10 @@ class AIHawkJobApplier:
 
         # Save non-cover letter answers
         if not is_cover_letter and not existing_answer:
-            self._save_questions_to_json(
+            self._save_answer_to_json(
                 {"type": question_type, "question": question_text, "answer": answer}
             )
-            self.all_data = self._load_questions_from_json()
+            self.answers_cache = self._load_answers_from_json()
             logger.debug("Saved non-cover letter answer to JSON.")
 
         self.job_application_page.fill_textbox_question(element, answer)
@@ -681,7 +682,7 @@ class AIHawkJobApplier:
         current_question_sanitized = self._sanitize_text(question_text)
         options = dropdown.options
 
-        for item in self.all_data:
+        for item in self.answers_cache:
             if (
                 current_question_sanitized in item["question"]
                 and item["type"] == "dropdown"
@@ -710,14 +711,14 @@ class AIHawkJobApplier:
             answer = self.gpt_answerer.answer_question_from_options(
                 question_text, options
             )
-            self._save_questions_to_json(
+            self._save_answer_to_json(
                 {
                     "type": "dropdown",
                     "question": question_text,
                     "answer": answer,
                 }
             )
-            self.all_data = self._load_questions_from_json()
+            self.answers_cache = self._load_answers_from_json()
             job_application.save_application_data(
                 {
                     "type": "dropdown",
@@ -729,9 +730,12 @@ class AIHawkJobApplier:
         self.job_application_page.select_dropdown_option(section, answer)
         logger.debug(f"Selected new dropdown answer: {answer}")
         return
+    
+    def _save_answer(self, answer_data: dict) -> None:
+        self._save_answer_to_json(answer_data)
 
-    def _save_questions_to_json(self, question_data: dict) -> None:
-        output_file = "answers.json"
+    def _save_answer_to_json(self, question_data: dict) -> None:
+        output_file = ANSWERS_CACHE_FILE
         question_data["question"] = self._sanitize_text(question_data["question"])
 
         logger.debug(f"Checking if question data already exists: {question_data}")
@@ -784,7 +788,7 @@ class AIHawkJobApplier:
         return sanitized_text
 
     def _find_existing_answer(self, question_text):
-        for item in self.all_data:
+        for item in self.answers_cache:
             if self._sanitize_text(item["question"]) == self._sanitize_text(
                 question_text
             ):

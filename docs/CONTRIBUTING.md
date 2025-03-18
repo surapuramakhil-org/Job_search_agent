@@ -1,8 +1,10 @@
-# Contributing to Auto_Jobs_Applier_AIHawk
+# Contributing to Job Search Assistant
+
+First time contributors can refer to [First Contributions](https://github.com/firstcontributions/first-contributions) for learning basics.
 
 ## Table of Contents
 
-- [Contributing to Auto\_Jobs\_Applier\_AIHawk](#contributing-to-auto_jobs_applier_aihawk)
+- [Contributing to Job Search Assistant](#contributing-to-job-search-assistant)
   - [Table of Contents](#table-of-contents)
 - [Filing Github issue](#filing-github-issue)
   - [Bug Reports](#bug-reports)

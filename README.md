@@ -13,7 +13,8 @@
 
 [job search assistant demo](https://github.com/user-attachments/assets/3cb23ee2-5128-4045-adfb-c90ad5b16611)
 
-[![Python Test Suite](https://github.com/surapuramakhil-org/Job_search_assistant/actions/workflows/py_test.yml/badge.svg?branch=main)](https://github.com/surapuramakhil-org/Job_search_assistant/actions/workflows/py_test.yml)
+<!-- Temporarity commented test suite branch and testing CI/CD is not working, doing manual testing as of now -->
+<!-- [![Python Test Suite](https://github.com/surapuramakhil-org/Job_search_assistant/actions/workflows/py_test.yml/badge.svg?branch=main)](https://github.com/surapuramakhil-org/Job_search_assistant/actions/workflows/py_test.yml) -->
 
 [![Discord](https://img.shields.io/discord/1300208460788400159?style=for-the-badge&color=5865F2&logo=discord&logoColor=white&label=Discord)](https://discord.gg/MYYwG8JyrQ)
 
