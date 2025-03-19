@@ -285,6 +285,11 @@ class AIHawkJobApplier:
                 self.job_application_page.upload_file(element, resume_file_path)
                 job_context.job.resume_path = resume_file_path
                 job_context.job_application.resume_path = resume_file_path
+                job_context.job_application.save_application_data({
+                    "type": "resume",
+                    "question": "Resume",
+                    "answer": resume_file_path
+                })
                 logger.debug(f"Resume uploaded from path: {resume_file_path}")
             else:
                 logger.debug(
@@ -387,6 +392,11 @@ class AIHawkJobApplier:
             element.send_keys(os.path.abspath(file_path_pdf))
             job.resume_path = os.path.abspath(file_path_pdf)
             job_application.resume_path = os.path.abspath(file_path_pdf)
+            job_application.save_application_data({
+                "type": "resume",
+                "question": "Resume",
+                "answer": os.path.abspath(file_path_pdf)
+            })
             time.sleep(2)
             logger.debug(f"Resume created and uploaded successfully: {file_path_pdf}")
         except Exception as e:
@@ -508,6 +518,11 @@ class AIHawkJobApplier:
             job_context.job_application.cover_letter_path = os.path.abspath(
                 file_path_pdf
             )
+            job_context.job_application.save_application_data({
+                "type": "cover_letter",
+                "question": "Cover Letter",
+                "answer": os.path.abspath(file_path_pdf)
+            })
             time.sleep(2)
             logger.debug(
                 f"Cover letter created and uploaded successfully: {file_path_pdf}"
