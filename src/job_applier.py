@@ -21,7 +21,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
-from config import ANSWERS_CACHE_FILE
+from config import ANSWERS_CACHE_FILE, CACHE
 from custom_exception import JobNotSuitableException, JobSkipException
 from jobContext import JobContext
 from job_application import JobApplication
@@ -584,15 +584,7 @@ class AIHawkJobApplier:
         question_text = radio_question.question
         options = radio_question.options
 
-        existing_answer = None
-        current_question_sanitized = self._sanitize_text(question_text)
-        for item in self.answers_cache:
-            if (
-                current_question_sanitized in item["question"]
-                and item["type"] == "radio"
-            ):
-                existing_answer = item
-                break
+        existing_answer = self._find_existing_answer(question_text, "radio")
 
         if existing_answer:
             self.job_application_page.select_radio_option(
@@ -627,21 +619,12 @@ class AIHawkJobApplier:
         is_cover_letter = "cover letter" in question_text.lower()
         is_numeric = textbox_question.type is TextBoxQuestionType.NUMERIC
 
-        # Look for existing answer if it's not a cover letter field
         existing_answer = None
         if not is_cover_letter:
-            current_question_sanitized = self._sanitize_text(question_text)
-            for item in self.answers_cache:
-                if (
-                    item["question"] == current_question_sanitized
-                    and item.get("type") == question_type
-                ):
-                    existing_answer = item["answer"]
-                    logger.debug(f"Found existing answer: {existing_answer}")
-                    break
+            existing_answer = self._find_existing_answer(question_text, question_type)
 
         if existing_answer and not is_cover_letter:
-            answer = existing_answer
+            answer = existing_answer["answer"]
             logger.debug(f"Using existing answer: {answer}")
         else:
             if is_numeric:
@@ -653,7 +636,6 @@ class AIHawkJobApplier:
                 )
                 logger.debug(f"Generated textual answer: {answer}")
 
-        # Save non-cover letter answers
         if not is_cover_letter and not existing_answer:
             self._save_answer_to_json(
                 {"type": question_type, "question": question_text, "answer": answer}
@@ -678,32 +660,15 @@ class AIHawkJobApplier:
         dropdown = self.job_application_page.web_element_to_dropdown_question(section)
 
         question_text = dropdown.question
-        existing_answer = None
-        current_question_sanitized = self._sanitize_text(question_text)
         options = dropdown.options
 
-        for item in self.answers_cache:
-            if (
-                current_question_sanitized in item["question"]
-                and item["type"] == "dropdown"
-            ):
-                existing_answer = item["answer"]
-                break
+        existing_answer = self._find_existing_answer(question_text, "dropdown")
 
         if existing_answer:
+            answer = existing_answer["answer"]
             logger.debug(
-                f"Found existing answer for question '{question_text}': {existing_answer}"
+                f"Found existing answer for question '{question_text}': {answer}"
             )
-            job_application.save_application_data(
-                {
-                    "type": "dropdown",
-                    "question": question_text,
-                    "answer": existing_answer,
-                }
-            )
-
-            answer = existing_answer
-
         else:
             logger.debug(
                 f"No existing answer found, querying model for: {question_text}"
@@ -719,14 +684,14 @@ class AIHawkJobApplier:
                 }
             )
             self.answers_cache = self._load_answers_from_json()
-            job_application.save_application_data(
-                {
-                    "type": "dropdown",
-                    "question": question_text,
-                    "answer": answer,
-                }
-            )
 
+        job_application.save_application_data(
+            {
+                "type": "dropdown",
+                "question": question_text,
+                "answer": answer,
+            }
+        )
         self.job_application_page.select_dropdown_option(section, answer)
         logger.debug(f"Selected new dropdown answer: {answer}")
         return
@@ -787,10 +752,16 @@ class AIHawkJobApplier:
         logger.debug(f"Sanitized text: {sanitized_text}")
         return sanitized_text
 
-    def _find_existing_answer(self, question_text):
+    def _find_existing_answer(self, question_text: str, question_type: str) -> Optional[dict]:
+        if not CACHE:
+            logger.trace("Cache is disabled, not checking for existing answers")
+            return None
+
+        current_question_sanitized = self._sanitize_text(question_text)
         for item in self.answers_cache:
-            if self._sanitize_text(item["question"]) == self._sanitize_text(
-                question_text
+            if (
+                current_question_sanitized == self._sanitize_text(item["question"])
+                and item["type"] == question_type
             ):
                 return item
         return None
