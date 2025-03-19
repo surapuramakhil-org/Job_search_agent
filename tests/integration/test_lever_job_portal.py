@@ -37,6 +37,9 @@ class TestLeverJobPortalIntegration(unittest.TestCase):
             work_preferences={"keywords_whitelist": []},
             resume_generator_manager=MagicMock(),
         )
+        
+        # Mock the _save_answer_to_json method to prevent modifying cache during tests
+        self.job_applier._save_answer_to_json = MagicMock()
 
     def _setup_application_mocks(self):
         """Configure application page and job portal mocks"""
@@ -70,15 +73,17 @@ class TestLeverJobPortalIntegration(unittest.TestCase):
     @parameterized.expand([
         (
             "job1",
-            "https://jobs.lever.co/catalist/b569aed8-57a5-45f8-bd7f-efbda74dff7d"
-            "tests/resources/lever_application_pages/job2/https-|jobs.lever.co|catalist|b569aed8-57a5-45f8-bd7f-efbda74dff7d.html",
-            "tests/resources/lever_application_pages/job2/https-|jobs.lever.co|catalist|b569aed8-57a5-45f8-bd7f-efbda74dff7d|apply.html",
-            "tests/resources/lever_application_pages/job2/https-|jobs.lever.co|catalist|b569aed8-57a5-45f8-bd7f-efbda74dff7d|thanks.html"
+            "https://jobs.lever.co/foodstuffs/b9077163-d168-4379-9a5e-d3953d8855e8",
+            "tests/resources/lever_application_pages/Foodstuffs North Island - Commercial Analyst - Wholesale_job_page.html",
+            "tests/resources/lever_application_pages/Foodstuffs North Island - Commercial Analyst - Wholesale_application_page.html",
+            "tests/resources/lever_application_pages/Foodstuffs North Island - Commercial Analyst - Wholesale_confirmation_page.html",
         )
     ])
     @patch.object(ApplicationSaver, "save")
     def test_apply_flow(self, name, lever_url , job_page, application_page, confirmation_page, mock_save):
         
+        print(f"Testing job application flow: {name}, URL: {lever_url}")
+
         job = Job(
             title="Test Job",
             company="Test company",

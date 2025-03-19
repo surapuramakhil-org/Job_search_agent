@@ -33,6 +33,9 @@ ALLOWED_SEARCH_ENGINES = [GOOGLE]
 DEFAULT_SEARCH_ENGINE = GOOGLE
 
 APPLY_ONCE_PER_COMPANY = False
+CACHE = False
+
+ANSWERS_CACHE_FILE = "answers.json"
 
 
 def validate_config():
