@@ -46,6 +46,7 @@ CONTENT = "content"
 TOTAL_COST = "total_cost"
 
 RESPONSE_METADATA = "response_metadata"
+RESPONSE_TIME = "response_time"
 MODEL_NAME = "model_name"
 SYSTEM_FINGERPRINT = "system_fingerprint"
 FINISH_REASON = "finish_reason"
@@ -88,3 +89,9 @@ OLLAMA = "ollama"
 GEMINI = "gemini"
 HUGGINGFACE = "huggingface"
 PERPLEXITY = "perplexity"
+
+
+# Response time constants
+VALUE = "value"
+UNIT = "unit"
+SECONDS = "seconds"

@@ -62,12 +62,14 @@ from constants import (
     QUESTION,
     REPLIES,
     RESPONSE_METADATA,
+    RESPONSE_TIME,
     RESUME,
     RESUME_EDUCATIONS,
     RESUME_JOBS,
     RESUME_PROJECTS,
     RESUME_SECTION,
     SALARY_EXPECTATIONS,
+    SECONDS,
     SELF_IDENTIFICATION,
     SYSTEM_FINGERPRINT,
     TEXT,
@@ -75,7 +77,9 @@ from constants import (
     TOKEN_USAGE,
     TOTAL_COST,
     TOTAL_TOKENS,
+    UNIT,
     USAGE_METADATA,
+    VALUE,
     WORK_PREFERENCES,
 )
 from job import Job
@@ -245,6 +249,7 @@ class LLMLogger:
             logger.debug("Prompts are of type StringPromptValue")
             prompts = prompts.text
             logger.debug(f"Prompts converted to text: {prompts}")
+
         elif isinstance(prompts, Dict):
             logger.debug("Prompts are of type Dict")
             try:
@@ -282,8 +287,10 @@ class LLMLogger:
             output_tokens = token_usage[OUTPUT_TOKENS]
             input_tokens = token_usage[INPUT_TOKENS]
             total_tokens = token_usage[TOTAL_TOKENS]
+            response_time = parsed_reply[RESPONSE_METADATA][RESPONSE_TIME]
+            
             logger.debug(
-                f"Token usage - Input: {input_tokens}, Output: {output_tokens}, Total: {total_tokens}"
+                f"Token usage - Input: {input_tokens}, Output: {output_tokens}, Total: {total_tokens}, Response Time: {response_time}  "
             )
         except KeyError as e:
             logger.error(f"KeyError in parsed_reply structure: {str(e)}")
@@ -317,7 +324,8 @@ class LLMLogger:
                 INPUT_TOKENS: input_tokens,
                 OUTPUT_TOKENS: output_tokens,
                 TOTAL_COST: total_cost,
-            }
+                RESPONSE_TIME: response_time,
+                }
             logger.debug(f"Log entry created: {log_entry}")
         except KeyError as e:
             logger.error(
@@ -346,11 +354,18 @@ class LoggerChatModel:
             try:
                 logger.debug("Attempting to call the LLM with messages")
 
+                start_time = time.time()
                 reply = self.llm.invoke(messages)
-                logger.debug(f"LLM response received: {reply}")
+                end_time = time.time()
+                response_time = end_time - start_time
 
                 parsed_reply = self.parse_llmresult(reply)
                 logger.debug(f"Parsed LLM reply: {parsed_reply}")
+
+                parsed_reply[RESPONSE_METADATA][RESPONSE_TIME] = {
+                    VALUE : response_time,
+                    UNIT : SECONDS
+                }
 
                 LLMLogger.log_request(prompts=messages, parsed_reply=parsed_reply)
                 logger.debug("Request successfully logged")
