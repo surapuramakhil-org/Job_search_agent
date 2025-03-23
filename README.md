@@ -259,6 +259,8 @@ Your support is greatly appreciated and helps us make job search assistant a pow
 
 If you like the project please star ⭐ the repository!
 
+[![Stargazers repo roster for @surapuramakhil-org/Job_search_assistant](https://reporoster.com/stars/surapuramakhil-org/Job_search_assistant)](https://github.com/surapuramakhil-org/Job_search_assistant/stargazers)
+
 ## Special Thanks
 [![Contributors](https://img.shields.io/github/contributors/surapuramakhil-org/Job_hunt_assistant)](https://github.com/surapuramakhil-org/Job_hunt_assistant/graphs/contributors)
 
@@ -267,6 +269,8 @@ If you like the project please star ⭐ the repository!
 </a>
 
 Made with [contrib.rocks](https://contrib.rocks).
+
+![Alt](https://repobeats.axiom.co/api/embed/ea4ca3eb91099b18374ddc89b207c0c5d04fdc64.svg "Repobeats analytics image")
 
 ## License
 
