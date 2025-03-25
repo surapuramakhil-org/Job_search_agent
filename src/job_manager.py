@@ -32,10 +32,10 @@ import utils.time_utils
 
 class EnvironmentKeys:
     def __init__(self):
-        logger.debug("Initializing EnvironmentKeys")
+        logger.info("Initializing EnvironmentKeys")
         self.skip_apply = self._read_env_key_bool("SKIP_APPLY")
         self.disable_description_filter = self._read_env_key_bool("DISABLE_DESCRIPTION_FILTER")
-        logger.debug(f"EnvironmentKeys initialized: skip_apply={self.skip_apply}, disable_description_filter={self.disable_description_filter}")
+        logger.info(f"EnvironmentKeys initialized: skip_apply={self.skip_apply}, disable_description_filter={self.disable_description_filter}")
 
     @staticmethod
     def _read_env_key(key: str) -> str:
@@ -52,14 +52,14 @@ class EnvironmentKeys:
 
 class AIHawkJobManager:
     def __init__(self, job_portal : BaseJobPortal):
-        logger.debug("Initializing AIHawkJobManager")
+        logger.info("Initializing AIHawkJobManager")
         self.job_portal = job_portal
         self.set_old_answers = set()
         self.easy_applier_component = None
-        logger.debug("AIHawkJobManager initialized successfully")
+        logger.info("AIHawkJobManager initialized successfully")
 
     def set_parameters(self, parameters):
-        logger.debug("Setting parameters for AIHawkJobManager")
+        logger.info("Setting parameters for AIHawkJobManager")
         self.workPreferences = parameters.get(WORK_PREFERENCES)
         self.company_blacklist = self.workPreferences.get('company_blacklist', []) or []
         self.title_blacklist = self.workPreferences.get('title_blacklist', []) or []
@@ -81,14 +81,14 @@ class AIHawkJobManager:
         self.resume_path = Path(resume_path) if resume_path and Path(resume_path).exists() else None
         self.output_file_directory = Path(parameters['outputFileDirectory'])
         self.env_config = EnvironmentKeys()
-        logger.debug("Parameters set successfully")
+        logger.info("Parameters set successfully")
 
     def set_gpt_answerer(self, gpt_answerer):
-        logger.debug("Setting GPT answerer")
+        logger.info("Setting GPT answerer")
         self.gpt_answerer = gpt_answerer
 
     def set_resume_generator_manager(self, resume_generator_manager):
-        logger.debug("Setting resume generator manager")
+        logger.info("Setting resume generator manager")
         self.resume_generator_manager = resume_generator_manager
 
     def start_collecting_data(self):
@@ -137,7 +137,7 @@ class AIHawkJobManager:
                 page_sleep += 1
 
     def start_applying(self):
-        logger.debug("Starting job application process")
+        logger.info("Starting job application process")
         self.easy_applier_component = AIHawkJobApplier(self.job_portal, self.resume_path, self.set_old_answers,
                                                           self.gpt_answerer,self.workPreferences , self.resume_generator_manager)
         searches = list(product(self.positions, self.locations))
@@ -148,21 +148,21 @@ class AIHawkJobManager:
 
         for position, location in searches:
             job_page_number = -1
-            logger.debug(f"Starting the search for {position} in {location}.")
+            logger.info(f"Starting the search for {position} in {location}.")
 
             try:
                 while True:
                     page_sleep += 1
                     job_page_number += 1
-                    logger.debug(f"Going to job page {job_page_number}")
+                    logger.info(f"Going to job page {job_page_number}")
                     self.job_portal.jobs_page.next_job_page(position, location, job_page_number)
                     utils.time_utils.medium_sleep()
-                    logger.debug("Starting the application process for this page...")
+                    logger.info("Starting the application process for this page...")
 
                     try:
                         jobs = self.job_portal.jobs_page.get_jobs_from_page(scroll=True)
                         if not jobs:
-                            logger.debug("No more jobs found on this page. Exiting loop.")
+                            logger.info("No more jobs found on this page. Exiting loop.")
                             break
                     except Exception as e:
                         logger.error(f"Failed to retrieve jobs: {e}")
@@ -174,7 +174,7 @@ class AIHawkJobManager:
                         logger.error(f"Error during job application: {e} {traceback.format_exc()}")
                         continue
 
-                    logger.debug("Applying to jobs on this page has been completed!")
+                    logger.info("Applying to jobs on this page has been completed!")
 
                     time_left = minimum_page_time - time.time()
 
@@ -187,9 +187,9 @@ class AIHawkJobManager:
                         except TimeoutOccurred:
                             user_input = ''  # No input after timeout
                         if user_input == 'y':
-                            logger.debug("User chose to skip waiting.")
+                            logger.info("User chose to skip waiting.")
                         else:
-                            logger.debug(f"Sleeping for {time_left} seconds as user chose not to skip.")
+                            logger.info(f"Sleeping for {time_left} seconds as user chose not to skip.")
                             time.sleep(time_left)
 
                     minimum_page_time = time.time() + minimum_time
@@ -203,9 +203,9 @@ class AIHawkJobManager:
                         except TimeoutOccurred:
                             user_input = ''  # No input after timeout
                         if user_input == 'y':
-                            logger.debug("User chose to skip waiting.")
+                            logger.info("User chose to skip waiting.")
                         else:
-                            logger.debug(f"Sleeping for {sleep_time} seconds.")
+                            logger.info(f"Sleeping for {sleep_time} seconds.")
                             time.sleep(sleep_time)
                         page_sleep += 1
             except Exception as e:
@@ -222,9 +222,9 @@ class AIHawkJobManager:
                 except TimeoutOccurred:
                     user_input = ''  # No input after timeout
                 if user_input == 'y':
-                    logger.debug("User chose to skip waiting.")
+                    logger.info("User chose to skip waiting.")
                 else:
-                    logger.debug(f"Sleeping for {time_left} seconds as user chose not to skip.")
+                    logger.info(f"Sleeping for {time_left} seconds as user chose not to skip.")
                     time.sleep(time_left)
 
             minimum_page_time = time.time() + minimum_time
@@ -238,9 +238,9 @@ class AIHawkJobManager:
                 except TimeoutOccurred:
                     user_input = ''  # No input after timeout
                 if user_input == 'y':
-                    logger.debug("User chose to skip waiting.")
+                    logger.info("User chose to skip waiting.")
                 else:
-                    logger.debug(f"Sleeping for {sleep_time} seconds.")
+                    logger.info(f"Sleeping for {sleep_time} seconds.")
                     time.sleep(sleep_time)
                 page_sleep += 1
 
@@ -266,7 +266,7 @@ class AIHawkJobManager:
 
         for job in job_list:
 
-            logger.debug(f"Starting applicant for job: {job.title} at {job.company}")
+            logger.info(f"Starting applicant for job: {job.title} at {job.company}")
             #TODO fix apply threshold
             """
                 # Initialize applicants_count as None
@@ -322,10 +322,10 @@ class AIHawkJobManager:
         
 
             if self.is_previously_failed_to_apply(job.link):
-                logger.debug(f"Previously failed to apply for {job.title} at {job.company}, skipping...")
+                logger.info(f"Previously failed to apply for {job.title} at {job.company}, skipping...")
                 continue
             if self.is_blacklisted(job.title, job.company, job.link, job.location):
-                logger.debug(f"Job blacklisted: {job.title} at {job.company} in {job.location}")
+                logger.info(f"Job blacklisted: {job.title} at {job.company} in {job.location}")
                 self.write_to_file(job, "skipped", "Job blacklisted")
                 continue
             if self.is_already_applied_to_job(job.title, job.company, job.link):
@@ -340,9 +340,9 @@ class AIHawkJobManager:
 
                 self.easy_applier_component.job_apply(job)
                 self.write_to_file(job, "success")
-                logger.debug(f"Applied to job: {job.title} at {job.company}")
+                logger.info(f"Applied to job: {job.title} at {job.company}")
             except JobNotSuitableException as e:
-                logger.debug(f"Job not suitable for application: {job.title} at {job.company}")
+                logger.info(f"Job not suitable for application: {job.title} at {job.company}")
                 self.write_to_file(job, "skipped", f"{str(e)} {traceback.format_exc()}")
                 continue
             except Exception as e:
@@ -351,7 +351,7 @@ class AIHawkJobManager:
                 continue
 
     def write_to_file(self, job : Job, file_name, reason=None):
-        logger.debug(f"Writing job application result to file: {file_name}")
+        logger.info(f"Writing job application result to file: {file_name}")
         pdf_path = Path(job.resume_path).resolve()
         pdf_path = pdf_path.as_uri()
         data = job.__dict__
@@ -365,7 +365,7 @@ class AIHawkJobManager:
         if not file_path.exists():
             with open(file_path, 'w', encoding='utf-8') as f:
                 json.dump([data], f, indent=4)
-                logger.debug(f"Job data written to new file: {file_name}")
+                logger.info(f"Job data written to new file: {file_name}")
         else:
             with open(file_path, 'r+', encoding='utf-8') as f:
                 try:
@@ -377,27 +377,27 @@ class AIHawkJobManager:
                 f.seek(0)
                 json.dump(existing_data, f, indent=4)
                 f.truncate()
-                logger.debug(f"Job data appended to existing file: {file_name}")
+                logger.info(f"Job data appended to existing file: {file_name}")
 
     def is_blacklisted(self, job_title, company, link, job_location):
 
         if not job_title or not company or not link or not job_location:
             logger.warning(f"One or more input parameters are None or empty: job_title={job_title}, company={company}, link={link}, job_location={job_location}")
 
-        logger.debug(f"Checking if job is blacklisted: {job_title} at {company} in {job_location}")
+        logger.info(f"Checking if job is blacklisted: {job_title} at {company} in {job_location}")
         title_blacklisted = any(re.search(pattern, job_title, re.IGNORECASE) for pattern in self.title_blacklist_patterns)
         company_blacklisted = any(re.search(pattern, company, re.IGNORECASE) for pattern in self.company_blacklist_patterns)
         location_blacklisted = any(re.search(pattern, job_location, re.IGNORECASE) for pattern in self.location_blacklist_patterns)
 
         is_blacklisted = title_blacklisted or company_blacklisted or location_blacklisted 
-        logger.debug(f"Job blacklisted status: {is_blacklisted}")
+        logger.info(f"Job blacklisted status: {is_blacklisted}")
 
         return is_blacklisted
 
     def is_already_applied_to_job(self, job_title, company, link):
         link_seen = link in self.seen_jobs
         if link_seen:
-            logger.debug(f"Already applied to job: {job_title} at {company}, skipping...")
+            logger.info(f"Already applied to job: {job_title} at {company}, skipping...")
         return link_seen
 
     def is_already_applied_to_company(self, company):
@@ -413,7 +413,7 @@ class AIHawkJobManager:
                         existing_data = json.load(f)
                         for applied_job in existing_data:
                             if applied_job['company'].strip().lower() == company.strip().lower():
-                                logger.debug(
+                                logger.info(
                                     f"Already applied at {company} (once per company policy), skipping...")
                                 return True
                     except json.JSONDecodeError:

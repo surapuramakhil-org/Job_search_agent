@@ -230,11 +230,11 @@ class AIAdapter:
 class LLMLogger:
     def __init__(self, llm: Union[OpenAIModel, OllamaModel, ClaudeModel, GeminiModel]):
         self.llm = llm
-        logger.debug(f"LLMLogger successfully initialized with LLM: {llm}")
+        logger.info(f"LLMLogger successfully initialized with LLM: {llm}")
 
     @staticmethod
     def log_request(prompts, parsed_reply: Dict[str, Dict]):
-        logger.debug("Starting log_request method")
+        logger.info("Starting log_request method")
         logger.debug(f"Prompts received: {prompts}")
         logger.debug(f"Parsed reply received: {parsed_reply}")
 

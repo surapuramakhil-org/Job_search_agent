@@ -1,8 +1,5 @@
-import os
 import re
-import sys
 from pathlib import Path
-import trace
 import traceback
 import yaml
 import click
