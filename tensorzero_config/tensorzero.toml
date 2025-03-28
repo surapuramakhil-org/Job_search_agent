@@ -1,0 +1,9 @@
+# A function defines the task we're tackling (e.g. generating a haiku)...
+[functions.generate_haiku]
+type = "chat"
+
+# ... and a variant is one of many implementations we can use to tackle it (a choice of prompt, model, etc.).
+# Since we only have one variant for this function, the gateway will always use it.
+[functions.generate_haiku.variants.gpt_4o_mini]
+type = "chat_completion"
+model = "openai::gpt-4o-mini"

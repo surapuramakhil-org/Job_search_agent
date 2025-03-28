@@ -185,7 +185,15 @@ After copying, open the `.env` file and fill in the required values. Ensure you 
 
     **Note:** `answers.json` is not part of the output folder and can be found in the root of the project. It is used to store the answers of the questions asked to the user. Can be used to update the bot with corrected answers. Search for `Select an option`, `0`, `Authorized`, and `how many years of` to verify correct answers.
 
-3. **Run the Bot:**
+3. **Start Required Services (if applicable):**
+    Start TensorZero using Docker Compose before running the main application. Make sure you have added your `OPENAI_API_KEY` to your `.env` file first.
+   ```bash
+   # Ensure OPENAI_API_KEY is set in your .env file
+   docker compose -f docker-compose-tensorzero.yml up -d
+   ```
+   Ensure these services are running before proceeding to the next step.
+
+4. **Run the Bot:**
 
    job search assistant offers flexibility in how it handles your pdf resume:
 
