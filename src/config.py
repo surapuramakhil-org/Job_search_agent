@@ -21,7 +21,7 @@ JOB_MIN_APPLICATIONS = 1
 
 # TensorZero Gateway Configuration
 TENSORZERO_GATEWAY_URL = os.getenv("TENSORZERO_GATEWAY_URL", "http://localhost:3000")
-TENSORZERO_DEFAULT_FUNCTION = "generate_response"
+TENSORZERO_DEFAULT_FUNCTION = "generate_haiku"
 
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", None)
 GOOGLE_SEARCH_ENGINE_ID = os.getenv("GOOGLE_SEARCH_ENGINE_ID", None)
