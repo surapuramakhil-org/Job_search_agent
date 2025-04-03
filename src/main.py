@@ -1,8 +1,5 @@
-import os
 import re
-import sys
 from pathlib import Path
-import trace
 import traceback
 import yaml
 import click
@@ -32,7 +29,7 @@ from constants import (
 )
 from job_manager import AIHawkJobManager
 from job_portals.base_job_portal import get_job_portal
-from llm.llm_manager import GPTAnswerer
+from llm.ai_answerer import AiAnswerer
 from utils.chrome_utils import chrome_browser_options
 
 from job_application_profile import JobApplicationProfile
@@ -275,7 +272,7 @@ def create_and_run_bot(parameters, llm_api_key):
         )
         login_component = job_portal.authenticator
         apply_component = AIHawkJobManager(job_portal)
-        gpt_answerer_component = GPTAnswerer(parameters, llm_api_key)
+        gpt_answerer_component = AiAnswerer(parameters, llm_api_key)
         bot = AIHawkBotFacade(login_component, apply_component)
         bot.set_job_application_profile_and_resume(
             job_application_profile_object, resume_object

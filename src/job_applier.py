@@ -32,7 +32,7 @@ from job_portals.base_job_portal import BaseJobPage, BaseJobPortal
 
 
 from job import Job, JobState
-from llm.llm_manager import GPTAnswerer
+from llm.ai_answerer import AiAnswerer
 from utils import browser_utils, time_utils
 
 
@@ -56,7 +56,7 @@ class AIHawkJobApplier:
         job_portal: BaseJobPortal,
         resume_dir: Optional[str],
         set_old_answers: List[Tuple[str, str, str]],
-        gpt_answerer: GPTAnswerer,
+        gpt_answerer: AiAnswerer,
         work_preferences: dict,
         resume_generator_manager,
     ):

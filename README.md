@@ -173,7 +173,9 @@ After copying, open the `.env` file and fill in the required values. Ensure you 
 
    Also, make sure you fill all placeholders. This is important!.
 
-### For configuration refer [this docs](/docs/configuration.md)
+### Configuration
+- For basic configuration, refer to [configuration.md](/docs/configuration.md)
+- For TensorZero gateway setup, see [tensorzero_setup.md](/docs/tensorzero_setup.md)
 
 2. **Output Folder:**
     Contains the output of the bot.
@@ -185,7 +187,16 @@ After copying, open the `.env` file and fill in the required values. Ensure you 
 
     **Note:** `answers.json` is not part of the output folder and can be found in the root of the project. It is used to store the answers of the questions asked to the user. Can be used to update the bot with corrected answers. Search for `Select an option`, `0`, `Authorized`, and `how many years of` to verify correct answers.
 
-3. **Run the Bot:**
+3. **Start Required Services (if applicable):**
+    Start TensorZero using Docker Compose before running the main application. Make sure you have added your `OPENAI_API_KEY` to your `.env` file first.
+   ```bash
+   # Start TensorZero gateway service
+   docker compose -f docker-compose-tensorzero.yml up -d
+   ```
+   Note: The TensorZero gateway handles all LLM connections. See [tensorzero_setup.md](/docs/tensorzero_setup.md) for configuration details.
+   Ensure these services are running before proceeding to the next step.
+
+4. **Run the Bot:**
 
    job search assistant offers flexibility in how it handles your pdf resume:
 
@@ -259,6 +270,8 @@ Your support is greatly appreciated and helps us make job search assistant a pow
 
 If you like the project please star ⭐ the repository!
 
+[![Stargazers repo roster for @surapuramakhil-org/Job_search_assistant](https://reporoster.com/stars/surapuramakhil-org/Job_search_assistant)](https://github.com/surapuramakhil-org/Job_search_assistant/stargazers)
+
 ## Special Thanks
 [![Contributors](https://img.shields.io/github/contributors/surapuramakhil-org/Job_hunt_assistant)](https://github.com/surapuramakhil-org/Job_hunt_assistant/graphs/contributors)
 
@@ -267,6 +280,8 @@ If you like the project please star ⭐ the repository!
 </a>
 
 Made with [contrib.rocks](https://contrib.rocks).
+
+![Alt](https://repobeats.axiom.co/api/embed/ea4ca3eb91099b18374ddc89b207c0c5d04fdc64.svg "Repobeats analytics image")
 
 ## License
 
