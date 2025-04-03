@@ -12,7 +12,7 @@ from job import Job
 
 from job_application_saver import ApplicationSaver
 from job_portals.lever.job_page import LeverJobPage
-from llm.llm_manager import GPTAnswerer
+from llm.ai_answerer import AiAnswerer
 from main import init_browser
 from utils import browser_utils
 
@@ -53,7 +53,7 @@ class TestLeverJobPortalIntegration(unittest.TestCase):
 
     def _setup_gpt_mocks(self):
         """Configure standard GPT response behavior"""
-        self.mock_gpt_answerer = MagicMock(spec=GPTAnswerer)
+        self.mock_gpt_answerer = MagicMock(spec=AiAnswerer)
         self.mock_gpt_answerer.answer_question_from_options.side_effect = (
             lambda q, o: o[0]
         )
