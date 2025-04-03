@@ -19,12 +19,13 @@ class AIAdapter:
     """
     def __init__(self, config: dict, api_key: str):
         
-        tensorzero_gateway_url = "http://localhost:3000/openai/v1"
-        logger.info(f"Initializing AIAdapter with ChatOpenAI pointing to TensorZero gateway: {tensorzero_gateway_url}")
+        from config import TENSORZERO_GATEWAY_URL, TENSORZERO_DEFAULT_FUNCTION
+        gateway_url = f"{TENSORZERO_GATEWAY_URL}/openai/v1"
+        logger.info(f"Initializing AIAdapter with ChatOpenAI pointing to TensorZero gateway: {gateway_url}")
         self.model = ChatOpenAI(
-            base_url=tensorzero_gateway_url,
+            base_url=gateway_url,
             temperature=0.4,
-            model="tensorzero::function_name::generate_haiku"
+            model=f"tensorzero::function_name::{TENSORZERO_DEFAULT_FUNCTION}"
         )
         logger.info(f"ChatOpenAI model initialized for TensorZero gateway.")
 
@@ -74,4 +75,3 @@ class TensorZeroChatModelWrapper:
             logger.error(f"Error during LLM invocation within wrapper: {str(e)}")
             # Re-raise the exception to be handled by the caller
             raise
-

@@ -173,7 +173,9 @@ After copying, open the `.env` file and fill in the required values. Ensure you 
 
    Also, make sure you fill all placeholders. This is important!.
 
-### For configuration refer [this docs](/docs/configuration.md)
+### Configuration
+- For basic configuration, refer to [configuration.md](/docs/configuration.md)
+- For TensorZero gateway setup, see [tensorzero_setup.md](/docs/tensorzero_setup.md)
 
 2. **Output Folder:**
     Contains the output of the bot.
@@ -188,9 +190,10 @@ After copying, open the `.env` file and fill in the required values. Ensure you 
 3. **Start Required Services (if applicable):**
     Start TensorZero using Docker Compose before running the main application. Make sure you have added your `OPENAI_API_KEY` to your `.env` file first.
    ```bash
-   # Ensure OPENAI_API_KEY is set in your .env file
+   # Start TensorZero gateway service
    docker compose -f docker-compose-tensorzero.yml up -d
    ```
+   Note: The TensorZero gateway handles all LLM connections. See [tensorzero_setup.md](/docs/tensorzero_setup.md) for configuration details.
    Ensure these services are running before proceeding to the next step.
 
 4. **Run the Bot:**

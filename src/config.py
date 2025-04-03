@@ -19,10 +19,9 @@ JOB_SUITABILITY_SCORE = 7
 JOB_MAX_APPLICATIONS = 5
 JOB_MIN_APPLICATIONS = 1
 
-LLM_MODEL_TYPE = 'openai'
-LLM_MODEL = 'gpt-4o-mini'
-# Only required for OLLAMA models
-LLM_API_URL = ''
+# TensorZero Gateway Configuration
+TENSORZERO_GATEWAY_URL = os.getenv("TENSORZERO_GATEWAY_URL", "http://localhost:3000")
+TENSORZERO_DEFAULT_FUNCTION = "generate_response"
 
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", None)
 GOOGLE_SEARCH_ENGINE_ID = os.getenv("GOOGLE_SEARCH_ENGINE_ID", None)
