@@ -3,6 +3,7 @@ import traceback
 from typing import List, Text
 from regex import E
 from selenium.webdriver.remote.webelement import WebElement
+from sqlalchemy import false
 from custom_exception import JobSkipException
 from logger import logger
 from job_portals.application_form_elements import (
@@ -29,6 +30,9 @@ class LeverApplicationPage(BaseApplicationPage):
 
     def __init__(self, driver):
         super().__init__(driver)
+
+    def has_save_button(self) -> bool:
+        return False;    
 
     def save(self) -> None:
         raise NotImplementedError

@@ -176,8 +176,9 @@ class AIHawkJobApplier:
             tb_str = traceback.format_exc()
             logger.error(f"Failed to apply to job: {job}, error: {tb_str}")
 
-            logger.debug("marking save in job application page")
-            self.job_application_page.save()
+            if self.job_application_page.has_save_button():
+                logger.debug("marking save in job application page")
+                self.job_application_page.save()
             
             logger.debug("Saving application details")
             ApplicationSaver.save(job_context.job_application, is_failed=True)

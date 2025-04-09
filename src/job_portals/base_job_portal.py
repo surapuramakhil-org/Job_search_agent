@@ -199,6 +199,10 @@ class BaseApplicationPage(WebPage):
     @abstractmethod
     def discard(self) -> None:
         raise NotImplementedError
+    
+    @abstractmethod
+    def has_save_button(self) -> bool:
+        raise NotImplementedError
 
     @abstractmethod
     def save(self) -> None:
