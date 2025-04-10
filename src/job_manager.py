@@ -346,7 +346,7 @@ class AIHawkJobManager:
                 self.write_to_file(job, "skipped", f"{str(e)} {traceback.format_exc()}")
                 continue
             except Exception as e:
-                logger.error(f"Failed to apply for {job.title} at {job.company}: {e}",exc_info=True)
+                logger.error(f"Failed to apply for {job.title} at {job.company}: {str(e)}\n{traceback.format_exc()}")
                 self.write_to_file(job, "failed", f"Application error: {str(e)} {traceback.format_exc()}")
                 continue
 
