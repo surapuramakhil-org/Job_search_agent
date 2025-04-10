@@ -46,6 +46,7 @@ class SearchLeverJobs(BaseJobsPage):
         
         # Add position and location to keywords
         query_builder.add_to_keywords("site:jobs.lever.co")
+        query_builder.add_to_keywords("inurl:/apply")
         query_builder.add_to_keywords(position)
         query_builder.set_geolocation(location)
 
@@ -134,7 +135,7 @@ class SearchLeverJobs(BaseJobsPage):
             id=job_id,
             title=job_tile.title,
             company=company,
-            link=job_tile.link,
+            link=link,
             job_state=JobState.APPLY.value,
         )
 

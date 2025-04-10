@@ -127,7 +127,6 @@ class AIHawkJobApplier:
         job_context = JobContext()
         job_context.job = job
         job_context.job_application = JobApplication(job)
-        self.job_page.goto_job_page(job)
         time_utils.short_sleep()
 
         try:
