@@ -74,9 +74,16 @@ class TestLeverJobPortalIntegration(unittest.TestCase):
         (
             "job1",
             "https://jobs.lever.co/foodstuffs/b9077163-d168-4379-9a5e-d3953d8855e8",
-            "tests/resources/lever_application_pages/Foodstuffs North Island - Commercial Analyst - Wholesale_job_page.html",
-            "tests/resources/lever_application_pages/Foodstuffs North Island - Commercial Analyst - Wholesale_application_page.html",
-            "tests/resources/lever_application_pages/Foodstuffs North Island - Commercial Analyst - Wholesale_confirmation_page.html",
+            "tests/resources/lever_application_pages/job1/Foodstuffs North Island - Commercial Analyst - Wholesale_job_page.html",
+            "tests/resources/lever_application_pages/job1/Foodstuffs North Island - Commercial Analyst - Wholesale_application_page.html",
+            "tests/resources/lever_application_pages/job1/Foodstuffs North Island - Commercial Analyst - Wholesale_confirmation_page.html",
+        ),
+        (
+            "job2",
+            "https://jobs.lever.co/agiloft/5b181cdd-fa45-40e6-b561-ec268e292914",
+            "tests/resources/lever_application_pages/job2/Agiloft - Senior Software Engineer, Full Stack_job_page.html",
+            "tests/resources/lever_application_pages/job2/Agiloft - Senior Software Engineer, Full Stack_application_page.html",
+            "tests/resources/lever_application_pages/job2/Agiloft - Senior Software Engineer, Full Stack_confirmation_page.html",
         )
     ])
     @patch.object(ApplicationSaver, "save")

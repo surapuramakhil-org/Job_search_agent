@@ -3,6 +3,7 @@ import traceback
 from typing import List, Text
 from regex import E
 from selenium.webdriver.remote.webelement import WebElement
+from sqlalchemy import false
 from custom_exception import JobSkipException
 from logger import logger
 from job_portals.application_form_elements import (
@@ -29,6 +30,9 @@ class LeverApplicationPage(BaseApplicationPage):
 
     def __init__(self, driver):
         super().__init__(driver)
+
+    def has_save_button(self) -> bool:
+        return False;    
 
     def save(self) -> None:
         raise NotImplementedError
@@ -68,7 +72,7 @@ class LeverApplicationPage(BaseApplicationPage):
             logger.error(
                 f"Error occurred while waiting for page to load: {e} {traceback.format_exc()}"
             )
-            raise JobSkipException(
+            raise Exception(
                 f"Error occurred while waiting for page to load {e} {traceback.format_exc()}"
             )
 
@@ -79,7 +83,7 @@ class LeverApplicationPage(BaseApplicationPage):
 
         except NoSuchElementException:
             logger.error("Submit button not found.")
-            raise JobSkipException("Submit button not found.")
+            raise Exception("Submit button not found.")
 
         except ElementClickInterceptedException as e:
             logger.warning(
@@ -91,7 +95,7 @@ class LeverApplicationPage(BaseApplicationPage):
             logger.error(
                 f"Error occurred while clicking submit button: {e} {traceback.format_exc()}"
             )
-            raise JobSkipException(
+            raise Exception(
                 f"Error occurred while clicking submit button {e} {traceback.format_exc()}"
             )
 
@@ -109,7 +113,7 @@ class LeverApplicationPage(BaseApplicationPage):
             logger.error(
                 f"Error occurred while checking for submit button: {e} {traceback.format_exc()}"
             )
-            raise JobSkipException(
+            raise Exception(
                 f"Error occurred while checking for submit button {e} {traceback.format_exc()}"
             )
 
@@ -124,7 +128,7 @@ class LeverApplicationPage(BaseApplicationPage):
             logger.error(
                 f"Error occurred while uploading file: {e} {traceback.format_exc()}"
             )
-            raise JobSkipException(
+            raise Exception(
                 f"Error occurred while uploading file {e} {traceback.format_exc()}"
             )
 
@@ -139,7 +143,7 @@ class LeverApplicationPage(BaseApplicationPage):
             logger.error(
                 f"Error occurred while getting form sections: {e} {traceback.format_exc()}"
             )
-            raise JobSkipException(
+            raise Exception(
                 f"Error occurred while getting form sections {e} {traceback.format_exc()}"
             )
 
@@ -152,10 +156,10 @@ class LeverApplicationPage(BaseApplicationPage):
             self.driver.execute_script("arguments[0].click();", checkbox)
 
         except NoSuchElementException:
-            raise JobSkipException("Consent checkbox not found in terms section")
+            raise Exception("Consent checkbox not found in terms section")
         except Exception as e:
             logger.error(f"Terms acceptance error: {e} {traceback.format_exc()}")
-            raise JobSkipException(
+            raise Exception(
                 f"Failed to check consent box: {e} {traceback.format_exc()}"
             )
 
@@ -172,7 +176,7 @@ class LeverApplicationPage(BaseApplicationPage):
             logger.error(
                 f"Error checking terms of service element: {e} {traceback.format_exc()}"
             )
-            raise JobSkipException(f"Terms check failed: {e} {traceback.format_exc()}")
+            raise Exception(f"Terms check failed: {e} {traceback.format_exc()}")
 
     def is_radio_question(self, element: WebElement) -> bool:
         try:
@@ -186,7 +190,7 @@ class LeverApplicationPage(BaseApplicationPage):
             logger.error(
                 f"Error occurred while checking if element is a radio question: {e} {traceback.format_exc()}"
             )
-            raise JobSkipException(
+            raise Exception(
                 f"Error occurred while checking if element is a radio question {e} {traceback.format_exc()}"
             )
 
@@ -240,7 +244,7 @@ class LeverApplicationPage(BaseApplicationPage):
             logger.error(
                 f"Error converting element to radio question: {e} {traceback.format_exc()}"
             )
-            raise JobSkipException(
+            raise Exception(
                 f"Error converting element to radio question: {e} {traceback.format_exc()}"
             )
 
@@ -250,7 +254,7 @@ class LeverApplicationPage(BaseApplicationPage):
 
         try:
             radio_input = radio_question_web_element.find_element(
-                By.XPATH, f".//input[@value='{answer}']"
+                By.XPATH, f".//input[@value=\"{answer}\"]"
             )
             time_utils.short_sleep()
             radio_input.click()
@@ -259,7 +263,7 @@ class LeverApplicationPage(BaseApplicationPage):
             logger.error(
                 f"Error occurred while selecting radio option: {e} {traceback.format_exc()}"
             )
-            raise JobSkipException(
+            raise Exception(
                 f"Error occurred while selecting radio option {e} {traceback.format_exc()}"
             )
 
@@ -277,7 +281,7 @@ class LeverApplicationPage(BaseApplicationPage):
             return False
         except Exception as e:
             logger.error(f"Textbox check error: {e} {traceback.format_exc()}")
-            raise JobSkipException(f"Textbox verification failed: {e}")
+            raise Exception(f"Textbox verification failed: {e}")
 
     def web_element_to_textbox_question(self, element: WebElement) -> TextBoxQuestion:
         try:
@@ -319,7 +323,7 @@ class LeverApplicationPage(BaseApplicationPage):
             logger.error(
                 f"Error occurred while converting element to textbox question: {e} {traceback.format_exc()}"
             )
-            raise JobSkipException(
+            raise Exception(
                 f"Error occurred while converting element to textbox question {e} {traceback.format_exc()}"
             )
 
@@ -339,7 +343,7 @@ class LeverApplicationPage(BaseApplicationPage):
 
         except Exception as e:
             logger.error(f"Input handling failed: {e} {traceback.format_exc()}")
-            raise JobSkipException(f"Text input error: {str(e)}")
+            raise Exception(f"Text input error: {str(e)}")
 
     def _is_location_input(self, element: WebElement) -> bool:
         """Check if the element contains a location input field"""
@@ -382,7 +386,7 @@ class LeverApplicationPage(BaseApplicationPage):
             first_result.click()
         except TimeoutException:
             if "No location found" in element.text:
-                raise JobSkipException("Invalid location entered")
+                raise Exception("Invalid location entered")
             raise
 
         # Verify selection
@@ -424,7 +428,7 @@ class LeverApplicationPage(BaseApplicationPage):
             logger.error(
                 f"Error occurred while getting input elements: {e} {traceback.format_exc()}"
             )
-            raise JobSkipException(
+            raise Exception(
                 f"Error occurred while getting input elements {e} {traceback.format_exc()}"
             )
 
@@ -438,7 +442,7 @@ class LeverApplicationPage(BaseApplicationPage):
             logger.error(
                 f"Error occurred while checking for upload field: {e} {traceback.format_exc()}"
             )
-            raise JobSkipException(
+            raise Exception(
                 f"Error occurred while checking for upload field {e} {traceback.format_exc()}"
             )
 
@@ -452,7 +456,7 @@ class LeverApplicationPage(BaseApplicationPage):
             logger.error(
                 f"Error occurred while getting upload element heading: {e} {traceback.format_exc()}"
             )
-            raise JobSkipException(
+            raise Exception(
                 f"Error occurred while getting upload element heading {e} {traceback.format_exc()}"
             )
 
@@ -467,7 +471,7 @@ class LeverApplicationPage(BaseApplicationPage):
             logger.error(
                 f"Error checking for multiple-choice question: {e} {traceback.format_exc()}"
             )
-            raise JobSkipException(
+            raise Exception(
                 f"Error checking multiple-choice question: {e} {traceback.format_exc()}"
             )
 
@@ -514,7 +518,7 @@ class LeverApplicationPage(BaseApplicationPage):
             logger.error(
                 f"Error occurred while converting element to dropdown question: {e} {traceback.format_exc()}"
             )
-            raise JobSkipException(
+            raise Exception(
                 f"Error occurred while converting element to dropdown question {e} {traceback.format_exc()}"
             )
 
@@ -530,6 +534,6 @@ class LeverApplicationPage(BaseApplicationPage):
             logger.error(
                 f"Error occurred while selecting dropdown option: {e} {traceback.format_exc()}"
             )
-            raise JobSkipException(
+            raise Exception(
                 f"Error occurred while selecting dropdown option {e} {traceback.format_exc()}"
             )

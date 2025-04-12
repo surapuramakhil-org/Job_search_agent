@@ -12,11 +12,11 @@ For official TensorZero documentation, see:
 
 ```toml
 # Define a function for your LLM tasks
-[functions.generate_response]
+[functions.generate_haiku]
 type = "chat"  # The type of task
 
 # Define model variants for this function
-[functions.generate_response.variants.default]
+[functions.generate_haiku.variants.default]
 type = "chat_completion"
 model = "openai::gpt-4o-mini"  # Format: provider::model-name
 ```

@@ -36,7 +36,7 @@ class LeverJobPage(BaseJobPage):
             apply_button.click()
         except Exception as e:
             logger.error(f"Failed to click apply button: {e}, { traceback.format_exc()}")
-            raise JobSkipException("Failed to click apply button")
+            raise Exception("Failed to click apply button")
 
     def get_location(self) -> str:
         try:
@@ -47,7 +47,7 @@ class LeverJobPage(BaseJobPage):
             return location_element.text.strip()
         except Exception as e:
             logger.error(f"Failed to get location: {e}, {traceback.format_exc()}")
-            raise JobSkipException("Failed to retrieve job location")
+            raise Exception("Failed to retrieve job location")
     
     def get_job_categories(self) -> dict:
         try:
@@ -74,7 +74,7 @@ class LeverJobPage(BaseJobPage):
 
         except Exception as e:
             logger.error(f"Failed to get job categories: {e}, {traceback.format_exc()}")
-            raise JobSkipException("Could not extract job categories")
+            raise Exception("Could not extract job categories")
 
 
     def get_job_description(self, job) -> str:
