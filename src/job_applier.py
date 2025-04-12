@@ -237,7 +237,7 @@ class AIHawkJobApplier:
                 time_utils.short_sleep()
                 
                 if not self.job_application_page.application_submission_confirmation():
-                    raise JobSkipException(f"Application submission confrimation is missing for job:{job}")
+                    raise Exception(f"Application submission confirmation is missing for job: {job}")
                 
                 logger.debug("Application submission confirmaed")
 
@@ -245,7 +245,7 @@ class AIHawkJobApplier:
             
             else:
                 logger.warning(f"submit button not found, discarding application {job}")
-                raise JobSkipException(f" No next or submit button found, discarding application {job}")
+                raise Exception(f" No next or submit button found, discarding application {job}")
 
     def fill_up(self, job_context: JobContext) -> None:
         job = job_context.job
