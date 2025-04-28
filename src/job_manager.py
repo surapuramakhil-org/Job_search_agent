@@ -401,16 +401,17 @@ class AIHawkJobManager:
                 continue
 
             try:
-
                 self.easy_applier_component.job_apply(job)
                 self.write_to_file(job, "success")
                 logger.info(f"Applied to job: {job.title} at {job.company}")
+
             except JobNotSuitableException as e:
                 logger.info(
                     f"Job not suitable for application: {job.title} at {job.company}"
                 )
                 self.write_to_file(job, "skipped", f"{str(e)} {traceback.format_exc()}")
                 continue
+            
             except Exception as e:
                 logger.error(
                     f"Failed to apply for {job.title} at {job.company}: {str(e)}\n{traceback.format_exc()}"
