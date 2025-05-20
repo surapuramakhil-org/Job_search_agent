@@ -48,7 +48,7 @@ langchain-ollama = "^0.2.1"
 undetected-chromedriver = "^3.5.5"
 stringcase = "^1.2.0"
 pygame = "^2.6.1"
-setuptools = "^75.8.0"
+setuptools = "^78.1.1"
 parameterized = "^0.9.0"
 tensorzero = "^2025.3.4"
 
