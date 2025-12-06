@@ -8,6 +8,7 @@ DATE_24_HOURS = "24_hours"
 
 LINKEDIN = "linkedin"
 LEVER = "lever"
+GREENHOUSE = "greenhouse"
 
 GOOGLE = "google"
 BING = "bing"
