@@ -265,6 +265,60 @@ class GreenhouseBrowserAgent:
         # Extract common fields from the profile
         info_parts = []
 
+        # Handle JobApplicationProfile structure (from this codebase)
+        if hasattr(profile, "legal_authorization"):
+            legal = profile.legal_authorization
+            # US work authorization
+            if hasattr(legal, "us_work_authorization"):
+                info_parts.append(
+                    f"- US Work Authorization: {legal.us_work_authorization}"
+                )
+            if hasattr(legal, "requires_us_sponsorship"):
+                info_parts.append(
+                    f"- Requires US Visa Sponsorship: {legal.requires_us_sponsorship}"
+                )
+            if hasattr(legal, "legally_allowed_to_work_in_us"):
+                info_parts.append(
+                    f"- Legally Allowed to Work in US: {legal.legally_allowed_to_work_in_us}"
+                )
+            # EU work authorization
+            if hasattr(legal, "eu_work_authorization"):
+                info_parts.append(
+                    f"- EU Work Authorization: {legal.eu_work_authorization}"
+                )
+            if hasattr(legal, "requires_eu_sponsorship"):
+                info_parts.append(
+                    f"- Requires EU Visa Sponsorship: {legal.requires_eu_sponsorship}"
+                )
+            # UK work authorization
+            if hasattr(legal, "uk_work_authorization"):
+                info_parts.append(
+                    f"- UK Work Authorization: {legal.uk_work_authorization}"
+                )
+            # Canada work authorization
+            if hasattr(legal, "canada_work_authorization"):
+                info_parts.append(
+                    f"- Canada Work Authorization: {legal.canada_work_authorization}"
+                )
+
+        if hasattr(profile, "work_preferences"):
+            prefs = profile.work_preferences
+            if hasattr(prefs, "remote_work"):
+                info_parts.append(f"- Remote Work Preference: {prefs.remote_work}")
+            if hasattr(prefs, "open_to_relocation"):
+                info_parts.append(f"- Open to Relocation: {prefs.open_to_relocation}")
+
+        if hasattr(profile, "availability"):
+            avail = profile.availability
+            if hasattr(avail, "notice_period"):
+                info_parts.append(f"- Notice Period: {avail.notice_period}")
+
+        if hasattr(profile, "salary_expectations"):
+            salary = profile.salary_expectations
+            if hasattr(salary, "salary_range_usd"):
+                info_parts.append(f"- Salary Expectations (USD): {salary.salary_range_usd}")
+
+        # Handle Resume object (from lib_resume_builder_AIHawk) if passed
         if hasattr(profile, "personal_information"):
             personal = profile.personal_information
             if hasattr(personal, "name"):
@@ -278,14 +332,11 @@ class GreenhouseBrowserAgent:
             if hasattr(personal, "linkedin"):
                 info_parts.append(f"- LinkedIn: {personal.linkedin}")
 
-        if hasattr(profile, "legal_authorization"):
-            legal = profile.legal_authorization
-            if hasattr(legal, "work_authorization"):
-                info_parts.append(f"- Work Authorization: {legal.work_authorization}")
-            if hasattr(legal, "requires_sponsorship"):
-                info_parts.append(f"- Requires Visa Sponsorship: {legal.requires_sponsorship}")
-
-        return "\n".join(info_parts) if info_parts else "Use reasonable defaults for personal information."
+        return (
+            "\n".join(info_parts)
+            if info_parts
+            else "Use reasonable defaults for personal information."
+        )
 
     def _format_answers_for_agent(self, answers: Dict[str, str]) -> str:
         """Format pre-defined answers for the agent."""
@@ -313,7 +364,7 @@ class GreenhouseBrowserAgent:
     async def close(self):
         """Close the browser and clean up resources."""
         if self.browser:
-            await self.browser.close()
+            await self.browser.stop()
             self.browser = None
 
     def search_jobs_sync(
@@ -436,5 +487,5 @@ class GreenhouseJobSearchAgent:
     async def close(self):
         """Close browser resources."""
         if self.browser:
-            await self.browser.close()
+            await self.browser.stop()
             self.browser = None

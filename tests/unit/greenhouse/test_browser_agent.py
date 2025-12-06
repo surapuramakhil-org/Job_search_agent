@@ -112,6 +112,42 @@ class TestGreenhouseBrowserAgent(unittest.TestCase):
         self.assertIn("john@example.com", result)
         self.assertIn("555-1234", result)
 
+    def test_format_profile_for_agent_with_job_application_profile(self):
+        """Test profile formatting with JobApplicationProfile structure."""
+        # Create mock profile matching JobApplicationProfile structure
+        mock_legal = MagicMock()
+        mock_legal.us_work_authorization = "US Citizen"
+        mock_legal.requires_us_sponsorship = "No"
+        mock_legal.legally_allowed_to_work_in_us = "Yes"
+
+        mock_work_prefs = MagicMock()
+        mock_work_prefs.remote_work = "Yes"
+        mock_work_prefs.open_to_relocation = "No"
+
+        mock_availability = MagicMock()
+        mock_availability.notice_period = "2 weeks"
+
+        mock_salary = MagicMock()
+        mock_salary.salary_range_usd = "$100,000 - $150,000"
+
+        mock_profile = MagicMock()
+        mock_profile.legal_authorization = mock_legal
+        mock_profile.work_preferences = mock_work_prefs
+        mock_profile.availability = mock_availability
+        mock_profile.salary_expectations = mock_salary
+        # Ensure personal_information is not present for this test
+        del mock_profile.personal_information
+
+        agent = GreenhouseBrowserAgent(
+            llm=self.mock_llm,
+            job_application_profile=mock_profile,
+        )
+
+        result = agent._format_profile_for_agent()
+        self.assertIn("US Citizen", result)
+        self.assertIn("2 weeks", result)
+        self.assertIn("$100,000 - $150,000", result)
+
     def test_format_answers_for_agent_empty(self):
         """Test answer formatting with no answers."""
         agent = GreenhouseBrowserAgent(
