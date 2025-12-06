@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from re import A
 
-from constants import LEVER, LINKEDIN
+from constants import GREENHOUSE, LEVER, LINKEDIN
 from job_portals.application_form_elements import SelectQuestion, TextBoxQuestion
 from authenticator import AIHawkAuthenticator
 from job import Job
@@ -238,9 +238,12 @@ class BaseJobPortal(ABC):
 
 def get_job_portal(portal_name, driver, work_preferences):
     from job_portals.lever.lever import Lever
+    from job_portals.greenhouse.greenhouse import Greenhouse
 
     if portal_name == LEVER:
         return Lever(driver, work_preferences)
+    elif portal_name == GREENHOUSE:
+        return Greenhouse(driver, work_preferences)
     else:
         raise ValueError(f"Unknown job portal: {portal_name}")
 
