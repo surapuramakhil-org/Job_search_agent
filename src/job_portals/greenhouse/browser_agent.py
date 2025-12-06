@@ -6,7 +6,9 @@ on Greenhouse job boards using the browser-use library.
 """
 
 import asyncio
+import os
 from dataclasses import dataclass, field
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 from browser_use import Agent, Browser
@@ -45,6 +47,9 @@ class GreenhouseBrowserAgent:
         job_application_profile: Any,
         resume_path: Optional[str] = None,
         headless: bool = False,
+        record_video: bool = False,
+        video_dir: Optional[str] = None,
+        traces_dir: Optional[str] = None,
     ):
         """
         Initialize the Greenhouse browser agent.
@@ -54,19 +59,69 @@ class GreenhouseBrowserAgent:
             job_application_profile: User's job application profile with personal info.
             resume_path: Path to resume file for uploads.
             headless: Whether to run browser in headless mode.
+            record_video: Whether to record video during automation.
+            video_dir: Directory to save recorded videos.
+            traces_dir: Directory to save browser traces.
         """
         self.llm = llm
         self.job_application_profile = job_application_profile
         self.resume_path = resume_path
         self.headless = headless
+        self.record_video = record_video
+        self.video_dir = video_dir or "recordings"
+        self.traces_dir = traces_dir
         self.browser: Optional[Browser] = None
 
     async def _get_browser(self) -> Browser:
         """Get or create browser instance."""
         if self.browser is None:
-            profile = BrowserProfile(headless=self.headless)
+            # Set up recording options if enabled
+            profile_kwargs = {"headless": self.headless}
+            
+            if self.record_video:
+                import os
+                os.makedirs(self.video_dir, exist_ok=True)
+                profile_kwargs["record_video_dir"] = self.video_dir
+                logger.info(f"Recording video to: {self.video_dir}")
+            
+            if self.traces_dir:
+                import os
+                os.makedirs(self.traces_dir, exist_ok=True)
+                profile_kwargs["traces_dir"] = self.traces_dir
+                logger.info(f"Saving traces to: {self.traces_dir}")
+            
+            profile = BrowserProfile(**profile_kwargs)
             self.browser = Browser(browser_profile=profile)
         return self.browser
+
+    async def take_screenshot(self, name: str = "screenshot") -> Optional[str]:
+        """
+        Take a screenshot of the current browser state.
+        
+        Args:
+            name: Name prefix for the screenshot file.
+            
+        Returns:
+            Path to the saved screenshot, or None if failed.
+        """
+        if self.browser is None:
+            logger.warning("Browser not initialized, cannot take screenshot")
+            return None
+            
+        try:
+            screenshot_dir = self.video_dir  # Reuse video dir for screenshots
+            os.makedirs(screenshot_dir, exist_ok=True)
+            
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            screenshot_path = os.path.join(screenshot_dir, f"{name}_{timestamp}.png")
+            
+            # Use browser's screenshot capability
+            await self.browser.take_screenshot(screenshot_path)
+            logger.info(f"Screenshot saved to: {screenshot_path}")
+            return screenshot_path
+        except Exception as e:
+            logger.error(f"Failed to take screenshot: {e}")
+            return None
 
     async def search_jobs(
         self,
@@ -181,6 +236,7 @@ class GreenhouseBrowserAgent:
         self,
         job: Job,
         answers: Optional[Dict[str, str]] = None,
+        capture_screenshots: bool = True,
     ) -> GreenhouseJobApplication:
         """
         Apply to a job on Greenhouse using the AI browser agent.
@@ -188,12 +244,14 @@ class GreenhouseBrowserAgent:
         Args:
             job: Job object to apply to.
             answers: Pre-defined answers for common questions.
+            capture_screenshots: Whether to capture screenshots during application.
 
         Returns:
             GreenhouseJobApplication with status and details.
         """
         browser = await self._get_browser()
         application = GreenhouseJobApplication(job=job, resume_path=self.resume_path)
+        screenshots: List[str] = []
 
         # Build the application task with user profile info
         profile_info = self._format_profile_for_agent()
@@ -226,6 +284,12 @@ class GreenhouseBrowserAgent:
         """
 
         try:
+            # Capture screenshot before starting application
+            if capture_screenshots:
+                screenshot = await self.take_screenshot(f"job_page_{job.company}")
+                if screenshot:
+                    screenshots.append(screenshot)
+
             agent = Agent(
                 task=task,
                 llm=self.llm,
@@ -236,6 +300,12 @@ class GreenhouseBrowserAgent:
             )
 
             result = await agent.run()
+
+            # Capture screenshot after application attempt
+            if capture_screenshots:
+                screenshot = await self.take_screenshot(f"application_result_{job.company}")
+                if screenshot:
+                    screenshots.append(screenshot)
 
             # Check if application was successful
             if hasattr(result, "final_result"):
@@ -252,6 +322,17 @@ class GreenhouseBrowserAgent:
             application.status = "error"
             application.error_message = str(e)
             logger.error(f"Error applying to job {job.title}: {e}")
+            
+            # Capture screenshot on error
+            if capture_screenshots:
+                screenshot = await self.take_screenshot(f"error_{job.company}")
+                if screenshot:
+                    screenshots.append(screenshot)
+
+        # Store screenshots in application answers for reference
+        if screenshots:
+            application.answers["screenshots"] = screenshots
+            logger.info(f"Captured {len(screenshots)} screenshots during application")
 
         return application
 
@@ -380,9 +461,10 @@ class GreenhouseBrowserAgent:
         self,
         job: Job,
         answers: Optional[Dict[str, str]] = None,
+        capture_screenshots: bool = True,
     ) -> GreenhouseJobApplication:
         """Synchronous wrapper for apply_to_job."""
-        return asyncio.run(self.apply_to_job(job, answers))
+        return asyncio.run(self.apply_to_job(job, answers, capture_screenshots))
 
     def get_job_details_sync(self, job: Job) -> Job:
         """Synchronous wrapper for get_job_details."""
@@ -401,6 +483,8 @@ class GreenhouseJobSearchAgent:
         llm: BaseChatModel,
         work_preferences: Dict[str, Any],
         headless: bool = False,
+        record_video: bool = False,
+        video_dir: Optional[str] = None,
     ):
         """
         Initialize the job search agent.
@@ -409,16 +493,27 @@ class GreenhouseJobSearchAgent:
             llm: Language model for the browser agent.
             work_preferences: User's job preferences (positions, locations, etc.)
             headless: Whether to run browser in headless mode.
+            record_video: Whether to record video during automation.
+            video_dir: Directory to save recorded videos.
         """
         self.llm = llm
         self.work_preferences = work_preferences
         self.headless = headless
+        self.record_video = record_video
+        self.video_dir = video_dir or "recordings"
         self.browser: Optional[Browser] = None
 
     async def _get_browser(self) -> Browser:
         """Get or create browser instance."""
         if self.browser is None:
-            profile = BrowserProfile(headless=self.headless)
+            profile_kwargs = {"headless": self.headless}
+            
+            if self.record_video:
+                os.makedirs(self.video_dir, exist_ok=True)
+                profile_kwargs["record_video_dir"] = self.video_dir
+                logger.info(f"Recording video to: {self.video_dir}")
+            
+            profile = BrowserProfile(**profile_kwargs)
             self.browser = Browser(browser_profile=profile)
         return self.browser
 

@@ -98,12 +98,15 @@ async def example_apply_to_job():
 
     job_profile = MockProfile()
 
-    # Create the browser agent
+    # Create the browser agent with screen recording enabled
     agent = GreenhouseBrowserAgent(
         llm=llm,
         job_application_profile=job_profile,
         resume_path="/path/to/your/resume.pdf",  # Update with actual path
         headless=False,
+        record_video=True,  # Enable video recording
+        video_dir="./recordings",  # Directory to save videos
+        traces_dir="./traces",  # Directory to save browser traces
     )
 
     try:
@@ -128,13 +131,18 @@ async def example_apply_to_job():
             "Do you require visa sponsorship?": "No",
         }
 
-        # Apply to the job
+        # Apply to the job with screenshots captured automatically
         print(f"Applying to job: {job.title}")
-        application = await agent.apply_to_job(job, answers=answers)
+        print("Screen recording is enabled - videos will be saved to ./recordings/")
+        application = await agent.apply_to_job(job, answers=answers, capture_screenshots=True)
 
         print(f"Application status: {application.status}")
         if application.error_message:
             print(f"Error: {application.error_message}")
+        
+        # Check for captured screenshots
+        if "screenshots" in application.answers:
+            print(f"Captured screenshots: {application.answers['screenshots']}")
 
     finally:
         await agent.close()

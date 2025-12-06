@@ -69,6 +69,30 @@ class TestGreenhouseBrowserAgent(unittest.TestCase):
         self.assertTrue(agent.headless)
         self.assertIsNone(agent.browser)
 
+    def test_init_with_video_recording(self):
+        """Test agent initialization with video recording enabled."""
+        agent = GreenhouseBrowserAgent(
+            llm=self.mock_llm,
+            job_application_profile=self.mock_profile,
+            record_video=True,
+            video_dir="/tmp/recordings",
+            traces_dir="/tmp/traces",
+        )
+
+        self.assertTrue(agent.record_video)
+        self.assertEqual(agent.video_dir, "/tmp/recordings")
+        self.assertEqual(agent.traces_dir, "/tmp/traces")
+
+    def test_default_video_dir(self):
+        """Test default video directory when not specified."""
+        agent = GreenhouseBrowserAgent(
+            llm=self.mock_llm,
+            job_application_profile=self.mock_profile,
+            record_video=True,
+        )
+
+        self.assertEqual(agent.video_dir, "recordings")
+
     def test_greenhouse_job_board_url(self):
         """Test that the Greenhouse job board URL is correct."""
         agent = GreenhouseBrowserAgent(
@@ -229,6 +253,18 @@ class TestGreenhouseJobSearchAgent(unittest.TestCase):
         self.assertEqual(agent.work_preferences, self.work_preferences)
         self.assertTrue(agent.headless)
         self.assertIsNone(agent.browser)
+
+    def test_init_with_video_recording(self):
+        """Test search agent initialization with video recording."""
+        agent = GreenhouseJobSearchAgent(
+            llm=self.mock_llm,
+            work_preferences=self.work_preferences,
+            record_video=True,
+            video_dir="/tmp/search_recordings",
+        )
+
+        self.assertTrue(agent.record_video)
+        self.assertEqual(agent.video_dir, "/tmp/search_recordings")
 
 
 if __name__ == "__main__":
