@@ -1,0 +1,36 @@
+spec_version: "0.1.0"
+name: job-search-agent
+version: 1.0.0
+description: >
+  An AI-powered job search and application automation agent. It scans job
+  portals (LinkedIn, Lever, and others), evaluates each listing against the
+  candidate's resume and work preferences, generates tailored cover letters and
+  answers to employer questions, and submits applications — autonomously and
+  at scale. Supports OpenAI, Claude, Gemini, Groq, Ollama, and Perplexity
+  models via a TensorZero or direct LangChain backend.
+license: AGPL-3.0
+model:
+  preferred: openai:gpt-4o
+  alternatives:
+    - anthropic:claude-sonnet-4-6
+    - google:gemini-2.0-flash
+runtime:
+  max_turns: 200
+  entrypoint: "python src/main.py"
+skills:
+  - name: job-search
+    description: Search job portals for listings matching user-defined criteria (title, location, date range, blacklists).
+  - name: resume-screening
+    description: Score each job posting against the candidate's resume and work preferences; skip poor fits.
+  - name: cover-letter-generation
+    description: Compose personalised, company-specific cover letters using the job description and resume.
+  - name: application-form-filling
+    description: Auto-fill application forms — text, numeric, dropdown and checkbox questions — using LLM-generated answers drawn from the candidate profile.
+  - name: dynamic-resume-generation
+    description: Generate tailored resumes for each application, adapting content to the specific role.
+  - name: application-tracking
+    description: Log every application attempt with metadata (company, role, status, token usage) to a structured output directory.
+compliance:
+  risk_tier: standard
+  supervision:
+    human_in_the_loop: destructive
